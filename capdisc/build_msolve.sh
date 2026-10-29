@@ -25,33 +25,43 @@ step() { echo "=== $(date '+%T') $*"; }
 
 if ! [ -x "$P/bin/m4" ]; then
   step m4
-  fetch m4-1.4.20.tar.xz https://ftp.gnu.org/gnu/m4/m4-1.4.20.tar.xz https://ftpmirror.gnu.org/m4/m4-1.4.20.tar.xz
-  cd "$SRC" && rm -rf m4-1.4.20 && tar xJf m4-1.4.20.tar.xz && cd m4-1.4.20
-  CC="$GNUCC" ./configure -q --prefix="$P" && make -s -j$J && make -s install; cd "$ROOT"
+  ok=0
+  for v in 1.4.20 1.4.19; do
+    fetch m4-$v.tar.xz https://ftp.gnu.org/gnu/m4/m4-$v.tar.xz https://ftpmirror.gnu.org/m4/m4-$v.tar.xz || continue
+    cd "$SRC" && rm -rf m4-$v && tar xJf m4-$v.tar.xz && cd m4-$v
+    for cc in "gcc -std=gnu17" "gcc -std=gnu11" "gcc"; do
+      echo "--- m4 $v with CC=$cc"
+      if CC="$cc" ./configure -q --prefix="$P" > ../m4-configure.log 2>&1 && make -s -j$J > ../m4-make.log 2>&1 && make -s install > /dev/null 2>&1; then ok=1; break; fi
+      tail -5 ../m4-configure.log ../m4-make.log; make -s distclean > /dev/null 2>&1 || true
+    done
+    cd "$ROOT"; [ $ok = 1 ] && break
+  done
+  [ -x "$P/bin/m4" ] || { echo "FAILED: m4 (see $SRC/m4-*.log)"; exit 1; }
 fi
 if ! [ -f "$P/include/gmp.h" ]; then
   step gmp
   fetch gmp-6.3.0.tar.xz https://gmplib.org/download/gmp/gmp-6.3.0.tar.xz https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz
   cd "$SRC" && rm -rf gmp-6.3.0 && tar xJf gmp-6.3.0.tar.xz && cd gmp-6.3.0
-  CC="$GNUCC" ./configure -q --prefix="$P" --enable-shared && make -s -j$J && make -s check -j$J >/dev/null && make -s install; cd "$ROOT"
+  CC="$GNUCC" ./configure -q --prefix="$P" --enable-shared --host=x86_64-pc-linux-gnu \
+    && make -s -j$J && make -s check -j$J >/dev/null && make -s install || { echo "FAILED: gmp"; exit 1; }; cd "$ROOT"
 fi
 if ! [ -f "$P/include/mpfr.h" ]; then
   step mpfr
   fetch mpfr-4.2.1.tar.xz https://www.mpfr.org/mpfr-4.2.1/mpfr-4.2.1.tar.xz https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.1.tar.xz
   cd "$SRC" && rm -rf mpfr-4.2.1 && tar xJf mpfr-4.2.1.tar.xz && cd mpfr-4.2.1
-  CC="$GNUCC" ./configure -q --prefix="$P" --with-gmp="$P" && make -s -j$J && make -s install; cd "$ROOT"
+  CC="$GNUCC" ./configure -q --prefix="$P" --with-gmp="$P" && make -s -j$J && make -s install || { echo "FAILED: mpfr"; exit 1; }; cd "$ROOT"
 fi
 if ! [ -f "$P/include/flint/flint.h" ]; then
   step flint
   fetch flint-3.1.3.tar.gz https://github.com/flintlib/flint/releases/download/v3.1.3/flint-3.1.3.tar.gz
   cd "$SRC" && rm -rf flint-3.1.3 && tar xzf flint-3.1.3.tar.gz && cd flint-3.1.3
-  ./configure --prefix="$P" --with-gmp="$P" --with-mpfr="$P" > /dev/null && make -s -j$J && make -s install; cd "$ROOT"
+  ./configure --prefix="$P" --with-gmp="$P" --with-mpfr="$P" > /dev/null && make -s -j$J && make -s install || { echo "FAILED: flint"; exit 1; }; cd "$ROOT"
 fi
 if ! [ -x "$P/bin/msolve" ]; then
   step msolve
   cd "$SRC" && rm -rf msolve-0.11.0 && tar xzf "$ROOT/third_party/msolve-0.11.0.tar.gz" && cd msolve-0.11.0
   ./configure -q --prefix="$P" && make -s -j$J ACLOCAL=true AUTOMAKE=true AUTOCONF=true AUTOHEADER=true \
-    && make -s install ACLOCAL=true AUTOMAKE=true AUTOCONF=true AUTOHEADER=true; cd "$ROOT"
+    && make -s install ACLOCAL=true AUTOMAKE=true AUTOCONF=true AUTOHEADER=true || { echo "FAILED: msolve"; exit 1; }; cd "$ROOT"
 fi
 step test
 "$P/bin/msolve" -f "$ROOT/msolve/N5_C2v.ms" -P 1 -o /tmp/msolve_selftest.out
