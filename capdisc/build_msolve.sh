@@ -10,6 +10,9 @@ exec > >(tee -a logs/build_msolve.log) 2>&1
 export PATH="$P/bin:$PATH" CPPFLAGS="-I$P/include" LDFLAGS="-L$P/lib -Wl,-rpath,$P/lib"
 GNUCC="gcc -std=gnu17"          # GMP 6.3 / m4 configure tests break under GCC 15's C23 default
 
+# Route 0: the distribution's msolve package via `apt-get download` (no compiling, no root).
+if [ -z "${FORCE_SOURCE:-}" ] && bash "$ROOT/get_msolve_deb.sh"; then exit 0; fi
+
 fetch() {  # fetch FILE URL [URL...]
   local f=$1; shift
   [ -s "$SRC/$f" ] && return 0
