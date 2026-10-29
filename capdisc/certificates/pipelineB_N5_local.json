@@ -1,0 +1,22 @@
+{
+ "N": 5,
+ "pipeline": "B (second kernels)",
+ "mesh": {
+  "kernel": "arb (capcert_arb, FLINT C)",
+  "result": "N=5 T=0x1.4b15e123fa6b2p-2 MIN_EPS=0x1.47ae147ae147bp-5 nf=8192 mode=arb keep=0x1p+0 balls=0 survivors=125747 cells=3863796"
+ },
+ "refine": {
+  "input_cells": 125747,
+  "cells": 297347,
+  "bounded": 192287,
+  "boxed": 10,
+  "sym": 19250,
+  "failed": 0,
+  "time": 4229.949005365372,
+  "verified": true,
+  "complete": true,
+  "kernel": "mpmath.iv"
+ },
+ "machine": "Claude workspace, 4 threads",
+ "note": "local run; the w227 run of run_xcheck.sh repeats it and adds N=6"
+}
