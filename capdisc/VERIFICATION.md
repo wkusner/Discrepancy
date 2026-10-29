@@ -30,8 +30,8 @@ Rules:
 
 | claim | step | label now | kernels |
 |---|---|---|---|
-| D_N ≥ T outside the boxes, N = 5, 6 | mesh stage `capcert_rig` | interval-verified | ours (IEEE, C). Second kernel planned: mesh re-implemented on Arb's C library (FLINT), about one night on w227 for N = 6 |
-| | refinement `refine.py` | Arb-verified | Arb. Second kernel planned: numpy IEEE outward-rounded intervals |
+| D_N ≥ T outside the boxes | pipeline A: mesh `capcert_rig` (IEEE intervals, C) + refinement `refine.py` (Arb) | interval-verified + Arb-verified | |
+| | pipeline B: mesh `capcert_arb` (Arb, C) + refinement `xcheck_refine.py` (mpmath.iv) | N = 5: **certified** (A and B agree; `certificates/pipelineB_N5_local.json`). N = 6: B running on w227 | |
 | minimizer unique in its box, D(q*) = D* | `local_cert.py` / `xcheck_local.py` | **certified** | Arb (python-flint) + mpmath.iv, independent code (`certificates/xcheck_local_*.json`) |
 | minimizer symmetric, (q*, D*) = (q(Y(s*)), D_s) | `sym_cert.py` / `xcheck_sym.py` | **certified** | Arb + mpmath.iv, independent code (`certificates/xcheck_sym_*.json`); the orbit structure is exact combinatorics |
 | N·D* is a root of P_N | elimination | **certified** | sympy resultants of the geometric orbit equations (`sym_cert.py`) + msolve Gröbner elimination of the paper's equations `msolve/*.ms` (`xcheck_elim.py`, `certificates/xcheck_elim.json`) |
@@ -46,4 +46,5 @@ checked in B, exact symmetry group and orbits of all worst caps checked in B, ex
 hand-off, stale-file and failure handling) are fixed.
 
 The theorem for N = 5, 6 is **proved**, with interval-verified, Arb-verified and certified steps.
-It becomes *certified* once the mesh and refinement rows have their second kernels.
+For N = 5 every row now has two kernels, so **Theorem 10 is certified for N = 5**. N = 6 becomes certified when
+pipeline B finishes on w227 (`run_xcheck.sh`).
