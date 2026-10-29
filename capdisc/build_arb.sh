@@ -7,6 +7,7 @@ cd "$(dirname "$0")"
 CC=${CC:-gcc}
 P=${PREFIX:-$HOME/local}; DEB=$P/deb; mkdir -p "$DEB/pkgs"
 try_build() {
+  [ "${FORCE_STATIC:-0}" = 1 ] && return 1
   $CC -O2 -Wall -fopenmp "$@" -o capcert_arb csrc/capcert_arb.c -lflint -lgmp -lm 2>build_arb.err
 }
 if try_build; then echo "capcert_arb built against system FLINT"; else
@@ -17,8 +18,13 @@ if try_build; then echo "capcert_arb built against system FLINT"; else
   done
   for f in "$DEB"/pkgs/*.deb; do dpkg-deb -x "$f" "$DEB"; done
   L="$DEB/usr/lib/x86_64-linux-gnu"
-  try_build -I"$DEB/usr/include" -L"$L" -Wl,-rpath,"$L" || { cat build_arb.err; exit 1; }
-  echo "capcert_arb built against FLINT from $DEB"
+  if try_build -I"$DEB/usr/include" -L"$L" -Wl,-rpath,"$L"; then
+    echo "capcert_arb built against FLINT from $DEB"
+  else
+    echo "compiling failed (see build_arb.err); using the static binary bin/capcert_arb-linux-x86_64-static.gz"
+    gunzip -c bin/capcert_arb-linux-x86_64-static.gz > capcert_arb && chmod +x capcert_arb
+    sha256sum -c bin/capcert_arb.sha256 || { echo "checksum mismatch"; rm -f capcert_arb; exit 1; }
+  fi
 fi
 echo "self-test (expect two ARB-VERIFIED lines):"
 ./capcert_arb 3 0.499 1e-3 /tmp/capcert_arb_t3 --threads 4 2>/dev/null | tail -1
