@@ -1,0 +1,133 @@
+# capdisc data guide (for readers and a website)
+
+Everything here is on GitHub, repo `wkusner/Discrepancy`, branch **`capdisc`**, folder
+`capdisc/`. Raw URLs have the form
+`https://raw.githubusercontent.com/wkusner/Discrepancy/capdisc/capdisc/<path>`.
+Files marked *server only* live on the department server w227 under
+`~/Discrepancy/capdisc/` and are **not** on GitHub (see "Getting server data to GitHub").
+
+## What the project does
+
+For N points on the unit sphere S², the spherical cap discrepancy is
+
+    D(X) = sup over closed caps C of | #(X ∩ C)/N − σ(C) |,    σ(C) = (1 − t)/2
+
+for the cap C = {y : ⟨y, w⟩ ≥ t} (Archimedes). D_N = min over all N-point configurations.
+The work has four layers, each with its own data:
+
+1. **Search**: find candidate minimizers (many descents; results grouped into classes).
+2. **Identification**: high-precision polishing, the exact value as an algebraic number
+   (minimal polynomial), exact Gram matrices, and Gröbner bases with msolve.
+3. **Proof by computer**: interval-arithmetic certification that the candidate is the
+   global minimum (done for N=5; N=6 running on w227).
+4. **Paper**: `paper/capture_balance.tex` and the PDF built from it, written for the
+   American Mathematical Monthly.
+
+Status: N ≤ 4 proved by hand; N = 5 proved (computer-assisted); N = 6 locally
+certified, with the global run in progress; N = 7, 8 numerical candidates;
+N = 9–12 search values only.
+
+## Conventions (used by every file)
+
+* **Points** are unit vectors `[x, y, z]`, indexed 0..N−1.
+* **Gauge (normal form)**: point 0 = north pole `(0,0,1)`; point 1 = `(sin q0, 0, cos q0)`
+  with x ≥ 0; point i ≥ 2 = `(sin θ cos φ, sin θ sin φ, cos θ)` with
+  `θ = q[2i−3]`, `φ = q[2i−2]`. So a configuration is a vector **q** of length 2N−3.
+  In the fundamental domain, (0, 1) is a closest pair, θ₂ ≤ θ₃ ≤ …, and φ₂ ∈ [0, π].
+* **Caps.** A "worst cap" is given by the indices `I` of the points on its boundary:
+  * |I| = 2: the smallest cap through the pair.
+  * |I| = 3: one of the two caps bounded by the circle through the triple.
+  * Two encodings occur:
+    * *search/critical files*: `kind` = `"up"` (the cap is over-full: `n_closed/N − σ = D`)
+      or `"low"` (under-full, `σ − n_open/N = D`), with `t` the signed plane level, so
+      σ = (1 − t)/2.
+    * *certificate files*: strings `"Cap(i, j, k)+"` / `"Cap(i, j, k)-"`. The sign selects the
+      side of the plane relative to the normal `(x_j − x_i) × (x_k − x_i)`, with i<j<k.
+      Pairs are written `"Cap(i, j)+"`. Each comes with an integer **count** n_C of points in
+      the cap, so the cap's value is `n_C/N − σ(C)`.
+  * To draw a cap, take axis `w` and level `t`. The boundary circle has center `t·w` and
+    radius `sqrt(1 − t²)`.
+* **Numbers**: `D_float` is a double; `D_60digits` and `D_digits` are decimal strings.
+  `minpoly_ascending` lists integer coefficients in ascending order of powers of the
+  variable named alongside (usually D itself; the paper's P5/P6 use u = N·D).
+  Interval enclosures are `[lo, hi]` pairs of doubles.
+
+## Files on GitHub
+
+### `sphcap/data/critical_configurations.json`: the main data set
+`{ "description": str, "classes": [ … ] }`, with 9 classes:
+`N5_best, N5_valley, N5_third, N6_best, N6_second, N7_best, N8_best, N8_second, N8_third`.
+
+| field | type | meaning |
+|---|---|---|
+| `name` | str | id, e.g. `N5_best` |
+| `N` | int | number of points |
+| `kind` | str | e.g. "sharp minimiser (C2v)" |
+| `D_float`, `D_60digits` | float, str | discrepancy |
+| `minpoly_ascending` | list[int] or null | minimal polynomial of D (ascending) when known |
+| `points` | list[[x,y,z]] | gauge-fixed coordinates |
+| `gram_offdiag` | list[float] | upper-triangular Gram entries ⟨x_i,x_j⟩, i<j, row-major |
+| `n_active` | int | number of worst caps |
+| `rank`, `dim_quotient` | int | rank of worst-cap gradients / 2N−3 |
+| `min_multiplier` | float | smallest balance weight λ |
+| `sharp` | bool | sharp (strict first-order) local minimum |
+| `gram_automorphisms` | int | order of the symmetry group (on the Gram matrix) |
+| `active` | list | worst caps: `{I, kind, n_closed, n_open, t, lam}` |
+| `symmetry`, `notes` | str | human description |
+
+### `certificates/`: proof artefacts (all small JSON)
+* `localcert_N5_best.json`, `localcert_N6_best.json`: the local certificate around each copy
+  ("image") of the minimizer in the fundamental domain. Top level:
+  `{name, N, box_radius, gauge, certified, images:[…]}`. Per image:
+  `krawczyk` (bool), `krawczyk_radius`, `D_enclosure` [lo,hi], `q_center` (length 2N−3),
+  `caps` (strings), `counts`, `extra_caps`/`extra_counts` (redundant worst caps),
+  `others_below`, `counts_frozen_on_box`, `orthants_failed` (0 = pass), `certified`.
+* `symcert_<NAME>_img<k>.json`: the symmetric certificate per image: `group_order`,
+  `orbits` (representative caps), `orbit_caps`, `D_s` [lo,hi] (128-bit), `eliminant_degree`,
+  `P_divides_eliminant`, `factors_meeting_enclosure`, `certified`.
+* `proof_N5.json`: the global proof record for N=5. Fields: `T` (threshold);
+  `capcert_result` (summary line); `capcert_stamp` (settings and counts, with T in hex);
+  `refine` (`input_cells, cells, certified, sym, boxed, failed, time, proved`); `machine`.
+  `proof_N6.json` will be added when the w227 run finishes.
+
+### `msolve/*.ms`: polynomial systems (text, msolve input format)
+Line 1 has the variables, line 2 the characteristic (0), then comma-separated polynomials.
+`N5_C2v.ms` and `N6_D3.ms` are the symmetry-reduced area equations whose elimination gives
+P5 and P6. `N7_C2.ms` is being solved on w227.
+
+### `paper/`
+`capture_balance.pdf` (current draft), `capture_balance.tex`, `refs.bib` (with verification
+notes), `refs_clean.bib`, and `figs/*.png|pdf`
+(`fig_n4_cubic`: the N=4 family; `fig_n5_n6`: the best N=5 and N=6 configurations with
+their worst caps).
+
+### Code (for reference, not data)
+`sphcap/` (Python package), `csrc/` (C certifier: `capcert.c`, rigorous mode `ia.h`,
+`rig.h`), and `jobs/` (search, identify, atlas, `local_cert.py`, `sym_cert.py`, `refine.py`).
+
+## Server-only data (w227, `~/Discrepancy/capdisc/`)
+
+| path | format | content |
+|---|---|---|
+| `STATUS.md` | markdown | summary of all phases, rewritten by `status.py` |
+| `results/search_N{3..12}.json` | list of classes | `{D, hits, active, rank, dimq, min_lambda, sharp, aut, sources}`. Runs from now on also include `points` and `worst_caps`; the existing N=9–12 files do not |
+| `results/identify_N*.json` | list | `{N, D_float, hits, sharp, D_digits (80), minpoly_D, gram (strings), gram_distinct, gram_minpolys, gram_in_QD, …}` |
+| `results/minpoly_N*.json` | object | `{N, dps, minpoly_ascending}` (deep LLL; none found for N=7, 8 at degree ≤ 160) |
+| `results/atlas_N{4,5,6}.atlas.json` | object | `{N, survivors, sample, classes:[{D, hits, active, rank, dimq, min_lambda, sharp, aut, points, worst_caps}]}`: local minima below best + δ (starting soon) |
+| `results/*.msolve.out` | msolve output | real solutions / parametrizations |
+| `results/ladder_N*_eta*.out`, `early_*` | one line | `RESULT N= T= MIN_EPS= cells= certified= sym= ball= survivors= …` (floating-point mesh checks) |
+| `results/proof_N*.out/.done/.refine.json` | text / key=value / JSON | the rigorous proof runs |
+| `results/*.surv.*`, `*.progress` | binary / text | working files (large; not for publication) |
+
+## Getting server data to GitHub
+There are two routes:
+
+1. **Automatic.** Set up the deploy key described in `README.md`, then run with `PUSH=1`. This
+   pushes `STATUS.md` and the small result JSONs every 10 minutes to branch `w227-status`.
+2. **Manual snapshot.** Copy the JSONs into the `capdisc` branch with a commit, e.g. under
+   `capdisc/data/` (ask Claude in the Discrepancy project).
+
+For a website, the cleanest contract is a single aggregated export file,
+`capdisc/data/site.json`: one entry per N with value, status, polynomial, points and worst
+caps, plus the proof records. It can be generated from the files above by a small script
+(not yet written).

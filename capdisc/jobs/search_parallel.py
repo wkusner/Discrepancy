@@ -65,7 +65,9 @@ def main():
         rep = B.balance_report(X)
         rows.append(dict(D=D, hits=hits, active=len(rep.active), rank=rep.rank, dimq=rep.dim_quot,
                          min_lambda=float(rep.min_lambda), sharp=bool(rep.sharp),
-                         aut=S.gram_automorphisms(X), sources=src))
+                         aut=S.gram_automorphisms(X), sources=src,
+                         points=np.asarray(X).tolist(),
+                         worst_caps=[dict(I=list(map(int, b.I)), kind=b.kind, n_closed=int(b.n_cl), n_open=int(b.n_op), t=float(b.t)) for b in rep.active]))
     json.dump(rows, open(out + '.json', 'w'), indent=1)
     for r in rows:
         print(json.dumps(r))

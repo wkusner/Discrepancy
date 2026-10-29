@@ -52,7 +52,9 @@ def main():
     for D, Y, hits in cl:
         rep = B.balance_report(Y)
         rows.append(dict(D=D, hits=hits, active=len(rep.active), rank=rep.rank, dimq=rep.dim_quot,
-                         min_lambda=float(rep.min_lambda), sharp=bool(rep.sharp), aut=S.gram_automorphisms(Y)))
+                         min_lambda=float(rep.min_lambda), sharp=bool(rep.sharp), aut=S.gram_automorphisms(Y),
+                         points=np.asarray(Y).tolist(),
+                         worst_caps=[dict(I=list(map(int, b.I)), kind=b.kind, n_closed=int(b.n_cl), n_open=int(b.n_op), t=float(b.t)) for b in rep.active]))
         print(json.dumps(rows[-1]), flush=True)
     json.dump(dict(N=N, survivors=int(len(arr)), sample=int(len(idx)), classes=rows), open(a.prefix + '.atlas.json', 'w'), indent=1)
     pickle.dump([(D, Y, h) for D, Y, h in cl], open(a.prefix + '.atlas.pkl', 'wb'))

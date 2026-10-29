@@ -15,6 +15,7 @@ enumeration algorithm (`MatrixSphericalDiscrepancy.nb`) is on `master`.
 | `run_all.sh` | orchestrator for all phases, N = 3..8 |
 | `run_proof.sh` | global proof for N = 5, 6: local certificate, capcert at T = D*_hi, rigorous refinement of survivors |
 | `status.py`, `push_status.sh` | STATUS.md writer and GitHub status push |
+| `DATA.md` | data guide: file formats, conventions, what is where (for readers and the website) |
 
 ## Running on w227
 
