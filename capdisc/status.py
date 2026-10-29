@@ -91,6 +91,18 @@ if pr or os.path.exists('logs/proof.log'):
         last = open(f).read().strip().split('\n')[-1:] 
         out.append(f"- {os.path.basename(f)}: {last[0] if last else ''}\n")
 
+# ---------------------------------------------------------------- second-kernel pipeline (run_xcheck.sh)
+if os.path.exists('logs/xcheck.log'):
+    out.append("\n## Second-kernel checks (VERIFICATION.md: certified = two kernels agree)\n")
+    for f in sorted(glob.glob('certificates/xcheck_*.json')):
+        d = json.load(open(f)); ok = d.get('verified', None)
+        out.append(f"- {os.path.basename(f)}: {'agrees' if ok else ('see file' if ok is None else 'DOES NOT AGREE')}\n")
+    for f in sorted(glob.glob(f'{R}/xproof_N*.out')):
+        out.append(f"- {os.path.basename(f)}: {open(f).read().strip().splitlines()[0] if open(f).read().strip() else 'running'}\n")
+    for f in sorted(glob.glob(f'{R}/xproof_N*.xrefine.json')):
+        d = json.load(open(f)); out.append(f"- xrefine N={d['N']}: {'**verified (mpmath.iv), no cell left**' if d['verified'] else 'NOT verified'}: input {d['input_cells']:,}, cells {d['cells']:,}, failed {d['failed']}, {d['time']/3600:.2f} h\n")
+    out.append("```\n" + '\n'.join(open('logs/xcheck.log').read().strip().split('\n')[-6:]) + "\n```\n")
+
 # ---------------------------------------------------------------- atlas
 for f in sorted(glob.glob(f'{R}/atlas_N*.atlas.json')):
     a = json.load(open(f))

@@ -19,6 +19,7 @@ Krawczyk-verified steps; the second-kernel cross-checks are in progress.
 | `msolve/` | symmetry-reduced polynomial systems (area equations) for exact elimination |
 | `paper/` | the paper source and figures |
 | `run_all.sh` | orchestrator for all phases, N = 3..8 |
+| `run_xcheck.sh`, `build_arb.sh` | second-kernel pipeline: Krawczyk tests in mpmath.iv, root isolation in sympy, elimination in msolve, mesh in Arb (`capcert_arb`) + refinement in mpmath.iv (`xcheck_refine.py`) |
 | `run_proof.sh` | global proof for N = 5, 6: local and symmetric verification (Krawczyk, Arb), interval-verified mesh at T = D*_hi, Arb-verified refinement |
 | `status.py`, `push_status.sh` | STATUS.md writer and GitHub status push |
 | `VERIFICATION.md` | **verification vocabulary** (certified = cross-checked by two kernels; otherwise interval-verified, Arb-verified, Krawczyk-verified, numerically identified, floating-point checked) and the status of every claim |

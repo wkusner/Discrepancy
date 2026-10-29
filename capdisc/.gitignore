@@ -5,3 +5,5 @@ capcert
 capcert_rig
 logs/
 results/
+capcert_arb
+build_arb.err
