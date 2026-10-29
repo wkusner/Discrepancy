@@ -12,13 +12,13 @@ out.append(f"host load {la[0]:.1f} / {la[1]:.1f} / {la[2]:.1f} (1/5/15 min), {os
 # ---------------------------------------------------------------- ladder
 out.append("\n## Certification ladder  (proves D >= D_best - eta for all configurations)\n")
 out.append("| N | eta | status | cells | time | note |\n|---|---|---|---|---|---|\n")
-for f in sorted(glob.glob(f'{R}/ladder_N*_eta*.out'), key=lambda s: (int(re.search(r'N(\d+)', s).group(1)), -float(re.search(r'eta([0-9.e-]+)\.out', s).group(1)))):
+for f in sorted(glob.glob(f'{R}/ladder_N*_eta*.out') + glob.glob(f'{R}/early_N*_eta*.out'), key=lambda s: (int(re.search(r'N(\d+)', s).group(1)), -float(re.search(r'eta([0-9.e-]+)\.out', s).group(1)))):
     N = re.search(r'N(\d+)', f).group(1); eta = re.search(r'eta([0-9.e-]+)\.out', f).group(1)
     txt = open(f).read()
     m = re.search(r'cells=(\d+).*survivors=(\d+).*time=(\d+)s', txt)
     if m:
         st = 'CERTIFIED' if 'CERTIFIED' in txt else f'survivors {int(m.group(2)):,}'
-        out.append(f"| {N} | {eta} | {st} | {int(m.group(1)):,} | {int(m.group(3))/3600:.2f} h | |\n")
+        out.append(f"| {N} | {eta} | {st} | {int(m.group(1)):,} | {int(m.group(3))/3600:.2f} h | {'early (run_more)' if 'early_' in f else ''} |\n")
     else:
         lg = f[:-4] + '.log'
         last = open(lg).read().strip().split('\n')[-1] if os.path.exists(lg) else ''
