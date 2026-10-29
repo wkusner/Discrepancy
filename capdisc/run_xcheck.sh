@@ -14,7 +14,7 @@ log() { echo "$(date '+%F %T')  $*" | tee -a logs/xcheck.log; }
 step() { local what=$1; shift; "$@" > logs/xcheck_step.out 2>&1; local rc=$?; tail -2 logs/xcheck_step.out | tee -a logs/xcheck.log
          [ $rc -eq 0 ] || log "FAILED: $what (exit $rc)"; return $rc; }
 [ -x capcert_arb ] || bash build_arb.sh || { log "could not build capcert_arb"; exit 1; }
-rm -f certificates/xcheck_*.json                     # never pass on stale results
+rm -f certificates/xcheck_*.json                     # never pass on stale results (regenerated below)
 step roots "$PY" jobs/xcheck_roots.py
 step elimination "$PY" jobs/xcheck_elim.py "$MSOLVE"
 declare -A EPS=([5]=0.04 [6]=0.03)

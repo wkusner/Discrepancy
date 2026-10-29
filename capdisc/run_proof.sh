@@ -22,7 +22,8 @@ for N in $NS; do
   echo "=== N=$N ($nm) $(date)" | tee -a logs/proof.log
   $PY jobs/local_cert.py "$nm" "${RBOX[$N]}" 2>&1 | tee -a logs/proof.log
   lc=results/localcert_$nm.json
-  mkdir -p certificates && cp "$lc" certificates/
+  # certificates/ is tracked in git: only overwrite it on request (UPDATE_CERTS=1), so that git pull keeps working
+  [ "${UPDATE_CERTS:-0}" = 1 ] && cp "$lc" certificates/
   nimg=$($PY -c "import json;print(len(json.load(open('$lc'))['images']))")
   for k in $(seq 0 $((nimg - 1))); do
     $PY jobs/sym_cert.py "$nm" "$k" 2>&1 | tail -4 | tee -a logs/proof.log
