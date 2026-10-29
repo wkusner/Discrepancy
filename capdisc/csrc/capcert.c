@@ -153,11 +153,14 @@ static int inside_ball(double X[][3], const double *E) {
     return 0;
 }
 
+static double SPLIT_ALPHA = 0.0; /* >0: prefer splitting earlier points (incremental placement) */
+static inline int coord_point(int k) { return k == 0 ? 1 : (k + 3) / 2; }
 static void split(const Cell *c, Cell *a, Cell *b) {
     int j = 0; double wmax = -1;
     for (int k = 0; k < NQ; k++) {
         double wk = c->h[k];
         if (k >= 2 && (k % 2 == 0)) wk = c->h[k] * (fabs(sin(c->q[k - 1])) + 1e-3); /* phi coordinate */
+        if (SPLIT_ALPHA > 0) wk /= (1.0 + SPLIT_ALPHA * (coord_point(k) - 1));
         if (wk > wmax) { wmax = wk; j = k; }
     }
     *a = *c; *b = *c;
@@ -226,6 +229,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[a], "--balls")) balls = argv[++a];
         else if (!strcmp(argv[a], "--max-cells-per-root")) maxc = atol(argv[++a]);
         else if (!strcmp(argv[a], "--keep-prob")) KEEP_PROB = atof(argv[++a]);
+        else if (!strcmp(argv[a], "--split-alpha")) SPLIT_ALPHA = atof(argv[++a]);
     }
     if (N < 3 || N > NMAX) { fprintf(stderr, "N must be in 3..%d\n", NMAX); return 1; }
     NQ = 2 * N - 3; NT3 = 0; NP2 = 0;
