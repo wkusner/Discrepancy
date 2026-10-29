@@ -40,10 +40,11 @@ def process(cell):
     c0, w0 = cell
     N, T = G['N'], G['T']
     stack = [(np.array(c0), np.array(w0))]
-    st = dict(cells=0, certified=0, boxed=0, failed=0, fails=[])
+    st = dict(cells=0, certified=0, boxed=0, sym=0, failed=0, fails=[])
     while stack:
         c, w = stack.pop(); st['cells'] += 1
         if inside_box(c, w): st['boxed'] += 1; continue
+        if Cf.misses_domain(c, w, N): st['sym'] += 1; continue
         lb, info = Cf.cell_lower_bound(c, w, N, T, G['caps'])
         if lb >= T: st['certified'] += 1; continue
         if w.max() < G['minw']:
@@ -86,7 +87,7 @@ def main():
     assert len(arr) >= int(stamp['survivors']), f"only {len(arr)} survivor records, capcert counted {stamp['survivors']}"
     cells = [(row[:nq], row[nq:2 * nq]) for row in arr]
     print(f"N={N}: {len(cells):,} cells from capcert, T={T!r}, {len(boxes)} exclusion box(es) of half-width {lc['box_radius']}", flush=True)
-    t0 = time.time(); tot = dict(cells=0, certified=0, boxed=0, failed=0); fails = []
+    t0 = time.time(); tot = dict(cells=0, certified=0, boxed=0, sym=0, failed=0); fails = []
     with Pool(a.workers, initializer=init, initargs=(N, T, boxes, a.min_width)) as pool:
         for k, st in enumerate(pool.imap_unordered(process, cells, chunksize=8)):
             for key in tot: tot[key] += st[key]

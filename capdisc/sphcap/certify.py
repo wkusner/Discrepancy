@@ -254,8 +254,11 @@ def in_fundamental_domain(q, N, tol=1e-9):
 
 
 def domain_images(X, tol=1e-9):
-    """All relabeled/reflected copies of X, gauge-fixed, that lie in capcert's fundamental domain."""
+    """All relabeled/reflected copies of X, gauge-fixed, that lie in (the closure of) capcert's
+    fundamental domain, including every boundary representative: a longitude within tol of +-pi is
+    listed with both signs, since both parameter values describe the same configuration."""
     N = len(X); out = []
+    phis = [2 * i - 2 for i in range(2, N)]
     for perm in itertools.permutations(range(N)):
         for refl in (1, -1):
             Y = X[list(perm)] * np.array([1, refl, 1.0])
@@ -263,7 +266,31 @@ def domain_images(X, tol=1e-9):
             for flip in (1, -1):                        # reflection y -> -y keeps x0, x1
                 Yf = Yg * np.array([1, flip, 1.0]); qf = q.copy()
                 for i in range(2, N): qf[2 * i - 2] = flip * q[2 * i - 2]
-                qf[[2 * i - 2 for i in range(2, N)]] = (qf[[2 * i - 2 for i in range(2, N)]] + np.pi) % (2 * np.pi) - np.pi
-                if in_fundamental_domain(qf, N, tol) and not any(np.allclose(qf, o[1], atol=1e-7) for o in out):
-                    out.append((Yf, qf))
+                qf[phis] = (qf[phis] + np.pi) % (2 * np.pi) - np.pi
+                near = [j for j in phis if abs(abs(qf[j]) - np.pi) < 1e-6]
+                for signs in itertools.product((1, -1), repeat=len(near)):
+                    qv = qf.copy()
+                    for j, sg in zip(near, signs): qv[j] = sg * np.pi + (qf[j] - np.sign(qf[j]) * np.pi)
+                    if in_fundamental_domain(qv, N, tol) and not any(np.allclose(qv, o[1], atol=1e-7) for o in out):
+                        out.append((Yf, qv))
     return out
+
+
+def misses_domain(qc, w, N):
+    """Rigorous: True if the cell qc +- w contains no point of capcert's fundamental domain
+    (theta_i > theta_{i+1} throughout, or some pair closer than (x0, x1) throughout)."""
+    nq = 2 * N - 3
+    for i in range(2, N - 1):
+        a, b = 2 * i - 3, 2 * (i + 1) - 3
+        if arb(qc[a]) - arb(w[a]) > arb(qc[b]) + arb(w[b]):
+            return True
+    qbox = [arb(qc[k], w[k]) for k in range(nq)]
+    P = points_ad(qbox, N)
+    pts = [[x.v for x in p] for p in P]
+    c01 = qbox[0].cos()                      # <y0, y1> = cos q0 = cos d(y0, y1)
+    for i, j in itertools.combinations(range(N), 2):
+        if (i, j) == (0, 1): continue
+        g = pts[i][0] * pts[j][0] + pts[i][1] * pts[j][1] + pts[i][2] * pts[j][2]
+        if g > c01:                          # <y_i,y_j> > <y_0,y_1> throughout: d(y_i,y_j) < d(y_0,y_1)
+            return True
+    return False

@@ -94,7 +94,11 @@ def solve_numeric():
         Y = fam_float(x); G = Y @ Y.T
         for perm in itertools.permutations(range(N)):
             if np.allclose(G[np.ix_(perm, perm)], Gimg, atol=2e-4):
-                best = (x, perm); break
+                # Gram matrices do not see reflections: also require the same orientation, i.e. the
+                # gauge coordinates of the relabeled family point agree with the image (mod 2 pi)
+                dq = (gauge_float(Y[list(perm)]) - qc + np.pi) % (2 * np.pi) - np.pi
+                if np.abs(dq).max() < 1e-3:
+                    best = (x, perm); break
         if best: break
     assert best, "no labeling matches"
     x, perm = best

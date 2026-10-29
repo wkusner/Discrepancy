@@ -150,7 +150,9 @@ print(f"{name}: N={N}, {len(images)} image(s) in the fundamental domain")
 results = []
 for k, (Yi, qi) in enumerate(images):
     q0, caps, counts = worst_caps(Yi); extra, extra_counts = [], []
-    assert np.allclose(q0, qi, atol=1e-9), (q0, qi)
+    dq = (q0 - qi + np.pi) % (2 * np.pi) - np.pi        # longitudes +-pi describe the same point
+    assert np.allclose(dq, 0, atol=1e-9), (q0, qi)
+    q0 = np.array(qi, float)                            # use the parameter value of this image
     if len(caps) != 2 * N - 2:
         # symmetric configurations have redundant worst caps: keep an independent square subset
         J = []
