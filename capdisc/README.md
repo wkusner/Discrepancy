@@ -5,16 +5,23 @@ Code, data and paper for the "cap capturing and balancing" program
 branch of `wkusner/Discrepancy`; the original 2014 Mathematica implementation of the
 enumeration algorithm (`MatrixSphericalDiscrepancy.nb`) is on `master`.
 
+**Labels.** Following the convention in `VERIFICATION.md`, a computational result is *certified*
+only after two independent kernels have checked it. A rigorous single-kernel computation is
+named by its method: *interval-verified*, *Arb-verified* or *Krawczyk-verified*.
+Current status: D_5 and D_6 are **proved**, with interval-verified, Arb-verified and
+Krawczyk-verified steps; the second-kernel cross-checks are in progress.
+
 | path | what |
 |---|---|
 | `sphcap/` | Python package: discrepancy (exact enumeration), `balance` (branches, forces, KKT/balance test, SLP descent), `gram` (Gram formulas, N=3/4 exact solutions, N=5 elimination), `highprec` (mpmath polishing, LLL identification), `search` (candidate search), `bnb` (Python branch-and-bound) |
-| `csrc/capcert.c` | C/OpenMP certifier: proves D >= T cell by cell over the reduced configuration space |
+| `csrc/capcert.c` | C/OpenMP mesh program: shows D >= T cell by cell over the reduced configuration space (floating-point checked; interval-verified when built as `capcert_rig`) |
 | `jobs/` | server jobs: parallel search, identification, deep identification, atlas |
 | `msolve/` | symmetry-reduced polynomial systems (area equations) for exact elimination |
 | `paper/` | the paper source and figures |
 | `run_all.sh` | orchestrator for all phases, N = 3..8 |
 | `run_proof.sh` | global proof for N = 5, 6: local certificate, capcert at T = D*_hi, rigorous refinement of survivors |
 | `status.py`, `push_status.sh` | STATUS.md writer and GitHub status push |
+| `VERIFICATION.md` | **verification vocabulary** (certified = cross-checked by two kernels; otherwise interval-verified, Arb-verified, Krawczyk-verified, numerically identified, floating-point checked) and the status of every claim |
 | `DATA.md` | data guide: file formats, conventions, what is where (for readers and the website) |
 
 ## Running on w227
