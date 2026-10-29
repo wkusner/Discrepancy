@@ -34,11 +34,10 @@ Rules:
 | | refinement `refine.py` | Arb-verified | Arb. Second kernel planned: numpy IEEE outward-rounded intervals |
 | minimizer unique in its box, D(q*) = D* | `local_cert.py` / `xcheck_local.py` | **certified** | Arb (python-flint) + mpmath.iv, independent code (`certificates/xcheck_local_*.json`) |
 | minimizer symmetric, (q*, D*) = (q(Y(s*)), D_s) | `sym_cert.py` / `xcheck_sym.py` | **certified** | Arb + mpmath.iv, independent code (`certificates/xcheck_sym_*.json`); the orbit structure is exact combinatorics |
-| N·D* is a root of P_N | elimination | N = 5: **certified** (sympy resultants + msolve Gröbner bases); N = 6: exact (sympy resultants), with the msolve output on w227 still to be compared | |
+| N·D* is a root of P_N | elimination | **certified** | sympy resultants of the geometric orbit equations (`sym_cert.py`) + msolve Gröbner elimination of the paper's equations `msolve/*.ms` (`xcheck_elim.py`, `certificates/xcheck_elim.json`) |
 | P_N irreducible, one root in the interval | root isolation | **certified** | FLINT + sympy (`certificates/xcheck_roots.json`) |
 | exact Gram matrices N = 5, 6 | `gram_exact.py` | numerically identified | — |
 | D_N ≥ D_best − η (ladder) | `capcert` (float) | floating-point checked | superseded by the proof |
 
 The theorem for N = 5, 6 is **proved**, with interval-verified, Arb-verified and certified steps.
-It becomes *certified* once the mesh and refinement rows have their second kernels and the
-N = 6 msolve comparison is done.
+It becomes *certified* once the mesh and refinement rows have their second kernels.

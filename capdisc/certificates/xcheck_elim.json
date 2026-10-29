@@ -1,0 +1,20 @@
+{
+ "5": {
+  "eliminant_degree": 12,
+  "factor_degrees": [
+   12
+  ],
+  "factor_meeting_enclosure_is_P_N": true,
+  "kernel": "msolve (F4 Groebner basis, elimination order) + sympy factorization"
+ },
+ "6": {
+  "eliminant_degree": 16,
+  "factor_degrees": [
+   1,
+   1,
+   12
+  ],
+  "factor_meeting_enclosure_is_P_N": true,
+  "kernel": "msolve (F4 Groebner basis, elimination order) + sympy factorization"
+ }
+}
