@@ -5,6 +5,8 @@
    12
   ],
   "factor_meeting_enclosure_is_P_N": true,
+  "verified": true,
+  "note": "msolve rational reconstruction is multi-modular (probabilistic): a cross-check of the deterministic sympy resultants",
   "kernel": "msolve (F4 Groebner basis, elimination order) + sympy factorization"
  },
  "6": {
@@ -15,6 +17,8 @@
    12
   ],
   "factor_meeting_enclosure_is_P_N": true,
+  "verified": true,
+  "note": "msolve rational reconstruction is multi-modular (probabilistic): a cross-check of the deterministic sympy resultants",
   "kernel": "msolve (F4 Groebner basis, elimination order) + sympy factorization"
  }
 }

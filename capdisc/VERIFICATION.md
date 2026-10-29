@@ -39,5 +39,11 @@ Rules:
 | exact Gram matrices N = 5, 6 | `gram_exact.py` | numerically identified | — |
 | D_N ≥ D_best − η (ladder) | `capcert` (float) | floating-point checked | superseded by the proof |
 
+Pipeline B (second kernels for every step) is run by `run_xcheck.sh`; `jobs/xcheck_verdict.py` states
+per N whether it proves the theorem on its own (`certificates/xcheck_verdict.json`). Its code was
+audited independently; the audit's findings (outward box B, D* < T and N·D* in the theorem interval
+checked in B, exact symmetry group and orbits of all worst caps checked in B, exact Krawczyk box
+hand-off, stale-file and failure handling) are fixed.
+
 The theorem for N = 5, 6 is **proved**, with interval-verified, Arb-verified and certified steps.
 It becomes *certified* once the mesh and refinement rows have their second kernels.

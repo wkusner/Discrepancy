@@ -31,7 +31,9 @@ def parse(s):
 
 
 cnt = {parse(s): n for s, n in zip(im['caps'], im['counts'])}
+extra = {parse(s): n for s, n in zip(im.get('extra_caps', []), im.get('extra_counts', []))}
 reps = [parse(s) for s in sc_['orbits']]
+T = max(i['D_enclosure'][1] for i in lc['images'])
 
 
 # ---- symmetric family (same parametrization as the paper, Section 8)
@@ -78,6 +80,48 @@ for sg in itertools.product((1, -1), repeat=len(x0)):
     if found: break
 assert found, "no labeling"
 s0, perm = found
+
+# ---- exact symmetry: each generator g maps the symbolic family Y(s) to itself, g Y_j = Y_sigma(j)
+import sympy as sp
+ssym = sp.symbols('s0:%d' % len(s0))
+Ysym = family(list(ssym), sp.sqrt, sp.sqrt(3), sp.Rational(1, 2))
+if N == 5:
+    gens = [sp.diag(1, -1, 1), sp.diag(-1, 1, 1)]
+else:
+    gens = [sp.Matrix([[-sp.Rational(1, 2), -sp.sqrt(3) / 2, 0], [sp.sqrt(3) / 2, -sp.Rational(1, 2), 0], [0, 0, 1]]), sp.diag(1, -1, -1)]
+inv = [perm.index(j) for j in range(N)]
+gens_img = []
+for g in gens:
+    sig = []
+    for j in range(N):
+        gy = g * sp.Matrix(Ysym[j])
+        hit = [m for m in range(N) if all(sp.simplify(gy[r] - Ysym[m][r]) == 0 for r in range(3))]
+        assert len(hit) == 1, "generator does not permute the family exactly"
+        sig.append(hit[0])
+    gens_img.append((tuple(inv[sig[perm[k]]] for k in range(N)), int(g.det())))
+group = {(tuple(range(N)), 1)}
+while True:
+    new = {(tuple(gp[0][p[k]] for k in range(N)), d * gp[1]) for (p, d) in group for gp in gens_img}
+    if new <= group: break
+    group |= new
+
+
+def image_cap(I, side, g):
+    sig, det = g
+    J = [sig[i] for i in I]
+    if len(J) == 2: return (tuple(sorted(J)), 1)
+    order = sorted(range(3), key=lambda k: J[k])
+    sgn = round(float(np.linalg.det(np.eye(3)[order])))
+    return (tuple(sorted(J)), side * det * sgn)
+
+
+orbit_of = {}
+for r in reps:
+    for g in group:
+        orbit_of.setdefault(image_cap(r[0], r[1], g), r)
+all_caps = dict(cnt); all_caps.update(extra)
+orbits_ok = all(c in orbit_of and all_caps[c] == cnt[orbit_of[c]] for c in all_caps)
+print(f"  exact symmetry group of order {len(group)}; every worst cap (incl. {len(extra)} redundant) is the image of a representative with the same count: {orbits_ok}")
 
 
 # ---- forward AD over mpmath.iv (independent of the Arb code)
@@ -173,14 +217,21 @@ norm = lambda v: iv.sqrt(dot(v, v))
 qg = [iv.atan2(norm(cross(a, b)), ab)]
 for y in Y[2:]:
     qg += [iv.atan2(norm(cross(a, y)), dot(a, y)), iv.atan2(dot(e2, y), dot(e1, y))]
-ctr = [mp.mpf(v) for v in xim['krawczyk_center']]; rk_loc = mp.mpf(xim['krawczyk_radius'])
-inK = all(qg[j].a > ctr[j] - rk_loc and qg[j].b < ctr[j] + rk_loc for j in range(nq))
-inD = Ds.a > ctr[-1] - rk_loc and Ds.b < ctr[-1] + rk_loc
+Zb = [iv.mpf([mp.make_mpf(tuple(lo_)), mp.make_mpf(tuple(hi_))]) for lo_, hi_ in xim['krawczyk_box']]   # exact
+inK = all((qg[j].a > Zb[j].a) is True and (qg[j].b < Zb[j].b) is True for j in range(nq))
+inD = (Ds.a > Zb[-1].a) is True and (Ds.b < Zb[-1].b) is True
+belowT = (Ds.b < iv.mpf(T)) is True
+# N*D_s lies in the interval stated in Theorem 10 (endpoints exact rationals -> outward intervals)
+THM = {5: ('1.616628254990254', '1.616628254990268'), 6: ('1.672072891057447', '1.672072891057457')}[N]
+uN = Ds * N
+in_thm = (uN.a > iv.mpf(THM[0])) is True and (uN.b < iv.mpf(THM[1])) is True
 print(f"{name} image {IMG}: Krawczyk (mpmath.iv, radius {rk}): D_s in [{mp.nstr(Ds.a, 25)}, {mp.nstr(Ds.b, 25)}]; "
-      f"q(Y(s*)) in the mpmath local box: {inK}; D_s in it: {inD}")
+      f"q(Y(s*)) in the mpmath local box: {inK}; D_s in it: {inD}; D_s < T: {belowT}")
 res = dict(name=name, image=IMG, kernel='mpmath.iv (interval arithmetic, 40 digits)', method='Krawczyk test in symmetric coordinates + gauge inclusion',
            independent_of='arb/python-flint and sphcap.certify', krawczyk_radius=float(rk),
-           D_s=[mp.nstr(Ds.a, 30), mp.nstr(Ds.b, 30)], gauge_in_local_box=bool(inK), D_in_local_box=bool(inD),
-           verified=bool(ok and inK and inD))
+           D_s=[mp.nstr(mp.mpf(Ds.a), 30), mp.nstr(mp.mpf(Ds.b), 30)], gauge_in_local_box=bool(inK), D_in_local_box=bool(inD),
+           T=T, D_below_T=bool(belowT), group_order=len(group), orbits_exact=bool(orbits_ok),
+           theorem_interval=THM, N_D_in_theorem_interval=bool(in_thm),
+           verified=bool(ok and inK and inD and belowT and orbits_ok and in_thm))
 json.dump(res, open(os.path.join(CERT, f'xcheck_sym_{name}_img{IMG}.json'), 'w'), indent=1)
 print("KRAWCZYK-VERIFIED (mpmath.iv): second kernel agrees" if res['verified'] else "SECOND KERNEL DOES NOT CONFIRM")

@@ -9,8 +9,9 @@ MS = sys.argv[1] if len(sys.argv) > 1 else os.environ.get('MSOLVE', 'msolve')
 D, u = sp.symbols('D u')
 P = {5: [64, -640, -352, 15344, -23004, -23384, -120504, 243968, 562963, -698538, -670529, 545392, 173504],
      6: [25, -496, 3524, -9120, -5298, 69920, -102348, -58272, 278817, -207344, -29312, 43520, 25600]}
-ENC = {5: (sp.Rational('0.3233256509980512'), sp.Rational('0.32332565099805344')),
-       6: (sp.Rational('0.2786788151762412'), sp.Rational('0.27867881517624293'))}
+# the interval of Theorem 10 (in u = N D), which contains N D* by xcheck_sym
+THM = {5: ('1.616628254990254', '1.616628254990268'), 6: ('1.672072891057447', '1.672072891057457')}
+ENC = {N: (sp.Rational(a) / N, sp.Rational(b) / N) for N, (a, b) in THM.items()}
 out = {}
 for N, f in ((5, 'N5_C2v.ms'), (6, 'N6_D3.ms')):
     src = os.path.join(ROOT, 'msolve', f)
@@ -29,6 +30,7 @@ for N, f in ((5, 'N5_C2v.ms'), (6, 'N6_D3.ms')):
     hits = [g for g in facs if g.count_roots(lo, hi) > 0]
     same = len(hits) == 1 and (hits[0].primitive()[1] == PD or hits[0].primitive()[1] == -PD)
     out[N] = dict(eliminant_degree=E.degree(), factor_degrees=[g.degree() for g in facs],
-                  factor_meeting_enclosure_is_P_N=bool(same), kernel='msolve (F4 Groebner basis, elimination order) + sympy factorization')
+                  factor_meeting_enclosure_is_P_N=bool(same), verified=bool(same),
+                  note='msolve rational reconstruction is multi-modular (probabilistic): a cross-check of the deterministic sympy resultants', kernel='msolve (F4 Groebner basis, elimination order) + sympy factorization')
     print(f"N={N}: msolve eliminant degree {E.degree()}, factors {[g.degree() for g in facs]}; the only factor with a root in the enclosure is P_{N}(N D): {same}")
 json.dump(out, open(os.path.join(CERT, 'xcheck_elim.json'), 'w'), indent=1)

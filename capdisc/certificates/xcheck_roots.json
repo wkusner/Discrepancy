@@ -2,6 +2,7 @@
  "5": {
   "irreducible": true,
   "roots_in_interval": 1,
+  "verified": true,
   "interval": [
    "1.616628254990254",
    "1.616628254990268"
@@ -11,6 +12,7 @@
  "6": {
   "irreducible": true,
   "roots_in_interval": 1,
+  "verified": true,
   "interval": [
    "1.672072891057447",
    "1.672072891057457"

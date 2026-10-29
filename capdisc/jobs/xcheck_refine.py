@@ -3,7 +3,7 @@
 Independent of Arb/python-flint and of sphcap.certify: cap geometry, forward AD over intervals,
 robust counts, the single-cap and LP-combined first-order bounds and the domain tests are
 re-implemented here on mpmath.iv.  The same survivor cells of the interval-verified mesh stage
-(capcert_rig) are bisected until every piece is
+(capcert_arb, pipeline B; or capcert_rig with --mesh rigorous) are bisected until every piece is
   * inside a box B of the local verification (certified), or
   * provably outside the fundamental domain, or
   * shown to satisfy D >= T by
@@ -256,17 +256,20 @@ def main():
     ap.add_argument('N', type=int); ap.add_argument('prefix')
     ap.add_argument('--workers', type=int, default=16); ap.add_argument('--min-width', type=float, default=1e-7)
     ap.add_argument('--limit', type=int, default=0, help='test: only the first LIMIT input cells')
+    ap.add_argument('--mesh', default='arb', choices=['arb', 'rigorous'])
     a = ap.parse_args()
     N, nq = a.N, 2 * a.N - 3
     name = f'N{N}_best'
     lc = json.load(open(os.path.join(CERT, f'localcert_{name}.json')))
     xl = json.load(open(os.path.join(CERT, f'xcheck_local_{name}.json')))
+    xs = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(CERT, f'xcheck_sym_{name}_img*.json')))]
     assert lc.get('verified') and xl.get('verified'), "local verification not certified"
+    assert len(xs) == len(lc['images']) and all(d.get('verified') for d in xs), "symmetric second-kernel check missing or failed"
     boxes = [(im['q_center'], lc['box_radius']) for im in lc['images']]
     T = max(im['D_enclosure'][1] for im in lc['images'])
     stamp = dict(kv.split('=', 1) for kv in open(a.prefix + '.done').read().split())
-    # survivors of either mesh kernel: 'arb' (capcert_arb, pipeline B) or 'rigorous' (capcert_rig)
-    assert int(stamp['N']) == N and stamp['mode'] in ('arb', 'rigorous') and float.fromhex(stamp['keep']) == 1.0
+    # pipeline B: survivors of the Arb mesh stage (capcert_arb); --mesh rigorous re-checks pipeline A's survivors
+    assert int(stamp['N']) == N and stamp['mode'] == a.mesh and float.fromhex(stamp['keep']) == 1.0
     assert float.fromhex(stamp['T']) >= T
     rec = (2 * nq + 1) * 8
     files = sorted(f for f in glob.glob(a.prefix + '.surv.*') if f.rsplit('.', 1)[1].isdigit())

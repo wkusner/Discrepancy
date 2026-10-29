@@ -1,0 +1,26 @@
+{
+ "5": {
+  "checks": {
+   "local": true,
+   "symmetric": true,
+   "roots": true,
+   "elimination": true,
+   "mesh": false,
+   "refinement": false
+  },
+  "pipeline_B_proves": false,
+  "T": 0.32332565099805344
+ },
+ "6": {
+  "checks": {
+   "local": true,
+   "symmetric": true,
+   "roots": true,
+   "elimination": true,
+   "mesh": false,
+   "refinement": false
+  },
+  "pipeline_B_proves": false,
+  "T": 0.27867881517624277
+ }
+}

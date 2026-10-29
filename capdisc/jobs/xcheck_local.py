@@ -22,6 +22,7 @@ CERT = os.path.join(HERE, '..', 'certificates')
 name = sys.argv[1]
 lc = json.load(open(os.path.join(CERT, f'localcert_{name}.json')))
 N = lc['N']; nq = 2 * N - 3; rB = lc['box_radius']
+T = max(im['D_enclosure'][1] for im in lc['images'])       # the threshold used by both mesh stages
 
 
 # ---------------------------------------------------------------- forward AD over mpmath.iv
@@ -135,7 +136,9 @@ def check_image(im):
             ok = ok and lo(acc) > lo(Z[i]) and hi(acc) < hi(Z[i])
         if ok: break
     rep['krawczyk'] = ok; rep['krawczyk_radius'] = float(rk)
-    rep['krawczyk_center'] = [mp.nstr(v, 40) for v in x]          # (q, D), box = center +- radius
+    # the Krawczyk box Z, endpoints stored exactly as mpmath raw tuples (sign, man, exp, bc)
+    rep['krawczyk_box'] = [[list(map(lambda v: int(v) if not isinstance(v, int) else v, z._mpi_[0])),
+                            list(map(lambda v: int(v) if not isinstance(v, int) else v, z._mpi_[1]))] for z in Z]
     if not ok: return rep, False
     Dk = K[-1]
     rep['D_enclosure'] = [float(lo(Dk)), float(hi(Dk))]
@@ -144,7 +147,7 @@ def check_image(im):
     # ---- K3 other caps below D on the Krawczyk box
     P = points(K[:-1])
     used = set(caps) | set(extra)
-    worst = -1.0; bad = False
+    worst = None; bad = False
     for k in (2, 3):
         for I in itertools.combinations(range(N), k):
             for side in ((1,) if k == 2 else (1, -1)):
@@ -157,11 +160,16 @@ def check_image(im):
                 # n/N - sigma) with closed caps: smallest pair caps and both caps of each triple circle
                 nup = len(I) + sum(1 for j in range(N) if j not in I and hi(marg(P[j]).v) >= 0)
                 up = iv.mpf(nup) / N - (1 - t.v) / 2
-                worst = max(worst, float(hi(up)))
-    rep['max_other_caps_on_Z'] = worst
-    rep['others_below'] = (not bad) and worst < float(lo(Dk)) and 1.0 / N < float(lo(Dk))
+                if worst is None or (up.b > worst.b) is True:   # keep the cap with the largest upper end
+                    worst = up
+    rep['max_other_caps_on_Z'] = mp.nstr(mp.mpf(worst.b), 20) if worst is not None else None
+    # rigorous comparisons between interval endpoints (no float conversion)
+    rep['others_below'] = bool((not bad) and (worst is None or (worst.b < Dk.a) is True) and ((iv.mpf(1) / N).b < Dk.a) is True)
     # ---- K2 counts frozen on the big box B (naive interval evaluation over B)
-    B = [iv.mpf([v - rB, v + rB]) for v in qc]
+    # the big box B, built outward: [qc - rB, qc + rB] with exact (interval) endpoints
+    B = [iv.mpf([(iv.mpf(v) - iv.mpf(rB)).a, (iv.mpf(v) + iv.mpf(rB)).b]) for v in qc]
+    rep['q_star_in_B'] = all((K[j].a > B[j].a) is True and (K[j].b < B[j].b) is True for j in range(nq))
+    rep['D_star_below_T'] = bool((Dk.b < iv.mpf(T)) is True)
     PB = points(B)
     frozen = True
     for (I, s), cnt in zip(caps, counts):
@@ -194,7 +202,7 @@ def check_image(im):
                 acc = acc + iv.mpf(mu[b]) * e
             if not (lo(acc * int(sv[j])) > 0): nfail += 1; break
     rep['orthants_failed'] = nfail
-    verified = rep['krawczyk'] and rep['others_below'] and frozen and nfail == 0
+    verified = rep['krawczyk'] and rep['others_below'] and frozen and nfail == 0 and rep['q_star_in_B'] and rep['D_star_below_T']
     return rep, verified
 
 
@@ -203,8 +211,8 @@ allok = True
 for k, im in enumerate(lc['images']):
     rep, ok = check_image(im)
     rep['image'] = k; rep['verified'] = bool(ok); out.append(rep); allok = allok and ok
-    print(f"  image {k}: " + ", ".join(f"{key}={rep.get(key)}" for key in ('krawczyk', 'D_enclosure', 'consistent_with_arb', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'verified')), flush=True)
+    print(f"  image {k}: " + ", ".join(f"{key}={rep.get(key)}" for key in ('krawczyk', 'D_enclosure', 'consistent_with_arb', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'q_star_in_B', 'D_star_below_T', 'verified')), flush=True)
 res = dict(name=name, N=N, kernel='mpmath.iv (interval arithmetic, 30 digits)', method='Krawczyk test + orthant test',
-           independent_of='arb/python-flint and sphcap.certify', box_radius=rB, verified=bool(allok), images=out)
+           independent_of='arb/python-flint and sphcap.certify', box_radius=rB, T=T, verified=bool(allok), images=out)
 json.dump(res, open(os.path.join(CERT, f'xcheck_local_{name}.json'), 'w'), indent=1)
 print("KRAWCZYK-VERIFIED (mpmath.iv): second kernel agrees" if allok else "SECOND KERNEL DOES NOT CONFIRM")

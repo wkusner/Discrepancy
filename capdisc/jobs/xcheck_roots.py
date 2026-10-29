@@ -13,6 +13,6 @@ for N in (5, 6):
     irr = p.is_irreducible
     lo, hi = sp.Rational(I[N][0]), sp.Rational(I[N][1])
     nroots = p.count_roots(lo, hi)
-    out[N] = dict(irreducible=bool(irr), roots_in_interval=int(nroots), interval=I[N], kernel='sympy (exact, Sturm/real root isolation)')
+    out[N] = dict(irreducible=bool(irr), roots_in_interval=int(nroots), verified=bool(irr and nroots == 1), interval=I[N], kernel='sympy (exact, Sturm/real root isolation)')
     print(f"P_{N}: irreducible {irr}; real roots in [{lo}, {hi}]: {nroots}")
 json.dump(out, open(os.path.join(CERT, 'xcheck_roots.json'), 'w'), indent=1)
