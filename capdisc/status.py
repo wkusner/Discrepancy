@@ -75,6 +75,20 @@ for f in sorted(glob.glob('logs/msolve_*.log')):
         res = 'running'
     out.append(f"- {b}: {res}\n")
 
+# ---------------------------------------------------------------- global proof (run_proof.sh)
+pr = sorted(glob.glob(f'{R}/proof_N*.out')) + sorted(glob.glob(f'{R}/proof_N*.refine.json'))
+if pr or os.path.exists('logs/proof.log'):
+    out.append("\n## Global proof (capcert + rigorous refinement + local certificate)\n")
+    for f in sorted(glob.glob(f'{R}/localcert_*.json')):
+        d = json.load(open(f)); out.append(f"- local certificate {d['name']}: {'CERTIFIED' if d['certified'] else 'failed'}, box {d['box_radius']}, D* in {d['images'][0].get('D_enclosure')}\n")
+    for f in sorted(glob.glob(f'{R}/proof_N*.out')):
+        out.append(f"- {os.path.basename(f)}: {open(f).read().strip().splitlines()[0] if open(f).read().strip() else 'running'}\n")
+    for f in sorted(glob.glob(f'{R}/proof_N*.refine.json')):
+        d = json.load(open(f)); out.append(f"- refine N={d['N']}: {'**PROVED**' if d['proved'] else 'NOT proved'}: input {d['input_cells']:,}, cells {d['cells']:,}, failed {d['failed']}, {d['time']/3600:.2f} h\n")
+    for f in sorted(glob.glob('logs/proof_refine_N*.log')):
+        last = open(f).read().strip().split('\n')[-1:] 
+        out.append(f"- {os.path.basename(f)}: {last[0] if last else ''}\n")
+
 # ---------------------------------------------------------------- atlas
 for f in sorted(glob.glob(f'{R}/atlas_N*.atlas.json')):
     a = json.load(open(f))
