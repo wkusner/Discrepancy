@@ -59,7 +59,13 @@ static int NBALLS = 0;
 static double (*BALL_Z)[NMAX][3] = NULL;
 static double *BALL_R = NULL;
 
+#ifdef RIGOROUS
+#include "ia.h"
+typedef struct { double q[QMAX], h[QMAX]; I sq[QMAX], cq[QMAX]; double E[NMAX]; I sE[NMAX], cE[NMAX]; } Cell;
+#include "rig.h"
+#else
 typedef struct { double q[QMAX], h[QMAX]; } Cell;
+#endif
 
 static inline double angle(const double *a, const double *b) {
     double cx = a[1] * b[2] - a[2] * b[1], cy = a[2] * b[0] - a[0] * b[2], cz = a[0] * b[1] - a[1] * b[0];
@@ -154,7 +160,9 @@ static int inside_ball(double X[][3], const double *E) {
 }
 
 static double SPLIT_ALPHA = 0.0; /* >0: prefer splitting earlier points (incremental placement) */
+#ifndef RIGOROUS
 static inline int coord_point(int k) { return k == 0 ? 1 : (k + 3) / 2; }
+#endif
 static void split(const Cell *c, Cell *a, Cell *b) {
     int j = 0; double wmax = -1;
     for (int k = 0; k < NQ; k++) {
@@ -176,16 +184,30 @@ static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
     size_t cap = 4096, top = 0;
     Cell *stack = malloc(cap * sizeof(Cell));
     stack[top++] = *root;
+#ifndef RIGOROUS
     double X[NMAX][3], E[NMAX];
+#else
+    double X[1][3];
+#endif
     long local = 0;
     while (top) {
         Cell c = stack[--top];
         st->processed++; local++;
+#ifdef RIGOROUS
+        CellR R; prep_r(&c, &R);
+        if (outside_domain_r(&c, &R)) { st->sym++; continue; }
+        double lb = cell_bound_r(&c, &R, TGT);
+        (void)X;
+#else
         points(c.q, X); motion(c.q, c.h, E);
         if (outside_domain(c.q, c.h, X, E)) { st->sym++; continue; }
         if (NBALLS && inside_ball(X, E)) { st->ball++; continue; }
         double lb = cell_bound(X, E, TGT);
+#endif
         if (lb >= TGT) { st->certified++; continue; }
+#ifdef RIGOROUS
+        const double *E = c.E;
+#endif
         double emax = 0; for (int i = 0; i < N; i++) if (E[i] > emax) emax = E[i];
         if (emax < MIN_EPS || (max_cells && local > max_cells)) {
             st->surv++;
@@ -200,7 +222,11 @@ static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
             continue;
         }
         if (top + 2 > cap) { cap *= 2; stack = realloc(stack, cap * sizeof(Cell)); }
+#ifdef RIGOROUS
+        split_r(&c, &stack[top], &stack[top + 1]); top += 2;
+#else
         split(&c, &stack[top], &stack[top + 1]); top += 2;
+#endif
     }
     free(stack);
 }
@@ -238,6 +264,23 @@ int main(int argc, char **argv) {
         for (int k = j + 1; k < N; k++) { T3[NT3][0] = i; T3[NT3][1] = j; T3[NT3][2] = k; NT3++; }
     }
     if (balls && load_balls(balls)) return 1;
+    if (getenv("CAPCERT_EVAL")) {   /* testing: read cells (q,h,lb doubles) from file, print bound and sym flag */
+        FILE *ef = fopen(getenv("CAPCERT_EVAL"), "rb"); Cell c; double dummy;
+#ifdef RIGOROUS
+        init_trig();
+#endif
+        while (fread(c.q, sizeof(double), NQ, ef) == (size_t)NQ && fread(c.h, sizeof(double), NQ, ef) == (size_t)NQ
+               && fread(&dummy, sizeof(double), 1, ef) == 1) {
+#ifdef RIGOROUS
+            init_cache(&c); CellR R; prep_r(&c, &R);
+            printf("%.17g %d\n", cell_bound_r(&c, &R, 1e9), outside_domain_r(&c, &R));
+#else
+            double X[NMAX][3], E[NMAX]; points(c.q, X); motion(c.q, c.h, E);
+            printf("%.17g %d\n", cell_bound(X, E, 1e9), outside_domain(c.q, c.h, X, E));
+#endif
+        }
+        return 0;
+    }
 #ifdef _OPENMP
     if (threads > 0) omp_set_num_threads(threads);
     int nthr = omp_get_max_threads();
@@ -248,16 +291,26 @@ int main(int argc, char **argv) {
 
     /* deterministic initial frontier: breadth-first splits */
     Cell root;
+#ifdef RIGOROUS
+    if (balls) { fprintf(stderr, "--balls is not available in rigorous mode (use the arb refiner)\n"); return 1; }
+    init_trig(); root_r(&root);
+#else
     root.q[0] = M_PI / 2; root.h[0] = M_PI / 2;
     for (int i = 2; i < N; i++) {
         root.q[2 * i - 3] = M_PI / 2; root.h[2 * i - 3] = M_PI / 2;
         if (i == 2) { root.q[2] = M_PI / 2; root.h[2] = M_PI / 2; }
         else { root.q[2 * i - 2] = 0; root.h[2 * i - 2] = M_PI; }
     }
+#endif
     size_t nf = 1, capf = 1024; Cell *F = malloc(capf * sizeof(Cell)); F[0] = root;
     while ((long)nf < frontier) {
         Cell *G = malloc(2 * nf * sizeof(Cell));
-        for (size_t i = 0; i < nf; i++) split(&F[i], &G[2 * i], &G[2 * i + 1]);
+        for (size_t i = 0; i < nf; i++)
+#ifdef RIGOROUS
+            split_r(&F[i], &G[2 * i], &G[2 * i + 1]);
+#else
+            split(&F[i], &G[2 * i], &G[2 * i + 1]);
+#endif
         free(F); F = G; nf *= 2;
     }
     /* checkpoint */
@@ -277,7 +330,12 @@ int main(int argc, char **argv) {
         fclose(pf);
     }
     long ndone = 0; for (size_t i = 0; i < nf; i++) ndone += done[i];
-    fprintf(stderr, "capcert N=%d T=%.17g MIN_EPS=%g threads=%d frontier=%zu (resuming %ld done) balls=%d\n",
+    fprintf(stderr, "capcert%s N=%d T=%.17g MIN_EPS=%g threads=%d frontier=%zu (resuming %ld done) balls=%d\n",
+#ifdef RIGOROUS
+            " (RIGOROUS)",
+#else
+            "",
+#endif
             N, TGT, MIN_EPS, nthr, nf, ndone, NBALLS);
     pf = fopen(fn, "a");
     time_t t0 = time(NULL), tlast = t0;
@@ -320,6 +378,9 @@ int main(int argc, char **argv) {
     fclose(pf);
     printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld certified=%ld sym=%ld ball=%ld survivors=%ld min_surv_lb=%.17g time=%lds\n",
            N, TGT, MIN_EPS, tot.processed, tot.certified, tot.sym, tot.ball, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
+    #ifdef RIGOROUS
+    printf("MODE rigorous (interval arithmetic, outward rounding)\n");
+#endif
     if (tot.surv == 0) printf("CERTIFIED: D >= T on the whole fundamental domain%s\n", NBALLS ? " minus the exclusion balls" : "");
     return 0;
 }

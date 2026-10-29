@@ -22,8 +22,9 @@ def init(N, T, boxes, min_width):
 
 
 def inside_box(c, w):
+    # cell c +- w inside the box m +- r; float rounding of |c - m| + w is absorbed by the factor
     for (m, r) in G['boxes']:
-        if np.all(np.abs(c - m) + w <= r):
+        if np.all(np.abs(c - m) + w <= r * (1 - 1e-12)):
             return True
     return False
 
@@ -49,8 +50,11 @@ def process(cell):
             st['failed'] += 1
             if len(st['fails']) < 20: st['fails'].append(dict(c=c.tolist(), w=w.tolist(), lb=float(lb.lower())))
             continue
-        j = split_dim(c, w, N); h = w.copy(); h[j] /= 2
-        a = c.copy(); a[j] -= h[j]; b = c.copy(); b[j] += h[j]
+        j = split_dim(c, w, N); h = w.copy(); h[j] = w[j] / 2
+        a = c.copy(); a[j] = c[j] - h[j]; b = c.copy(); b[j] = c[j] + h[j]
+        # children c -+ w/2 with radius w/2 cover the parent up to the rounding of the new centres;
+        # enlarge the radius by a bound for that rounding error
+        h[j] = np.nextafter(h[j] + (abs(c[j]) + w[j]) * 2.0**-52, np.inf)
         stack += [(a, h), (b, h)]
     return st
 

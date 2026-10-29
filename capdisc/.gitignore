@@ -1,6 +1,7 @@
-capcert
-results/
-logs/
+*.pyc
 STATUS.md
 __pycache__/
-*.pyc
+capcert
+capcert_rig
+logs/
+results/

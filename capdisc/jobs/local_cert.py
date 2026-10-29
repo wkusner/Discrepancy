@@ -92,12 +92,16 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
         report['redundant_caps_on_K'] = [[float((dd[0]).lower()), float(dd[4].upper())] for dd in datE]
     # ---------- 2. sharpness on the big box
     w = np.full(nq, r_big)
-    caps_all = list(caps) + list(extra); counts_all = list(counts) + list(extra_counts)
+    # only the square system enters the sharpness test: for these caps phi_b(q*) = D* exactly
+    # (Krawczyk); redundant caps are not needed and their value at q* is not used.
+    caps_all = list(caps); counts_all = list(counts)
     datB = Cf.cap_data(m[:-1], w, N, caps_all)
     counts_ok = all(dd is not None and dd[3] == n for dd, n in zip(datB, counts_all))
     report['counts_frozen_on_box'] = counts_ok
     if not counts_ok: return report
-    lo = np.array([dd[1] - dd[2] for dd in datB]); hi = np.array([dd[1] + dd[2] for dd in datB])
+    # gradient enclosures [mid - rad, mid + rad], rounded outward by one ulp (float subtraction)
+    lo = np.nextafter(np.array([dd[1] - dd[2] for dd in datB]), -np.inf)
+    hi = np.nextafter(np.array([dd[1] + dd[2] for dd in datB]), np.inf)
     nfail = 0
     for s in itertools.product((1, -1), repeat=nq):
         s = np.array(s)
@@ -110,7 +114,7 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
                       bounds=[(0, None)] * len(caps_all) + [(None, None)], method='highs')
         if res.status != 0 or -res.fun <= 0: nfail += 1; continue
         mu = res.x[:-1]
-        # rigorous check in ball arithmetic (Gs already outward-rounded endpoints)
+        # rigorous check in ball arithmetic (Gs are outward-rounded endpoints)
         for j in range(nq):
             acc = arb(0)
             for b in range(len(caps_all)): acc = acc + arb(float(mu[b])) * arb(float(Gs[b, j]))
