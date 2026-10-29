@@ -9,7 +9,7 @@ output, `STATUS.md`, JSON files and commit messages all follow this file.
 
 | label | meaning | example |
 |---|---|---|
-| **certified** | rigorous, and confirmed by a second, independent kernel (different arithmetic library and different code path) | the elimination giving P₅, P₆ (sympy resultants + msolve Gröbner bases) |
+| **certified** | rigorous, and confirmed by a second, independent kernel (different arithmetic library and different code path) | the local verification at the minimizer (Arb + mpmath.iv) |
 | **interval-verified** | rigorous single-kernel run in our IEEE interval arithmetic (`csrc/ia.h`, `csrc/rig.h`): one-ulp outward rounding, Taylor sin/cos with remainder | the mesh stage (`capcert_rig`) |
 | **Arb-verified** | rigorous single-kernel run in Arb ball arithmetic (python-flint) | the refinement stage (`jobs/refine.py`) |
 | **Krawczyk-verified** | existence and uniqueness of a zero by the Krawczyk test, single kernel (Arb) | the local and symmetric checks at the minimizer |
@@ -26,18 +26,19 @@ Rules:
 * Use the words above literally in output strings and JSON keys: `verified` plus a `kernel`
   field, and `certified` only for cross-checked results.
 
-## Status (2026-10-29)
+## Status (2026-10-29, updated)
 
-| claim | step | label now | second kernel planned |
+| claim | step | label now | kernels |
 |---|---|---|---|
-| D_N ≥ T outside the boxes, N = 5, 6 | mesh stage `capcert_rig` | interval-verified | mesh re-implemented on Arb's C library (FLINT) — about one night on w227 for N = 6 |
-| | refinement `refine.py` | Arb-verified | numpy IEEE outward-rounded intervals (independent of Arb) |
-| minimizer unique in its box, D(q*) = D* | `local_cert.py` (Krawczyk + orthant test) | Krawczyk-verified (Arb) | mpmath interval arithmetic (`mpmath.iv`) |
-| minimizer symmetric; N·D* a root of P_N | `sym_cert.py` (symmetric Krawczyk test) | Krawczyk-verified (Arb) | `mpmath.iv` |
-| | elimination to P_N | **certified** (sympy resultants + msolve) | — |
-| P_N irreducible, one root in the interval | FLINT | exact (FLINT) | sympy factorization / Sturm sequence |
-| exact Gram matrices N = 5, 6 | `gram_exact.py` | numerically identified | symbolic derivation from the symmetric parametrization |
+| D_N ≥ T outside the boxes, N = 5, 6 | mesh stage `capcert_rig` | interval-verified | ours (IEEE, C). Second kernel planned: mesh re-implemented on Arb's C library (FLINT), about one night on w227 for N = 6 |
+| | refinement `refine.py` | Arb-verified | Arb. Second kernel planned: numpy IEEE outward-rounded intervals |
+| minimizer unique in its box, D(q*) = D* | `local_cert.py` / `xcheck_local.py` | **certified** | Arb (python-flint) + mpmath.iv, independent code (`certificates/xcheck_local_*.json`) |
+| minimizer symmetric, (q*, D*) = (q(Y(s*)), D_s) | `sym_cert.py` / `xcheck_sym.py` | **certified** | Arb + mpmath.iv, independent code (`certificates/xcheck_sym_*.json`); the orbit structure is exact combinatorics |
+| N·D* is a root of P_N | elimination | N = 5: **certified** (sympy resultants + msolve Gröbner bases); N = 6: exact (sympy resultants), with the msolve output on w227 still to be compared | |
+| P_N irreducible, one root in the interval | root isolation | **certified** | FLINT + sympy (`certificates/xcheck_roots.json`) |
+| exact Gram matrices N = 5, 6 | `gram_exact.py` | numerically identified | — |
 | D_N ≥ D_best − η (ladder) | `capcert` (float) | floating-point checked | superseded by the proof |
 
-The theorem for N = 5, 6 is **proved**, with interval-verified, Arb-verified and
-Krawczyk-verified steps. It becomes *certified* when every row above has a second kernel.
+The theorem for N = 5, 6 is **proved**, with interval-verified, Arb-verified and certified steps.
+It becomes *certified* once the mesh and refinement rows have their second kernels and the
+N = 6 msolve comparison is done.

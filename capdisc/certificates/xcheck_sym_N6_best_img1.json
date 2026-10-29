@@ -1,0 +1,15 @@
+{
+ "name": "N6_best",
+ "image": 1,
+ "kernel": "mpmath.iv (interval arithmetic, 40 digits)",
+ "method": "Krawczyk test in symmetric coordinates + gauge inclusion",
+ "independent_of": "arb/python-flint and sphcap.certify",
+ "krawczyk_radius": 1e-30,
+ "D_s": [
+  "[0.278678815176242334054854114216531634559814029, 0.278678815176242334054854114216531634559814029]",
+  "[0.278678815176242334054854114216531634559974741, 0.278678815176242334054854114216531634559974741]"
+ ],
+ "gauge_in_local_box": true,
+ "D_in_local_box": true,
+ "verified": true
+}
