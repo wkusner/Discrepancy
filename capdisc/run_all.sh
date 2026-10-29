@@ -24,7 +24,7 @@ STATUS_EVERY=${STATUS_EVERY:-600}
 PUSH=${PUSH:-0}
 ATLAS=${ATLAS:-0}
 PY=${PY:-$HOME/sphcap-env/bin/python}
-MSOLVE=${MSOLVE:-$HOME/sphcap-env/bin/msolve}
+MSOLVE=${MSOLVE:-$(command -v msolve || { [ -x $HOME/local/bin/msolve ] && echo $HOME/local/bin/msolve; } || echo $HOME/sphcap-env/bin/msolve)}
 mkdir -p results logs
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1   # Python workers stay single-threaded
 
