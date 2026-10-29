@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Additional w227 jobs, to run beside run_all.sh and run_msolve.sh (resumable; separate tags).
-#   trackA   deeper certification rungs for N=5 (to 1e-5) and N=6 (to 1e-4), then the atlas for N=4..6   MORE_CERT_THREADS (8)
-#   n8cert   first N=8 certification rung (optional; run_all reaches N=8 later)
+#   trackA   deeper floating-point check rungs for N=5 (to 1e-5) and N=6 (to 1e-4), then the atlas for N=4..6   MORE_CERT_THREADS (8)
+#   n8cert   first N=8 floating-point rung (optional; run_all reaches N=8 later)
 #   n8sys    build the 2-fold-reduced N=8 area system (sympy) and solve it with msolve  MORE_MSOLVE_THREADS (4)
 #   search   candidate search for N=9..12, then identification                           MORE_SEARCH_WORKERS (4)
 # Usage (inside tmux):  bash run_more.sh        JOBS="n8cert search" bash run_more.sh
@@ -19,9 +19,9 @@ job_n8cert() {
   for eta in 5e-2 2e-2; do
     T=$(python3 -c "print(repr(0.23079914617978103 - $eta))"); me=$(python3 -c "print($eta/5)")
     tag=results/early_N8_eta$eta; grep -q '^RESULT' $tag.out 2>/dev/null && continue
-    log "early N=8 certification eta=$eta ($CT threads)"
+    log "early N=8 floating-point check eta=$eta ($CT threads)"
     timeout 48h ./capcert 8 $T $me $tag --threads $CT > $tag.out 2> $tag.log
-    grep -q '^CERTIFIED' $tag.out || { log "early N=8 stopped at eta=$eta"; break; }
+    grep -qE '^(CERTIFIED|FLOAT-CHECKED|INTERVAL-VERIFIED)' $tag.out || { log "early N=8 stopped at eta=$eta"; break; }
   done
 }
 job_n8sys() {
@@ -45,7 +45,7 @@ job_trackA() {
     set -- $spec; N=$1; eta=$2
     T=$(python3 -c "print(repr(${DB[$N]} - $eta))"); me=$(python3 -c "print($eta/5)")
     tag=results/ladder_N${N}_eta$eta; grep -q '^RESULT' $tag.out 2>/dev/null && continue
-    log "deeper certification N=$N eta=$eta ($CT threads)"
+    log "deeper floating-point check N=$N eta=$eta ($CT threads)"
     timeout 24h ./capcert $N $T $me $tag --threads $CT > $tag.out 2> $tag.log
   done
   declare -A DELTA=( [4]=0.005 [5]=0.01 [6]=0.02 ) ; declare -A DA=( [4]=0.375 [5]=0.32332565099805260 [6]=0.27867881517624233 )

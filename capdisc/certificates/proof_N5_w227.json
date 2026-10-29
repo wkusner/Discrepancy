@@ -2,17 +2,21 @@
  "N": 5,
  "statement": "independent rerun on w227",
  "T": 0.32332565099805344,
- "capcert_result": "RESULT N=5 T=0.32332565099805344 MIN_EPS=0.02 cells=26732740 certified=10517709 sym=2046711 ball=0 survivors=834718 min_surv_lb=0.31596388923971441 time=40s",
+ "capcert_result": "RESULT N=5 T=0.32332565099805344 MIN_EPS=0.02 cells=26732740 bounded=10517709 sym=2046711 ball=0 survivors=834718 min_surv_lb=0.31596388923971441 time=40s",
  "refine": {
   "input_cells": 834718,
   "cells": 911438,
-  "certified": 788151,
   "boxed": 10,
   "sym": 84917,
   "failed": 0,
   "time": 104,
-  "proved": true
+  "bounded": 788151,
+  "verified": true
  },
  "machine": "w227, 32 threads",
- "note": "transcribed from logs/proof.log on w227"
+ "note": "transcribed from logs/proof.log on w227",
+ "labels": {
+  "mesh": "interval-verified (capcert_rig, IEEE outward rounding)",
+  "refine": "Arb-verified (python-flint)"
+ }
 }

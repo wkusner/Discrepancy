@@ -90,6 +90,8 @@
    12
   ]
  ],
- "certified": true,
- "image": 2
+ "image": 2,
+ "verified": true,
+ "kernel": "arb (python-flint) + sympy resultants + flint factorization",
+ "label": "Krawczyk-verified (Arb); elimination exact (sympy)"
 }

@@ -2,7 +2,7 @@
  "N": 5,
  "statement": "D >= T on the fundamental domain outside the local-certificate boxes",
  "T": 0.32332565099805344,
- "capcert_result": "RESULT N=5 T=0.32332565099805344 MIN_EPS=0.04 cells=14831488 certified=5579428 sym=1249426 ball=0 survivors=590986 min_surv_lb=0.30817223689638673 time=160s",
+ "capcert_result": "RESULT N=5 T=0.32332565099805344 MIN_EPS=0.04 cells=14831488 bounded=5579428 sym=1249426 ball=0 survivors=590986 min_surv_lb=0.30817223689638673 time=160s",
  "capcert_stamp": {
   "N": "5",
   "T": "0x1.4b15e123fa6b2p-2",
@@ -17,13 +17,17 @@
  "refine": {
   "input_cells": 590986,
   "cells": 846246,
-  "certified": 632843,
   "boxed": 10,
   "sym": 85763,
   "failed": 0,
   "time": 3047.771804332733,
-  "proved": true
+  "bounded": 632843,
+  "verified": true
  },
  "machine": "Claude workspace, 4 threads",
- "note": "capcert_rig MIN_EPS=0.04; refine min-width 1e-7"
+ "note": "capcert_rig MIN_EPS=0.04; refine min-width 1e-7",
+ "labels": {
+  "mesh": "interval-verified (capcert_rig, IEEE outward rounding)",
+  "refine": "Arb-verified (python-flint)"
+ }
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the C certifier (OpenMP if available) and run a quick self-test.
+# Build the C mesh programs capcert (floating point) and capcert_rig (interval arithmetic) (OpenMP if available) and run a quick self-test.
 set -e
 cd "$(dirname "$0")"
 CC=${CC:-gcc}
@@ -10,7 +10,7 @@ else
   echo "OpenMP NOT available: building single-threaded"; $CC -O3 -march=native -Wall -o capcert csrc/capcert.c -lm
   $CC -O3 -march=native -Wall -Wno-unused-function -DRIGOROUS -ffp-contract=off -fno-fast-math -o capcert_rig csrc/capcert.c -lm
 fi
-echo "self-test (expect three CERTIFIED lines):"
+echo "self-test (expect two FLOAT-CHECKED lines and one INTERVAL-VERIFIED line):"
 ./capcert 3 0.499 1e-3 /tmp/capcert_selftest3 --threads 4 2>/dev/null | tail -1
 ./capcert 4 0.374 2.5e-4 /tmp/capcert_selftest4 --threads 4 2>/dev/null | tail -1
 ./capcert_rig 4 0.374 2.5e-4 /tmp/capcert_selftest5 --threads 4 2>/dev/null | tail -1

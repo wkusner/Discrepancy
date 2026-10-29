@@ -1,5 +1,8 @@
 # capdisc data guide (for readers and a website)
 
+Labels (certified / verified (method) / numerically identified / floating-point checked)
+follow `VERIFICATION.md`.
+
 Everything here is on GitHub, repo `wkusner/Discrepancy`, branch **`capdisc`**, folder
 `capdisc/`. Raw URLs have the form
 `https://raw.githubusercontent.com/wkusner/Discrepancy/capdisc/capdisc/<path>`.
@@ -18,13 +21,13 @@ The work has four layers, each with its own data:
 1. **Search**: find candidate minimizers (many descents; results grouped into classes).
 2. **Identification**: high-precision polishing, the exact value as an algebraic number
    (minimal polynomial), exact Gram matrices, and Gröbner bases with msolve.
-3. **Proof by computer**: interval-arithmetic certification that the candidate is the
+3. **Proof by computer**: an interval-verified and Arb-verified computation showing that the candidate is the
    global minimum (done for N=5; N=6 running on w227).
 4. **Paper**: `paper/capture_balance.tex` and the PDF built from it, written for the
    American Mathematical Monthly.
 
-Status: N ≤ 4 proved by hand; N = 5 proved (computer-assisted); N = 6 locally
-certified, with the global run in progress; N = 7, 8 numerical candidates;
+Status: N ≤ 4 proved by hand; N = 5, 6 proved (computer-assisted: interval-, Arb- and
+Krawczyk-verified; second-kernel cross-checks in progress); N = 7, 8 numerical candidates;
 N = 9–12 search values only.
 
 ## Conventions (used by every file)
@@ -41,7 +44,7 @@ N = 9–12 search values only.
     * *search/critical files*: `kind` = `"up"` (the cap is over-full: `n_closed/N − σ = D`)
       or `"low"` (under-full, `σ − n_open/N = D`), with `t` the signed plane level, so
       σ = (1 − t)/2.
-    * *certificate files*: strings `"Cap(i, j, k)+"` / `"Cap(i, j, k)-"`. The sign selects the
+    * *verification files* (in `certificates/`): strings `"Cap(i, j, k)+"` / `"Cap(i, j, k)-"`. The sign selects the
       side of the plane relative to the normal `(x_j − x_i) × (x_k − x_i)`, with i<j<k.
       Pairs are written `"Cap(i, j)+"`. Each comes with an integer **count** n_C of points in
       the cap, so the cap's value is `n_C/N − σ(C)`.
@@ -88,19 +91,19 @@ N = 9–12 search values only.
   * N5: points (0, ±√(1−c²), c), (±√(1−e²), 0, e), (0, 0, 1), so G = {c·e, 2c²−1, c, e, 2e²−1}.
   * N6: the D3-orbit of (a, b, c), with a = (1−6D)/3, c = 2D and b = √(1 − a² − c²).
 
-### `certificates/`: proof artefacts (all small JSON)
-* `localcert_N5_best.json`, `localcert_N6_best.json`: the local certificate around each copy
+### `certificates/`: proof artefacts (all small JSON; the folder name is historical, and labels follow `VERIFICATION.md`)
+* `localcert_N5_best.json`, `localcert_N6_best.json`: the local verification (Krawczyk-verified, Arb) around each copy
   ("image") of the minimizer in the fundamental domain. Top level:
-  `{name, N, box_radius, gauge, certified, images:[…]}`. Per image:
+  `{name, N, box_radius, gauge, verified, kernel, method, label, images:[…]}`. Per image:
   `krawczyk` (bool), `krawczyk_radius`, `D_enclosure` [lo,hi], `q_center` (length 2N−3),
   `caps` (strings), `counts`, `extra_caps`/`extra_counts` (redundant worst caps),
-  `others_below`, `counts_frozen_on_box`, `orthants_failed` (0 = pass), `certified`.
-* `symcert_<NAME>_img<k>.json`: the symmetric certificate per image: `group_order`,
+  `others_below`, `counts_frozen_on_box`, `orthants_failed` (0 = pass), `verified`.
+* `symcert_<NAME>_img<k>.json`: the symmetric verification per image: `group_order`,
   `orbits` (representative caps), `orbit_caps`, `D_s` [lo,hi] (128-bit), `eliminant_degree`,
-  `P_divides_eliminant`, `factors_meeting_enclosure`, `certified`.
+  `P_divides_eliminant`, `factors_meeting_enclosure`, `verified`, `kernel`, `label`.
 * `proof_N5.json`: the global proof record for N=5. Fields: `T` (threshold);
   `capcert_result` (summary line); `capcert_stamp` (settings and counts, with T in hex);
-  `refine` (`input_cells, cells, certified, sym, boxed, failed, time, proved`); `machine`.
+  `refine` (`input_cells, cells, bounded, sym, boxed, failed, time, verified`); `labels`; `machine`.
   `proof_N6.json` will be added when the w227 run finishes.
 
 ### `msolve/*.ms`: polynomial systems (text, msolve input format)
@@ -115,7 +118,7 @@ notes), `refs_clean.bib`, and `figs/*.png|pdf`
 their worst caps).
 
 ### Code (for reference, not data)
-`sphcap/` (Python package), `csrc/` (C certifier: `capcert.c`, rigorous mode `ia.h`,
+`sphcap/` (Python package), `csrc/` (C mesh program: `capcert.c`, interval-verified mode `ia.h`,
 `rig.h`), and `jobs/` (search, identify, atlas, `local_cert.py`, `sym_cert.py`, `refine.py`).
 
 ## Server-only data (w227, `~/Discrepancy/capdisc/`)
@@ -128,7 +131,7 @@ their worst caps).
 | `results/minpoly_N*.json` | object | `{N, dps, minpoly_ascending}` (deep LLL; none found for N=7, 8 at degree ≤ 160) |
 | `results/atlas_N{4,5,6}.atlas.json` | object | `{N, survivors, sample, classes:[{D, hits, active, rank, dimq, min_lambda, sharp, aut, points, worst_caps}]}`: local minima below best + δ (starting soon) |
 | `results/*.msolve.out` | msolve output | real solutions / parametrizations |
-| `results/ladder_N*_eta*.out`, `early_*` | one line | `RESULT N= T= MIN_EPS= cells= certified= sym= ball= survivors= …` (floating-point mesh checks) |
+| `results/ladder_N*_eta*.out`, `early_*` | one line | `RESULT N= T= MIN_EPS= cells= bounded= sym= ball= survivors= …` (floating-point checked; older files say `certified=`) |
 | `results/proof_N*.out/.done/.refine.json` | text / key=value / JSON | the rigorous proof runs |
 | `results/*.surv.*`, `*.progress` | binary / text | working files (large; not for publication) |
 

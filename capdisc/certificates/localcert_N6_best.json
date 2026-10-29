@@ -3,7 +3,6 @@
  "N": 6,
  "box_radius": 0.0001,
  "gauge": "capcert coordinates (x0 pole, x1 in xz-plane x>=0)",
- "certified": true,
  "images": [
   {
    "krawczyk": true,
@@ -34,7 +33,6 @@
    "counts_frozen_on_box": true,
    "orthants_failed": 0,
    "box_radius": 0.0001,
-   "certified": true,
    "image": 0,
    "caps": [
     "Cap(0, 5)+",
@@ -65,7 +63,8 @@
    ],
    "extra_counts": [
     3
-   ]
+   ],
+   "verified": true
   },
   {
    "krawczyk": true,
@@ -96,7 +95,6 @@
    "counts_frozen_on_box": true,
    "orthants_failed": 0,
    "box_radius": 0.0001,
-   "certified": true,
    "image": 1,
    "caps": [
     "Cap(0, 5)+",
@@ -127,7 +125,12 @@
    ],
    "extra_counts": [
     3
-   ]
+   ],
+   "verified": true
   }
- ]
+ ],
+ "verified": true,
+ "kernel": "arb (python-flint)",
+ "method": "Krawczyk test + orthant test",
+ "label": "Krawczyk-verified (Arb)"
 }

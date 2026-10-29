@@ -10,14 +10,14 @@ out.append(f"# capdisc status — {now}\n")
 out.append(f"host load {la[0]:.1f} / {la[1]:.1f} / {la[2]:.1f} (1/5/15 min), {os.cpu_count()} threads\n")
 
 # ---------------------------------------------------------------- ladder
-out.append("\n## Certification ladder  (proves D >= D_best - eta for all configurations)\n")
+out.append("\n## Floating-point ladder  (floating-point checked, not rigorous: D >= D_best - eta; labels as in VERIFICATION.md)\n")
 out.append("| N | eta | status | cells | time | note |\n|---|---|---|---|---|---|\n")
 for f in sorted(glob.glob(f'{R}/ladder_N*_eta*.out') + glob.glob(f'{R}/early_N*_eta*.out'), key=lambda s: (int(re.search(r'N(\d+)', s).group(1)), -float(re.search(r'eta([0-9.e-]+)\.out', s).group(1)))):
     N = re.search(r'N(\d+)', f).group(1); eta = re.search(r'eta([0-9.e-]+)\.out', f).group(1)
     txt = open(f).read()
     m = re.search(r'cells=(\d+).*survivors=(\d+).*time=(\d+)s', txt)
     if m:
-        st = 'CERTIFIED' if 'CERTIFIED' in txt else f'survivors {int(m.group(2)):,}'
+        st = ('float-checked' if ('CERTIFIED' in txt or 'FLOAT-CHECKED' in txt) else f'survivors {int(m.group(2)):,}')
         out.append(f"| {N} | {eta} | {st} | {int(m.group(1)):,} | {int(m.group(3))/3600:.2f} h | {'early (run_more)' if 'early_' in f else ''} |\n")
     else:
         lg = f[:-4] + '.log'
@@ -78,15 +78,15 @@ for f in sorted(glob.glob('logs/msolve_*.log')):
 # ---------------------------------------------------------------- global proof (run_proof.sh)
 pr = sorted(glob.glob(f'{R}/proof_N*.out')) + sorted(glob.glob(f'{R}/proof_N*.refine.json'))
 if pr or os.path.exists('logs/proof.log'):
-    out.append("\n## Global proof (capcert + rigorous refinement + local certificate)\n")
+    out.append("\n## Global proof (interval-verified mesh + Arb-verified refinement + Krawczyk-verified local checks; not yet certified, see VERIFICATION.md)\n")
     for f in sorted(glob.glob(f'{R}/localcert_*.json')):
-        d = json.load(open(f)); out.append(f"- local certificate {d['name']}: {'CERTIFIED' if d['certified'] else 'failed'}, box {d['box_radius']}, D* in {d['images'][0].get('D_enclosure')}\n")
+        d = json.load(open(f)); out.append(f"- local verification {d['name']}: {'Krawczyk-verified (Arb)' if d.get('verified', d.get('certified')) else 'failed'}, box {d['box_radius']}, D* in {d['images'][0].get('D_enclosure')}\n")
     for f in sorted(glob.glob('certificates/symcert_*.json')):
-        d = json.load(open(f)); out.append(f"- symmetric certificate {d['name']} image {d.get('image', 0)}: {'CERTIFIED' if d['certified'] else 'failed'} (group of order {d['group_order']}, D* in {d['D_s']})\n")
+        d = json.load(open(f)); out.append(f"- symmetric verification {d['name']} image {d.get('image', 0)}: {'Krawczyk-verified (Arb)' if d.get('verified', d.get('certified')) else 'failed'} (group of order {d['group_order']}, D* in {d['D_s']})\n")
     for f in sorted(glob.glob(f'{R}/proof_N*.out')):
         out.append(f"- {os.path.basename(f)}: {open(f).read().strip().splitlines()[0] if open(f).read().strip() else 'running'}\n")
     for f in sorted(glob.glob(f'{R}/proof_N*.refine.json')):
-        d = json.load(open(f)); out.append(f"- refine N={d['N']}: {'**PROVED**' if d['proved'] else 'NOT proved'}: input {d['input_cells']:,}, cells {d['cells']:,}, failed {d['failed']}, {d['time']/3600:.2f} h\n")
+        d = json.load(open(f)); out.append(f"- refine N={d['N']}: {'**Arb-verified, no cell left**' if d.get('verified', d.get('proved')) else 'NOT verified'}: input {d['input_cells']:,}, cells {d['cells']:,}, failed {d['failed']}, {d['time']/3600:.2f} h\n")
     for f in sorted(glob.glob('logs/proof_refine_N*.log')):
         last = open(f).read().strip().split('\n')[-1:] 
         out.append(f"- {os.path.basename(f)}: {last[0] if last else ''}\n")

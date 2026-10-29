@@ -1,4 +1,4 @@
-"""Local certificate around a sharp minimizer (rigorous, ball arithmetic).
+"""Local verification around a sharp minimizer (Krawczyk-verified, Arb ball arithmetic; see VERIFICATION.md).
 
 For a configuration in critical_configurations.json with |A| = 2N-2 worst caps:
  1. Krawczyk test: the square system phi_b(q) - D = 0 (b in A, counts frozen) has exactly one
@@ -83,7 +83,7 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
     act = {(c.I, c.side if len(c.I) == 3 else 0) for c in list(caps) + list(extra)}
     for c, dd in zip(allc, datK):
         if (c.I, c.side if len(c.I) == 3 else 0) in act: continue
-        if dd is None: worst_other = float('inf'); continue     # cannot be bounded: certificate fails
+        if dd is None: worst_other = float('inf'); continue     # cannot be bounded: verification fails
         worst_other = max(worst_other, float(dd[4].upper()))
     report['max_other_caps_on_K'] = worst_other
     report['others_below'] = bool(worst_other < float(Dstar.lower()) and float(arb(1) / N) < float(Dstar.lower()))
@@ -123,7 +123,7 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
             if not (acc * int(s[j]) > 0): nfail += 1; break
     report['orthants_failed'] = nfail
     report['box_radius'] = r_big
-    report['certified'] = (nfail == 0) and report['others_below']
+    report['verified'] = (nfail == 0) and report['others_below']
     return report
 
 
@@ -170,10 +170,11 @@ for k, (Yi, qi) in enumerate(images):
     out = certify_image(q0, caps, counts, r_big, extra, extra_counts)
     out['image'] = k; out['caps'] = [repr(c) for c in caps]; out['counts'] = counts
     out['extra_caps'] = [repr(c) for c in extra]; out['extra_counts'] = extra_counts
-    print(f"  image {k}: " + ", ".join(f"{key}={out.get(key)}" for key in ('krawczyk', 'D_enclosure', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'certified')))
+    print(f"  image {k}: " + ", ".join(f"{key}={out.get(key)}" for key in ('krawczyk', 'D_enclosure', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'verified')))
     results.append(out)
 os.makedirs('results', exist_ok=True)
 json.dump(dict(name=name, N=N, box_radius=r_big, gauge='capcert coordinates (x0 pole, x1 in xz-plane x>=0)',
-               certified=all(r.get('certified') for r in results), images=results),
+               verified=all(r.get('verified') for r in results), kernel='arb (python-flint)', method='Krawczyk test + orthant test',
+               label='Krawczyk-verified (Arb)', images=results),
           open(f'results/localcert_{name}.json', 'w'), indent=1)
-print("ALL CERTIFIED" if all(r.get('certified') for r in results) else "NOT ALL CERTIFIED")
+print("ALL KRAWCZYK-VERIFIED (Arb)" if all(r.get('verified') for r in results) else "NOT ALL VERIFIED")

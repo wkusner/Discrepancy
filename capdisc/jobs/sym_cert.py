@@ -1,4 +1,5 @@
-"""Symmetric certificate: the minimizer has the expected symmetry, and D* is a root of P_N.
+"""Symmetric verification (Krawczyk-verified, Arb; exact elimination): the minimizer has the expected
+symmetry, and D* is a root of P_N.  Labels follow VERIFICATION.md.
 
 For N5_best (mirror group of order 4) and N6_best (dihedral rotation group of order 6):
  1. A symmetric family Y(s) of configurations, s = (c, e) for N=5, s = (a, b, c) on the unit sphere
@@ -27,6 +28,7 @@ flint.ctx.prec = 128
 name = sys.argv[1]
 CERT = os.path.join(HERE, '..', 'certificates')
 lc = json.load(open(os.path.join(CERT, f'localcert_{name}.json')))
+lc.setdefault('verified', lc.get('certified'))
 N = lc['N']; nq = 2 * N - 3
 P_N = {5: [64, -640, -352, 15344, -23004, -23384, -120504, 243968, 562963, -698538, -670529, 545392, 173504],
        6: [25, -496, 3524, -9120, -5298, 69920, -102348, -58272, 278817, -207344, -29312, 43520, 25600]}[N]
@@ -347,7 +349,8 @@ res = dict(name=name, N=N, group_order=len(group), orbits=[repr(r) for r, _ in o
            counts_consistent=bool(same_counts), krawczyk_symmetric=bool(ok), krawczyk_radius=rk,
            D_s=[float(D_s.lower()), float(D_s.upper())], gauge_in_local_box=bool(inK), D_in_local_enclosure=bool(inD),
            eliminant_degree=R.degree(), P_divides_eliminant=bool(divides), factors_meeting_enclosure=hits,
-           certified=bool(ok and inK and inD and same_counts and cover and only_P))
+           verified=bool(ok and inK and inD and same_counts and cover and only_P),
+           kernel='arb (python-flint) + sympy resultants + flint factorization', label='Krawczyk-verified (Arb); elimination exact (sympy)')
 res['image'] = IMG
 json.dump(res, open(os.path.join(CERT, f'symcert_{name}_img{IMG}.json'), 'w'), indent=1)
-print("CERTIFIED: minimizer symmetric, N*D* is the root of P_N in the enclosure" if res['certified'] else "NOT CERTIFIED")
+print("KRAWCZYK-VERIFIED (Arb): minimizer symmetric, N*D* is the root of P_N in the enclosure" if res['verified'] else "NOT VERIFIED")

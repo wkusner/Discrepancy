@@ -2,7 +2,7 @@
 # =============================================================================
 # capdisc orchestrator for w227: N = 3..8, all phases, with a thread budget.
 #
-#   ladder   C certifier: D >= D_best - eta for a decreasing ladder of eta     (CERT_THREADS)
+#   ladder   C mesh program (floating-point checked): D >= D_best - eta for a decreasing ladder of eta     (CERT_THREADS)
 #   search   parallel Python search for minimiser candidates                    (SEARCH_WORKERS)
 #   identify high-precision polish + integer relations for the best classes    (after search)
 #   msolve   exact elimination of symmetry-reduced systems (if msolve present) (MSOLVE_THREADS)
@@ -51,7 +51,7 @@ phase_ladder() {
       grep -q '^RESULT' $tag.out 2>/dev/null && continue
       log "ladder N=$N eta=$eta T=$T"
       timeout ${LADDER_TIMEOUT:-12h} ./capcert $N $T $me $tag --threads $CERT_THREADS > $tag.out 2> $tag.log
-      grep -q '^CERTIFIED' $tag.out || { log "ladder N=$N stopped at eta=$eta"; break; }
+      grep -qE '^(CERTIFIED|FLOAT-CHECKED|INTERVAL-VERIFIED)' $tag.out || { log "ladder N=$N stopped at eta=$eta"; break; }
     done
   done
   log "ladder phase done"

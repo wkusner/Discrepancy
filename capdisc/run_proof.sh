@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Global minimality proof pipeline for N=5 and N=6 (run on w227, inside tmux):
-#   1. local certificate around each image of the minimizer (Krawczyk + orthant test), and the
-#      symmetric certificate (minimizer symmetric; N*D* is the root of P_N in the enclosure)
-#   2. capcert_rig (interval arithmetic) at T = upper end of the D* enclosure, coarse MIN_EPS, keeping every survivor
-#   3. rigorous ball-arithmetic refinement of the survivors (jobs/refine.py), with the
-#      certified boxes of step 1 excluded
+#   1. local verification around each image of the minimizer (Krawczyk + orthant test, Arb), and the
+#      symmetric verification (minimizer symmetric; N*D* is the root of P_N in the enclosure)
+#   2. capcert_rig (interval-verified) at T = upper end of the D* enclosure, coarse MIN_EPS, keeping every survivor
+#   3. Arb-verified refinement of the survivors (jobs/refine.py), with the
+#      Krawczyk-verified boxes of step 1 excluded
 # Output: results/proof_N{5,6}.* and logs/proof.log ; status.py picks up the .refine.json files.
 #   THREADS=16 NS="5 6" bash run_proof.sh
 set -u
@@ -27,8 +27,8 @@ for N in $NS; do
   for k in $(seq 0 $((nimg - 1))); do
     $PY jobs/sym_cert.py "$nm" "$k" 2>&1 | tail -4 | tee -a logs/proof.log
   done
-  T=$($PY -c "import json;d=json.load(open('$lc'));print(repr(max(i['D_enclosure'][1] for i in d['images'])) if d['certified'] else 'FAIL')")
-  [ "$T" = FAIL ] && { echo "local certificate failed for $nm" | tee -a logs/proof.log; continue; }
+  T=$($PY -c "import json;d=json.load(open('$lc'));print(repr(max(i['D_enclosure'][1] for i in d['images'])) if d.get('verified', d.get('certified')) else 'FAIL')")
+  [ "$T" = FAIL ] && { echo "local verification failed for $nm" | tee -a logs/proof.log; continue; }
   [ "${RESUME:-0}" = 1 ] || rm -f results/proof_N$N.surv.* results/proof_N$N.progress
   rm -f results/proof_N$N.done
   ./capcert_rig "$N" "$T" "${EPS[$N]}" "results/proof_N$N" --threads "$THREADS" \

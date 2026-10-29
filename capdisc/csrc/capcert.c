@@ -3,7 +3,7 @@
  *
  * Proves  D(X) >= T  for every configuration X of N points on S^2 (N <= 10),
  * cell by cell over the gauge- and symmetry-reduced parameter box, and writes
- * the cells it could not certify ("survivors") once they are smaller than MIN_EPS.
+ * the cells it could not bound ("survivors") once they are smaller than MIN_EPS.
  *
  * Coordinates q (2N-3):  x0 = north pole, x1 = (sin q0, 0, cos q0),
  *   x_i = (sin th cos ph, sin th sin ph, cos th),  th = q[2i-3], ph = q[2i-2]  (i >= 2).
@@ -22,7 +22,7 @@
  *
  * Exclusion balls (optional): cells entirely inside a ball
  *   max_i d(y_i, z_i) < r  around a listed gauge-fixed configuration z
- * are skipped (they are covered by a separate local certificate).
+ * are skipped (they are covered by a separate local verification).
  *
  * Parallel: the domain is split deterministically into an initial frontier; OpenMP
  * threads take frontier cells dynamically and run an explicit-stack DFS on each.
@@ -414,7 +414,7 @@ int main(int argc, char **argv) {
                 time_t now = time(NULL);
                 if (now - tlast >= 60 || finished == (long)nf) {
                     tlast = now;
-                    fprintf(stderr, "[%6lds] roots %ld/%zu  cells %ld  certified %ld  sym %ld  ball %ld  survivors %ld  min_surv_lb %.12g\n",
+                    fprintf(stderr, "[%6lds] roots %ld/%zu  cells %ld  bounded %ld  sym %ld  ball %ld  survivors %ld  min_surv_lb %.12g\n",
                             (long)(now - t0), finished, nf, tot.processed, tot.certified, tot.sym, tot.ball, tot.surv,
                             tot.min_surv_lb);
                 }
@@ -424,7 +424,7 @@ int main(int argc, char **argv) {
     }
     fclose(pf);
     if (IO_ERROR) { fprintf(stderr, "I/O ERROR writing survivors: run is incomplete\n"); printf("INCOMPLETE (I/O error)\n"); return 2; }
-    printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld certified=%ld sym=%ld ball=%ld survivors=%ld min_surv_lb=%.17g time=%lds\n",
+    printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld bounded=%ld sym=%ld ball=%ld survivors=%ld min_surv_lb=%.17g time=%lds\n",
            N, TGT, MIN_EPS, tot.processed, tot.certified, tot.sym, tot.ball, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
     #ifdef RIGOROUS
     printf("MODE rigorous (interval arithmetic, outward rounding)\n");
@@ -437,6 +437,11 @@ int main(int argc, char **argv) {
                        N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed) < 0 || fclose(df)) {
         perror(dfn); return 2;
     }
-    if (tot.surv == 0) printf("CERTIFIED: D >= T on the whole fundamental domain%s\n", NBALLS ? " minus the exclusion balls" : "");
+    /* labels follow VERIFICATION.md: a single-kernel run is never called "certified" */
+#ifdef RIGOROUS
+    if (tot.surv == 0) printf("INTERVAL-VERIFIED: D >= T on the whole fundamental domain\n");
+#else
+    if (tot.surv == 0) printf("FLOAT-CHECKED: D >= T on the whole fundamental domain%s (floating point with margins; not rigorous)\n", NBALLS ? " minus the exclusion balls" : "");
+#endif
     return 0;
 }

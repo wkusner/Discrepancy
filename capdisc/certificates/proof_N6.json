@@ -2,18 +2,22 @@
  "N": 6,
  "statement": "D >= T on the fundamental domain outside the local-certificate boxes",
  "T": 0.27867881517624293,
- "capcert_result": "RESULT N=6 T=0.27867881517624293 MIN_EPS=0.02 cells=424252406 certified=167544844 sym=38104264 ball=0 survivors=6509863 min_surv_lb=0.27078255285964842 time=1728s",
+ "capcert_result": "RESULT N=6 T=0.27867881517624293 MIN_EPS=0.02 cells=424252406 bounded=167544844 sym=38104264 ball=0 survivors=6509863 min_surv_lb=0.27078255285964842 time=1728s",
  "refine": {
   "input_cells": 6509863,
   "cells": 6531051,
-  "certified": 5835655,
   "boxed": 8,
   "sym": 684794,
   "failed": 0,
   "time": 2846,
-  "proved": true
+  "bounded": 5835655,
+  "verified": true
  },
  "machine": "w227, 32 threads",
  "run": "run_proof.sh, 2026-10-29 06:29-07:46 CDT",
- "note": "transcribed from logs/proof.log on w227; full refine.json on the server at results/proof_N6.refine.json"
+ "note": "transcribed from logs/proof.log on w227; full refine.json on the server at results/proof_N6.refine.json",
+ "labels": {
+  "mesh": "interval-verified (capcert_rig, IEEE outward rounding)",
+  "refine": "Arb-verified (python-flint)"
+ }
 }
