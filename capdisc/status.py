@@ -82,7 +82,7 @@ if pr or os.path.exists('logs/proof.log'):
     for f in sorted(glob.glob(f'{R}/localcert_*.json')):
         d = json.load(open(f)); out.append(f"- local certificate {d['name']}: {'CERTIFIED' if d['certified'] else 'failed'}, box {d['box_radius']}, D* in {d['images'][0].get('D_enclosure')}\n")
     for f in sorted(glob.glob('certificates/symcert_*.json')):
-        d = json.load(open(f)); out.append(f"- symmetric certificate {d['name']}: {'CERTIFIED' if d['certified'] else 'failed'} (group of order {d['group_order']}, D* in {d['D_s']})\n")
+        d = json.load(open(f)); out.append(f"- symmetric certificate {d['name']} image {d.get('image', 0)}: {'CERTIFIED' if d['certified'] else 'failed'} (group of order {d['group_order']}, D* in {d['D_s']})\n")
     for f in sorted(glob.glob(f'{R}/proof_N*.out')):
         out.append(f"- {os.path.basename(f)}: {open(f).read().strip().splitlines()[0] if open(f).read().strip() else 'running'}\n")
     for f in sorted(glob.glob(f'{R}/proof_N*.refine.json')):

@@ -13,7 +13,8 @@ For N5_best (mirror group of order 4) and N6_best (dihedral rotation group of or
  4. The squared representative equations, cleared of square roots, are polynomials in s and D;
     their eliminant R(D) (iterated resultants) vanishes at D*.  P_N(N D) divides R, and P_N is the
     only irreducible factor of R with a root in the enclosure of D*; so N D* is that root of P_N.
-usage: python jobs/sym_cert.py N5_best|N6_best      writes certificates/symcert_<NAME>.json
+usage: python jobs/sym_cert.py N5_best|N6_best [IMAGE]   writes certificates/symcert_<NAME>_img<IMAGE>.json
+(run once per image of the minimizer in the fundamental domain)
 """
 import sys, os, json, itertools, re
 import numpy as np, sympy as sp
@@ -71,7 +72,8 @@ def gauge_float(Y):
     return np.array(q)
 
 
-img = lc['images'][0]
+IMG = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+img = lc['images'][IMG]
 qc = np.array(img['q_center'])
 from sphcap import bnb
 X_img = bnb.points(qc[None], N)[0]
@@ -147,7 +149,15 @@ for c in caps:
     if key(c) in seen: continue
     orb = {image_cap(c, g) for g in group}
     orbits.append((c, orb)); seen |= orb
-cover = all(key(c) in set().union(*[o for _, o in orbits]) for c in caps)
+union_set = set().union(*[o for _, o in orbits])
+cover = all(key(c) in union_set for c in caps)
+# redundant worst caps (not in the square system) must lie in the orbits, with the same counts,
+# so that they too have value D* at the (symmetric) minimizer
+extra = [parse_cap(x) for x in img.get('extra_caps', [])]; extra_counts = img.get('extra_counts', [])
+for c_, n_ in zip(extra, extra_counts):
+    hit = [r for r, o in orbits if key(c_) in o]
+    cover = cover and len(hit) == 1 and cnt[key(hit[0])] == n_
+print(f"  redundant worst caps {[repr(c_) for c_ in extra]} lie in the orbits with matching counts: {cover}")
 same_counts = all(cnt.get(k, cnt[key(r)]) == cnt[key(r)] for r, o in orbits for k in o if k in cnt)
 print(f"  {len(caps)} caps of the square system in {len(orbits)} orbits; representatives {[repr(r) for r, _ in orbits]}; counts consistent: {same_counts}")
 assert len(orbits) == len(s_num) + (1 if N == 5 else 0), "orbit count does not match the number of unknowns"
@@ -171,7 +181,7 @@ def system(sv, Dv):
 
 
 k = len(s_num); n = k + 1
-m = np.append(s_num, np.mean(lc['images'][0]['D_enclosure']))
+m = np.append(s_num, np.mean(img['D_enclosure']))
 for _ in range(8):                                   # float Newton
     F = system([arb(float(x)) for x in m[:-1]], arb(float(m[-1])))
     J = np.array([[float(f.d.get(j, arb(0)).mid()) for j in range(n)] for f in F])
@@ -213,8 +223,10 @@ e2 = [a[1] * e1[2] - a[2] * e1[1], a[2] * e1[0] - a[0] * e1[2], a[0] * e1[1] - a
 qg = [ab.acos()]
 for y in Yb[2:]:
     qg += [dot(a, y).acos(), arb.atan2(dot(e2, y), dot(e1, y))]
-flip = 1 if float(qg[2].mid()) * qc[2] >= 0 else -1      # reflection y -> -y if needed
-for i in range(2, N): qg[2 * i - 2] = qg[2 * i - 2] * flip
+# The labeling perm was chosen so that Y(s) matches the image's Gram matrix; the family is closed
+# under the reflection y -> -y only up to relabeling, which a reflection would also change the cap
+# sides of.  We require that no reflection is needed (true for both images found).
+assert float(qg[2].mid()) * qc[2] > 0, "a reflection would be needed: not supported" 
 rk_loc = img['krawczyk_radius']
 inK = all((qg[j] - arb(qc[j])).abs_upper() < rk_loc for j in range(nq))
 Dlo, Dhi = img['D_enclosure']
@@ -316,7 +328,14 @@ for f, mult in facs:
         if r_.imag.contains(0) and r_.real.upper() >= Dlo and r_.real.lower() <= Dhi:
             hits.append((str(f)[:60], fp.degree()))
 print(f"  eliminant degree {R.degree()}; P_N(N D) divides it: {divides}; factors with a root in the enclosure: {hits}")
-only_P = divides and len(hits) == 1 and sp.Poly(sp.factor_list(PD.as_expr())[1][0][0], Dsym).degree() == hits[0][1]
+# the unique factor meeting the enclosure must be P_N(N D) itself (compare primitive parts), and P_N
+# must be irreducible over Q
+PDprim = sp.Poly(PD.as_expr(), Dsym).primitive()[1]
+hit_factors = [sp.Poly(f, Dsym) for f, _ in facs if sp.Poly(f, Dsym).degree() > 0 and any(str(f)[:60] == h[0] for h in hits)]
+same = len(hit_factors) == 1 and (hit_factors[0].primitive()[1] == PDprim or hit_factors[0].primitive()[1] == -PDprim)
+irreducible = len(fmpz_poly(P_N[::-1]).factor()[1]) == 1 and fmpz_poly(P_N[::-1]).factor()[1][0][1] == 1
+print(f"  the factor meeting the enclosure is P_N(N D): {same};  P_N irreducible: {irreducible}")
+only_P = divides and len(hits) == 1 and same and irreducible
 
 union = sorted(set().union(*[o for _, o in orbits]))
 print(f"  orbits of the representatives contain {len(union)} caps (worst caps at the minimizer, including redundant ones): {union}")
@@ -325,5 +344,6 @@ res = dict(name=name, N=N, group_order=len(group), orbits=[repr(r) for r, _ in o
            D_s=[float(D_s.lower()), float(D_s.upper())], gauge_in_local_box=bool(inK), D_in_local_enclosure=bool(inD),
            eliminant_degree=R.degree(), P_divides_eliminant=bool(divides), factors_meeting_enclosure=hits,
            certified=bool(ok and inK and inD and same_counts and cover and only_P))
-json.dump(res, open(os.path.join(CERT, f'symcert_{name}.json'), 'w'), indent=1)
+res['image'] = IMG
+json.dump(res, open(os.path.join(CERT, f'symcert_{name}_img{IMG}.json'), 'w'), indent=1)
 print("CERTIFIED: minimizer symmetric, N*D* is the root of P_N in the enclosure" if res['certified'] else "NOT CERTIFIED")

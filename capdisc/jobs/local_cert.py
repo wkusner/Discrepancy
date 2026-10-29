@@ -83,7 +83,7 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
     act = {(c.I, c.side if len(c.I) == 3 else 0) for c in list(caps) + list(extra)}
     for c, dd in zip(allc, datK):
         if (c.I, c.side if len(c.I) == 3 else 0) in act: continue
-        if dd is None: continue
+        if dd is None: worst_other = float('inf'); continue     # cannot be bounded: certificate fails
         worst_other = max(worst_other, float(dd[4].upper()))
     report['max_other_caps_on_K'] = worst_other
     report['others_below'] = bool(worst_other < float(Dstar.lower()) and float(arb(1) / N) < float(Dstar.lower()))
@@ -96,7 +96,8 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
     # (Krawczyk); redundant caps are not needed and their value at q* is not used.
     caps_all = list(caps); counts_all = list(counts)
     datB = Cf.cap_data(m[:-1], w, N, caps_all)
-    counts_ok = all(dd is not None and dd[3] == n for dd, n in zip(datB, counts_all))
+    # lower AND upper counts must equal the frozen count (no point may cross a worst-cap boundary)
+    counts_ok = all(dd is not None and dd[3] == n and dd[5] == n for dd, n in zip(datB, counts_all))
     report['counts_frozen_on_box'] = counts_ok
     if not counts_ok: return report
     # gradient enclosures [mid - rad, mid + rad], rounded outward by one ulp (float subtraction)
@@ -113,7 +114,8 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
                       A_eq=np.append(np.ones(len(caps_all)), 0.0)[None], b_eq=[1.0],
                       bounds=[(0, None)] * len(caps_all) + [(None, None)], method='highs')
         if res.status != 0 or -res.fun <= 0: nfail += 1; continue
-        mu = res.x[:-1]
+        mu = np.maximum(res.x[:-1], 0.0)                   # the argument needs mu >= 0
+        if mu.sum() <= 0: nfail += 1; continue
         # rigorous check in ball arithmetic (Gs are outward-rounded endpoints)
         for j in range(nq):
             acc = arb(0)
@@ -165,6 +167,7 @@ for k, (Yi, qi) in enumerate(images):
         print(f"  image {k}: {len(caps) + len(extra)} worst caps, using an independent subset of {len(caps)}")
     out = certify_image(q0, caps, counts, r_big, extra, extra_counts)
     out['image'] = k; out['caps'] = [repr(c) for c in caps]; out['counts'] = counts
+    out['extra_caps'] = [repr(c) for c in extra]; out['extra_counts'] = extra_counts
     print(f"  image {k}: " + ", ".join(f"{key}={out.get(key)}" for key in ('krawczyk', 'D_enclosure', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'certified')))
     results.append(out)
 os.makedirs('results', exist_ok=True)

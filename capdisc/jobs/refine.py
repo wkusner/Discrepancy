@@ -70,8 +70,20 @@ def main():
     assert lc.get('certified'), "local certificate not certified"
     boxes = [(np.array(im['q_center']), lc['box_radius']) for im in lc['images']]
     T = a.T if a.T is not None else max(im['D_enclosure'][1] for im in lc['images'])
-    files = sorted(glob.glob(a.prefix + '.surv.*'))
+    # the C run must be complete, at a threshold >= ours, keeping every survivor (completion stamp)
+    stamp = dict(kv.split('=', 1) for kv in open(a.prefix + '.done').read().split())
+    T_c = float.fromhex(stamp['T'])
+    assert int(stamp['N']) == N, "stamp: wrong N"
+    assert stamp['mode'] == 'rigorous', "stamp: capcert was not run in rigorous mode"
+    assert float.fromhex(stamp['keep']) == 1.0 and int(stamp['balls']) == 0, "stamp: survivors were sampled or balls used"
+    assert T_c >= T, f"stamp: capcert threshold {T_c!r} is below the refinement threshold {T!r}"
+    rec = (2 * nq + 1) * 8
+    files = sorted(f for f in glob.glob(a.prefix + '.surv.*') if f.rsplit('.', 1)[1].isdigit())
+    for f in files:
+        assert os.path.getsize(f) % rec == 0, f"{f}: partial record"
     arr = np.concatenate([np.fromfile(f, dtype=np.float64) for f in files]).reshape(-1, 2 * nq + 1) if files else np.zeros((0, 2 * nq + 1))
+    # an interrupted root rerun on resume may have left duplicate records; never fewer than counted
+    assert len(arr) >= int(stamp['survivors']), f"only {len(arr)} survivor records, capcert counted {stamp['survivors']}"
     cells = [(row[:nq], row[nq:2 * nq]) for row in arr]
     print(f"N={N}: {len(cells):,} cells from capcert, T={T!r}, {len(boxes)} exclusion box(es) of half-width {lc['box_radius']}", flush=True)
     t0 = time.time(); tot = dict(cells=0, certified=0, boxed=0, failed=0); fails = []
@@ -81,7 +93,7 @@ def main():
             fails += st['fails'][:5]
             if (k + 1) % 1000 == 0 or k + 1 == len(cells):
                 print(f"[{time.time()-t0:7.0f}s] {k+1:,}/{len(cells):,} input cells; {tot}", flush=True)
-    res = dict(N=N, T=T, input_cells=len(cells), **tot, fails=fails[:50], time=time.time() - t0,
+    res = dict(N=N, T=T, capcert_stamp=stamp, input_cells=len(cells), **tot, fails=fails[:50], time=time.time() - t0,
                proved=(tot['failed'] == 0))
     json.dump(res, open(a.prefix + '.refine.json', 'w'), indent=1)
     print("PROVED: no cell left" if res['proved'] else f"NOT PROVED: {tot['failed']} cells failed")

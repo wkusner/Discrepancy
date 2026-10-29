@@ -41,6 +41,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -178,11 +180,13 @@ static void split(const Cell *c, Cell *a, Cell *b) {
 }
 
 typedef struct { long processed, certified, sym, ball, surv; double min_surv_lb; } Stats;
+static volatile int IO_ERROR = 0;
+static void *xmalloc(size_t n) { void *p = malloc(n); if (!p) { fprintf(stderr, "out of memory\n"); exit(3); } return p; }
 
 /* DFS on one root; survivors appended to fp (thread-private) */
 static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
     size_t cap = 4096, top = 0;
-    Cell *stack = malloc(cap * sizeof(Cell));
+    Cell *stack = xmalloc(cap * sizeof(Cell));
     stack[top++] = *root;
 #ifndef RIGOROUS
     double X[NMAX][3], E[NMAX];
@@ -218,10 +222,11 @@ static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
                 for (size_t k = 0; k < NQ * sizeof(double); k++) { hsh ^= p[k]; hsh *= 1099511628211ULL; }
                 keep = (double)(hsh >> 11) * (1.0 / 9007199254740992.0) < KEEP_PROB;
             }
-            if (keep) { fwrite(c.q, sizeof(double), NQ, fp); fwrite(c.h, sizeof(double), NQ, fp); fwrite(&lb, sizeof(double), 1, fp); }
+            if (keep) { if (fwrite(c.q, sizeof(double), NQ, fp) != (size_t)NQ || fwrite(c.h, sizeof(double), NQ, fp) != (size_t)NQ
+                              || fwrite(&lb, sizeof(double), 1, fp) != 1) IO_ERROR = 1; }
             continue;
         }
-        if (top + 2 > cap) { cap *= 2; stack = realloc(stack, cap * sizeof(Cell)); }
+        if (top + 2 > cap) { cap *= 2; stack = realloc(stack, cap * sizeof(Cell)); if (!stack) { fprintf(stderr, "out of memory\n"); exit(3); } }
 #ifdef RIGOROUS
         split_r(&c, &stack[top], &stack[top + 1]); top += 2;
 #else
@@ -302,9 +307,9 @@ int main(int argc, char **argv) {
         else { root.q[2 * i - 2] = 0; root.h[2 * i - 2] = M_PI; }
     }
 #endif
-    size_t nf = 1, capf = 1024; Cell *F = malloc(capf * sizeof(Cell)); F[0] = root;
+    size_t nf = 1, capf = 1024; Cell *F = xmalloc(capf * sizeof(Cell)); F[0] = root;
     while ((long)nf < frontier) {
-        Cell *G = malloc(2 * nf * sizeof(Cell));
+        Cell *G = xmalloc(2 * nf * sizeof(Cell));
         for (size_t i = 0; i < nf; i++)
 #ifdef RIGOROUS
             split_r(&F[i], &G[2 * i], &G[2 * i + 1]);
@@ -313,21 +318,58 @@ int main(int argc, char **argv) {
 #endif
         free(F); F = G; nf *= 2;
     }
-    /* checkpoint */
-    char fn[4096];
+    /* checkpoint.  The progress file starts with a header recording everything that determines the
+       frontier and the meaning of a finished root; resuming with different settings is refused. */
+    char fn[4096], hdr[512];
     snprintf(fn, sizeof fn, "%s.progress", out);
+#ifdef RIGOROUS
+    const char *mode = "rigorous";
+#else
+    const char *mode = "float";
+#endif
+    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld\n",
+             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc);
     char *done = calloc(nf, 1);
+    if (!done) { fprintf(stderr, "out of memory\n"); return 3; }
     Stats tot = {0, 0, 0, 0, 0, INFINITY};
     FILE *pf = fopen(fn, "r");
+    int have_header = 0;
     if (pf) {
-        long idx, p, c, s, b, v; double ml;
-        while (fscanf(pf, "%ld %ld %ld %ld %ld %ld %lf", &idx, &p, &c, &s, &b, &v, &ml) == 7) {
+        char line[512] = "";
+        long pos = ftell(pf);
+        if (fgets(line, sizeof line, pf) && line[0] == '#') {
+            if (strcmp(line, hdr)) {
+                fprintf(stderr, "refusing to resume: %s was written with different settings\n  file: %s  now:  %s", fn, line, hdr);
+                return 2;
+            }
+            have_header = 1;
+        } else {
+            fseek(pf, pos, SEEK_SET);
+#ifdef RIGOROUS
+            if (line[0]) { fprintf(stderr, "refusing to resume from a progress file without header (%s)\n", fn); return 2; }
+#else
+            if (line[0]) fprintf(stderr, "warning: legacy progress file without header; resuming as before\n");
+#endif
+        }
+        long idx, p, cc, s, b, v; double ml;
+        while (fscanf(pf, "%ld %ld %ld %ld %ld %ld %lf", &idx, &p, &cc, &s, &b, &v, &ml) == 7) {
             if (idx >= 0 && (size_t)idx < nf && !done[idx]) {
-                done[idx] = 1; tot.processed += p; tot.certified += c; tot.sym += s; tot.ball += b; tot.surv += v;
+                done[idx] = 1; tot.processed += p; tot.certified += cc; tot.sym += s; tot.ball += b; tot.surv += v;
                 if (ml < tot.min_surv_lb) tot.min_surv_lb = ml;
             }
         }
         fclose(pf);
+    }
+    /* survivor files of an interrupted run may end in a partial record: cut them back */
+    {
+        long rec = (long)((2 * NQ + 1) * sizeof(double));
+        for (int t = 0; t < 4096; t++) {
+            char sfn[4200]; struct stat stt;
+            snprintf(sfn, sizeof sfn, "%s.surv.%d", out, t);
+            if (stat(sfn, &stt) == 0 && stt.st_size % rec) {
+                if (truncate(sfn, stt.st_size - stt.st_size % rec)) { perror(sfn); return 2; }
+            }
+        }
     }
     long ndone = 0; for (size_t i = 0; i < nf; i++) ndone += done[i];
     fprintf(stderr, "capcert%s N=%d T=%.17g MIN_EPS=%g threads=%d frontier=%zu (resuming %ld done) balls=%d\n",
@@ -338,6 +380,8 @@ int main(int argc, char **argv) {
 #endif
             N, TGT, MIN_EPS, nthr, nf, ndone, NBALLS);
     pf = fopen(fn, "a");
+    if (!pf) { perror(fn); return 2; }
+    if (!have_header && ndone == 0) { fputs(hdr, pf); fflush(pf); }
     time_t t0 = time(NULL), tlast = t0;
     long finished = ndone;
 
@@ -350,12 +394,15 @@ int main(int argc, char **argv) {
 #endif
         char sfn[4200]; snprintf(sfn, sizeof sfn, "%s.surv.%d", out, tid);
         FILE *sf = fopen(sfn, "ab");
+        if (!sf) IO_ERROR = 1;
 #pragma omp for schedule(dynamic, 1)
         for (long r = 0; r < (long)nf; r++) {
             if (done[r]) continue;
             Stats st = {0, 0, 0, 0, 0, INFINITY};
+            if (IO_ERROR) continue;
             dfs(&F[r], &st, sf, maxc);
-            fflush(sf);
+            if (fflush(sf)) IO_ERROR = 1;
+            if (IO_ERROR) continue;   /* do not record a root whose survivors may be lost */
 #pragma omp critical
             {
                 fprintf(pf, "%ld %ld %ld %ld %ld %ld %.17g\n", r, st.processed, st.certified, st.sym, st.ball, st.surv,
@@ -373,14 +420,23 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        fclose(sf);
+        if (sf && fclose(sf)) IO_ERROR = 1;
     }
     fclose(pf);
+    if (IO_ERROR) { fprintf(stderr, "I/O ERROR writing survivors: run is incomplete\n"); printf("INCOMPLETE (I/O error)\n"); return 2; }
     printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld certified=%ld sym=%ld ball=%ld survivors=%ld min_surv_lb=%.17g time=%lds\n",
            N, TGT, MIN_EPS, tot.processed, tot.certified, tot.sym, tot.ball, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
     #ifdef RIGOROUS
     printf("MODE rigorous (interval arithmetic, outward rounding)\n");
 #endif
+    if (finished != (long)nf) { printf("INCOMPLETE: %ld of %zu roots finished\n", finished, nf); return 2; }
+    /* completion stamp, read by jobs/refine.py */
+    char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
+    FILE *df = fopen(dfn, "w");
+    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld\n",
+                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed) < 0 || fclose(df)) {
+        perror(dfn); return 2;
+    }
     if (tot.surv == 0) printf("CERTIFIED: D >= T on the whole fundamental domain%s\n", NBALLS ? " minus the exclusion balls" : "");
     return 0;
 }
