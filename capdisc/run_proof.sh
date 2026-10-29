@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Global minimality proof pipeline for N=5 and N=6 (run on w227, inside tmux):
-#   1. local certificate around each image of the minimizer (Krawczyk + orthant test)
+#   1. local certificate around each image of the minimizer (Krawczyk + orthant test), and the
+#      symmetric certificate (minimizer symmetric; N*D* is the root of P_N in the enclosure)
 #   2. capcert_rig (interval arithmetic) at T = upper end of the D* enclosure, coarse MIN_EPS, keeping every survivor
 #   3. rigorous ball-arithmetic refinement of the survivors (jobs/refine.py), with the
 #      certified boxes of step 1 excluded
@@ -21,6 +22,7 @@ for N in $NS; do
   echo "=== N=$N ($nm) $(date)" | tee -a logs/proof.log
   $PY jobs/local_cert.py "$nm" "${RBOX[$N]}" 2>&1 | tee -a logs/proof.log
   lc=results/localcert_$nm.json
+  mkdir -p certificates && cp "$lc" certificates/ && $PY jobs/sym_cert.py "$nm" 2>&1 | tail -3 | tee -a logs/proof.log
   T=$($PY -c "import json;d=json.load(open('$lc'));print(repr(max(i['D_enclosure'][1] for i in d['images'])) if d['certified'] else 'FAIL')")
   [ "$T" = FAIL ] && { echo "local certificate failed for $nm" | tee -a logs/proof.log; continue; }
   rm -f results/proof_N$N.surv.* results/proof_N$N.progress
