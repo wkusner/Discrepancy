@@ -57,7 +57,7 @@ def sha(path):
 def commit():
     try:
         c = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], cwd=ROOT, capture_output=True, text=True).stdout.strip()
-        dirty = subprocess.run(['git', 'status', '--porcelain', '--', '.'], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+        dirty = subprocess.run(['git', 'status', '--porcelain', '--', '.', ':(exclude)export'], cwd=ROOT, capture_output=True, text=True).stdout.strip()
         return c + ('+dirty' if dirty else '')
     except Exception:
         return None
