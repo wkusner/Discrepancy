@@ -438,7 +438,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "a0f7ad5+dirty",
+    "commit": "613d696",
     "pointer": "N6_best"
    },
    "gram": {
@@ -838,7 +838,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "a0f7ad5+dirty",
+    "commit": "613d696",
     "pointer": "N6_second"
    }
   }
