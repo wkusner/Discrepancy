@@ -345,7 +345,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "4aefc55",
+    "commit": "0d4ed47",
     "pointer": "N5_best"
    },
    "gram": {
@@ -621,7 +621,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "4aefc55",
+    "commit": "0d4ed47",
     "pointer": "N5_valley"
    },
    "second_order": {
@@ -916,10 +916,850 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "4aefc55",
+    "commit": "0d4ed47",
     "pointer": "N5_third"
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 5,
+   "name": "atlas_N5_levels#0",
+   "X": [
+    [
+     -0.31178377967345583,
+     -0.5127032595023282,
+     0.7999539001893936
+    ],
+    [
+     0.7677978566789472,
+     -0.6394098417239805,
+     -0.04051549809306665
+    ],
+    [
+     0.062199766167513555,
+     0.8456045008249808,
+     0.5301737613964329
+    ],
+    [
+     -0.8521274718149746,
+     -0.18776527289832703,
+     -0.4884905056105355
+    ],
+    [
+     0.39782330194963095,
+     0.4410509139766853,
+     -0.8044940718900441
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.32332565099805977,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "weight_range": [
+       0.175359304586,
+       0.175359304586
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       4
+      ],
+      "interior": [
+       1
+      ],
+      "branches": [
+       "low:0-2-4"
+      ],
+      "weight_range": [
+       0.012278842181,
+       0.012278842181
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       3,
+       4
+      ],
+      "interior": [
+       1
+      ],
+      "branches": [
+       "up:0-3-4"
+      ],
+      "weight_range": [
+       0.012278842181,
+       0.012278842181
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-4"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:1-3-4"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       2,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-3-4"
+      ],
+      "weight_range": [
+       0.175359304586,
+       0.175359304586
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;0,3,4/2;1,2,3/;1,2,4/;1,3,4/2"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-3",
+     "up:0-2-3",
+     "low:0-2-4",
+     "up:0-3-4",
+     "low:1-2-4",
+     "up:1-3-4",
+     "low:2-3-4"
+    ],
+    "ranges": {
+     "up:0-1-2": [
+      0.156180926617,
+      0.156180926617
+     ],
+     "low:0-1-3": [
+      0.156180926617,
+      0.156180926617
+     ],
+     "up:0-2-3": [
+      0.175359304586,
+      0.175359304586
+     ],
+     "low:0-2-4": [
+      0.012278842181,
+      0.012278842181
+     ],
+     "up:0-3-4": [
+      0.012278842181,
+      0.012278842181
+     ],
+     "low:1-2-4": [
+      0.156180926617,
+      0.156180926617
+     ],
+     "up:1-3-4": [
+      0.156180926617,
+      0.156180926617
+     ],
+     "low:2-3-4": [
+      0.175359304586,
+      0.175359304586
+     ]
+    },
+    "maxmin": {
+     "up:0-1-2": 0.156180926617,
+     "low:0-1-3": 0.156180926617,
+     "up:0-2-3": 0.175359304586,
+     "low:0-2-4": 0.012278842181,
+     "up:0-3-4": 0.012278842181,
+     "low:1-2-4": 0.156180926617,
+     "up:1-3-4": 0.156180926617,
+     "low:2-3-4": 0.175359304586
+    },
+    "maxmin_value": 0.012278842180726772,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;0,3,4/2;1,2,3/;1,2,4/;1,3,4/2",
+    "graph_hash": "062ff563df4f"
+   },
+   "first_order": {
+    "rank": 7,
+    "dim_quotient": 7,
+    "kernel_dim": 0,
+    "sharp": true,
+    "stationary": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/atlas/atlas_N5_levels.json",
+    "file_sha256": "b598bcef4319a60b9c8f8cc0d0e1c9910f41e5efbff2c07ffa5f77ea2f2fa7d0",
+    "pointer": 0,
+    "script": "jobs/atlas_export.py",
+    "commit": "0d4ed47"
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 5,
+   "name": "atlas_N5_levels#1",
+   "X": [
+    [
+     -0.22768305432998714,
+     -0.5922472799601077,
+     0.772918874236373
+    ],
+    [
+     0.9598362703533591,
+     -0.2690039048058211,
+     0.07969462537319844
+    ],
+    [
+     -0.37168116222729713,
+     0.7646418168516491,
+     0.5264750759220943
+    ],
+    [
+     -0.5922673438400002,
+     -0.5125176458304137,
+     -0.6217274773831069
+    ],
+    [
+     0.2462525706333376,
+     0.6593826148809189,
+     -0.7103338923698312
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.3234105479512766,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 7,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       4
+      ],
+      "interior": [
+       1,
+       2
+      ],
+      "branches": [
+       "up:0-4"
+      ],
+      "weight_range": [
+       0.016503707775,
+       0.016503707775
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "weight_range": [
+       0.154829800376,
+       0.154829800376
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "weight_range": [
+       0.172482630612,
+       0.172482630612
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "weight_range": [
+       0.16443571512,
+       0.16443571512
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-4"
+      ],
+      "weight_range": [
+       0.154829800379,
+       0.154829800379
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:1-3-4"
+      ],
+      "weight_range": [
+       0.172482630615,
+       0.172482630615
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       2,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-3-4"
+      ],
+      "weight_range": [
+       0.164435715123,
+       0.164435715123
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;1,2,3/;1,2,4/;3,4/1,2"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "up:0-4",
+     "up:0-1-2",
+     "low:0-1-3",
+     "up:0-2-3",
+     "low:1-2-4",
+     "up:1-3-4",
+     "low:2-3-4"
+    ],
+    "ranges": {
+     "up:0-4": [
+      0.016503707775,
+      0.016503707775
+     ],
+     "up:0-1-2": [
+      0.154829800376,
+      0.154829800376
+     ],
+     "low:0-1-3": [
+      0.172482630612,
+      0.172482630612
+     ],
+     "up:0-2-3": [
+      0.16443571512,
+      0.16443571512
+     ],
+     "low:1-2-4": [
+      0.154829800379,
+      0.154829800379
+     ],
+     "up:1-3-4": [
+      0.172482630615,
+      0.172482630615
+     ],
+     "low:2-3-4": [
+      0.164435715123,
+      0.164435715123
+     ]
+    },
+    "maxmin": {
+     "up:0-4": 0.016503707775,
+     "up:0-1-2": 0.154829800378,
+     "low:0-1-3": 0.172482630612,
+     "up:0-2-3": 0.164435715122,
+     "low:1-2-4": 0.154829800378,
+     "up:1-3-4": 0.172482630612,
+     "low:2-3-4": 0.164435715122
+    },
+    "maxmin_value": 0.01650370777546952,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;1,2,3/;1,2,4/;3,4/1,2",
+    "graph_hash": "770b4118b655"
+   },
+   "first_order": {
+    "rank": 6,
+    "dim_quotient": 7,
+    "kernel_dim": 1,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/atlas/atlas_N5_levels.json",
+    "file_sha256": "b598bcef4319a60b9c8f8cc0d0e1c9910f41e5efbff2c07ffa5f77ea2f2fa7d0",
+    "pointer": 1,
+    "script": "jobs/atlas_export.py",
+    "commit": "0d4ed47"
+   },
+   "second_order": {
+    "level": 0,
+    "status": "numerical",
+    "kernel_dim": 1,
+    "hessian_eigenvalues_on_kernel": [
+     -5e-08
+    ],
+    "descending": 0,
+    "ascending": 0,
+    "null": 1,
+    "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 5,
+   "name": "atlas_N5_levels#2",
+   "X": [
+    [
+     0.3615866994635019,
+     -0.3509024539840268,
+     0.8637838424971142
+    ],
+    [
+     0.9986052232723197,
+     0.04570883107451193,
+     -0.026425571233983963
+    ],
+    [
+     -0.45386763824363663,
+     0.8781304867376228,
+     0.1512977700334317
+    ],
+    [
+     -0.9853080365733079,
+     -0.1216795534917763,
+     -0.1198422268071443
+    ],
+    [
+     0.08041546679820155,
+     -0.45943711587056707,
+     -0.8845625411807594
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.330742284557316,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "weight_range": [
+       0.170685069546,
+       0.170685069546
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [
+       4
+      ],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "weight_range": [
+       0.068515273302,
+       0.068515273302
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-4"
+      ],
+      "weight_range": [
+       0.204325315778,
+       0.204325315778
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "weight_range": [
+       0.170685069546,
+       0.170685069546
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       3,
+       4
+      ],
+      "interior": [
+       1,
+       2
+      ],
+      "branches": [
+       "low:0-3-4"
+      ],
+      "weight_range": [
+       0.056474341375,
+       0.056474341375
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       4
+      ],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "weight_range": [
+       0.068515273302,
+       0.068515273302
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       4
+      ],
+      "interior": [
+       0,
+       3
+      ],
+      "branches": [
+       "up:1-2-4"
+      ],
+      "weight_range": [
+       0.056474341375,
+       0.056474341375
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       2,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-3-4"
+      ],
+      "weight_range": [
+       0.204325315778,
+       0.204325315778
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,2/;0,1,3/;0,2,3/4;0,2,4/;0,3,4/1,2;1,2,3/4;1,2,4/0,3;1,3,4/"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-3",
+     "low:0-1-4",
+     "up:0-2-3",
+     "low:0-3-4",
+     "low:1-2-3",
+     "up:1-2-4",
+     "low:2-3-4"
+    ],
+    "ranges": {
+     "up:0-1-2": [
+      0.170685069546,
+      0.170685069546
+     ],
+     "low:0-1-3": [
+      0.068515273302,
+      0.068515273302
+     ],
+     "low:0-1-4": [
+      0.204325315778,
+      0.204325315778
+     ],
+     "up:0-2-3": [
+      0.170685069546,
+      0.170685069546
+     ],
+     "low:0-3-4": [
+      0.056474341375,
+      0.056474341375
+     ],
+     "low:1-2-3": [
+      0.068515273302,
+      0.068515273302
+     ],
+     "up:1-2-4": [
+      0.056474341375,
+      0.056474341375
+     ],
+     "low:2-3-4": [
+      0.204325315778,
+      0.204325315778
+     ]
+    },
+    "maxmin": {
+     "up:0-1-2": 0.170685069546,
+     "low:0-1-3": 0.068515273302,
+     "low:0-1-4": 0.204325315778,
+     "up:0-2-3": 0.170685069546,
+     "low:0-3-4": 0.056474341375,
+     "low:1-2-3": 0.068515273302,
+     "up:1-2-4": 0.056474341375,
+     "low:2-3-4": 0.204325315778
+    },
+    "maxmin_value": 0.0564743413748113,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,3/;0,2,3/4;0,2,4/;0,3,4/1,2;1,2,3/4;1,2,4/0,3;1,3,4/",
+    "graph_hash": "15a57680b8dd"
+   },
+   "first_order": {
+    "rank": 7,
+    "dim_quotient": 7,
+    "kernel_dim": 0,
+    "sharp": true,
+    "stationary": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/atlas/atlas_N5_levels.json",
+    "file_sha256": "b598bcef4319a60b9c8f8cc0d0e1c9910f41e5efbff2c07ffa5f77ea2f2fa7d0",
+    "pointer": 2,
+    "script": "jobs/atlas_export.py",
+    "commit": "0d4ed47"
    }
   }
  ],
- "shared_hashes": {}
+ "shared_hashes": {
+  "062ff563df4f": [
+   "N5_best",
+   "atlas_N5_levels#0"
+  ],
+  "770b4118b655": [
+   "N5_valley",
+   "atlas_N5_levels#1"
+  ],
+  "15a57680b8dd": [
+   "N5_third",
+   "atlas_N5_levels#2"
+  ]
+ }
 }

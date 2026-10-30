@@ -403,7 +403,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "4aefc55",
+    "commit": "0d4ed47",
     "pointer": "N7_best"
    }
   }
