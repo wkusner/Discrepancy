@@ -107,7 +107,7 @@ N = 9–12 search values only.
   `capcert_result` (summary line); `capcert_stamp` (settings and counts, with T in hex);
   `refine` (`input_cells, cells, bounded, sym, boxed, failed, time, verified`); `labels`; `machine`.
   `proof_N6.json`: the same for N=6.
-* `pipelineB_N5_local.json`, `pipelineB_N6.json`: pipeline B (second kernels): the mesh record of `capcert_arb`
+* `pipelineB_N5.json`, `pipelineB_N6.json` (and the earlier local run `pipelineB_N5_local.json`): pipeline B (second kernels): the mesh record of `capcert_arb`
   (`result` line, `done_stamp`) and the mpmath.iv refinement record (`xrefine`), copied verbatim; `xcheck_verdict.py`
   reads them when the server's `results/` files are not present.
 * `xcheck_verdict.json`: per N, the checks of pipeline B and `pipeline_B_proves`.

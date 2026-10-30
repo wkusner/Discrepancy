@@ -40,7 +40,7 @@ Rules:
 | claim | step | label now | kernels |
 |---|---|---|---|
 | D_N ≥ T outside the boxes | pipeline A: mesh `capcert_rig` (IEEE intervals, C) + refinement `refine.py` (Arb) | interval-verified + Arb-verified | |
-| | pipeline B: mesh `capcert_arb` (Arb, C) + refinement `xcheck_refine.py` (mpmath.iv) | N = 5, 6: **cross-verified** (pipelines A and B agree; `certificates/pipelineB_N5_local.json`, `certificates/pipelineB_N6.json`: 52,698,474 cells, 446,327 survivors refined into 483,847 cells, 0 failed) | IEEE intervals + Arb; Arb + mpmath.iv |
+| | pipeline B: mesh `capcert_arb` (Arb, C) + refinement `xcheck_refine.py` (mpmath.iv) | N = 5, 6: **cross-verified** (pipelines A and B agree; `certificates/pipelineB_N5.json` (re-run of `pipelineB_N5_local.json`), `certificates/pipelineB_N6.json`: 52,698,474 cells, 446,327 survivors refined into 483,847 cells, 0 failed) | IEEE intervals + Arb; Arb + mpmath.iv |
 | minimizer unique in its box, D(q*) = D* | `local_cert.py` / `xcheck_local.py` | **cross-verified (Arb + mpmath.iv)** | independent code (`certificates/xcheck_local_*.json`) |
 | minimizer symmetric, (q*, D*) = (q(Y(s*)), D_s) | `sym_cert.py` / `xcheck_sym.py` | **cross-verified (Arb + mpmath.iv)** | independent code (`certificates/xcheck_sym_*.json`); the orbit structure is exact combinatorics |
 | N·D* is a root of P_N | elimination | **cross-verified (sympy + msolve)** | sympy resultants of the geometric orbit equations (`sym_cert.py`) + msolve Gröbner elimination of the paper's equations `msolve/*.ms` (`xcheck_elim.py`, `certificates/xcheck_elim.json`) |

@@ -17,10 +17,10 @@
    "symmetric": true,
    "roots": true,
    "elimination": true,
-   "mesh": false,
-   "refinement": false
+   "mesh": true,
+   "refinement": true
   },
-  "pipeline_B_proves": false,
+  "pipeline_B_proves": true,
   "T": 0.27867881517624277
  }
 }
