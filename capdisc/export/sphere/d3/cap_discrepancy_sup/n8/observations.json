@@ -1,0 +1,1484 @@
+{
+ "functional": {
+  "id": "cap_discrepancy_sup",
+  "definition": "D(X) = sup over closed spherical caps C of |#(X n C)/N - sigma(C)|, sigma the normalized area",
+  "sense": "minimize",
+  "container": "sphere",
+  "d": 3,
+  "critical_point": "balanced: a nonnegative combination of the gradients of the worst caps vanishes (Clarke stationary)",
+  "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)"
+ },
+ "N": 8,
+ "observations": [
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 8,
+   "name": "N8_best",
+   "X": [
+    [
+     0.3522362028840347,
+     0.7588854839846602,
+     0.5477430780714672
+    ],
+    [
+     -0.21907458355128165,
+     0.9482983348353573,
+     -0.22964449697373784
+    ],
+    [
+     -0.6020662571754877,
+     -0.7819010970671922,
+     -0.16170001971496725
+    ],
+    [
+     -0.0016364614928701788,
+     -0.07510652739594584,
+     -0.9971741731193725
+    ],
+    [
+     -0.9439691828807915,
+     0.11715359496814623,
+     0.30854046243144617
+    ],
+    [
+     0.8161873633835166,
+     0.21625801064111402,
+     -0.5357897541821898
+    ],
+    [
+     0.006519246862692196,
+     -0.3796015089967496,
+     0.9251271230418737
+    ],
+    [
+     0.599311303305206,
+     -0.7893440659056029,
+     0.13327380594185276
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.23079914617978103,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 16,
+    "hyperedges": [
+     {
+      "boundary": [
+       1,
+       6
+      ],
+      "interior": [
+       0,
+       4
+      ],
+      "branches": [
+       "up:1-6"
+      ],
+      "weight_range": [
+       0.051802934997,
+       0.174466219936
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       2,
+       5
+      ],
+      "interior": [
+       3,
+       7
+      ],
+      "branches": [
+       "up:2-5"
+      ],
+      "weight_range": [
+       0.051802934997,
+       0.174466219936
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       4,
+       6
+      ],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "weight_range": [
+       0.007117192636,
+       0.020287861883
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       5
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-5"
+      ],
+      "weight_range": [
+       0.011366444744,
+       0.150774588806
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       7
+      ],
+      "interior": [
+       4,
+       6
+      ],
+      "branches": [
+       "up:0-2-7"
+      ],
+      "weight_range": [
+       0.0,
+       0.053135509687
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       0,
+       4,
+       5
+      ],
+      "interior": [
+       1,
+       3
+      ],
+      "branches": [
+       "low:0-4-5"
+      ],
+      "weight_range": [
+       0.0,
+       0.084661818222
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       0,
+       5,
+       6
+      ],
+      "interior": [
+       7
+      ],
+      "branches": [
+       "low:0-5-6"
+      ],
+      "weight_range": [
+       0.045102991883,
+       0.161611346596
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       4
+      ],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "weight_range": [
+       0.045102991883,
+       0.161611346596
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       5
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-3-5"
+      ],
+      "weight_range": [
+       0.011366444744,
+       0.150774588806
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       7
+      ],
+      "interior": [
+       0,
+       5
+      ],
+      "branches": [
+       "low:1-3-7"
+      ],
+      "weight_range": [
+       0.0,
+       0.084661818222
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       1,
+       4,
+       7
+      ],
+      "interior": [
+       2,
+       3,
+       5
+      ],
+      "branches": [
+       "low:1-4-7"
+      ],
+      "weight_range": [
+       0.01104317092,
+       0.026604370833
+      ],
+      "in_support": true,
+      "count": 6
+     },
+     {
+      "boundary": [
+       2,
+       4,
+       6
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-4-6"
+      ],
+      "weight_range": [
+       0.0,
+       0.202025548859
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       2,
+       6,
+       7
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-6-7"
+      ],
+      "weight_range": [
+       0.0,
+       0.202025548859
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       3,
+       4,
+       6
+      ],
+      "interior": [
+       2,
+       7
+      ],
+      "branches": [
+       "low:3-4-6"
+      ],
+      "weight_range": [
+       0.0,
+       0.053135509687
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       3,
+       5,
+       6
+      ],
+      "interior": [
+       2,
+       7
+      ],
+      "branches": [
+       "up:3-5-6"
+      ],
+      "weight_range": [
+       0.007117192636,
+       0.020287861883
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       4,
+       5,
+       7
+      ],
+      "interior": [
+       0,
+       1,
+       6
+      ],
+      "branches": [
+       "low:4-5-7"
+      ],
+      "weight_range": [
+       0.01104317092,
+       0.026604370833
+      ],
+      "in_support": true,
+      "count": 6
+     }
+    ],
+    "code": "0,1,4/;0,1,5/;0,2,4/3,7;0,2,5/7;0,3/4,7;0,5,6/1,4;0,6,7/1,2,5;1,2/5,6;1,3,4/6;1,3,5/2,6;1,4,7/0,5;1,6,7/0,3,4;2,3,6/;2,3,7/;2,4,6/3,7;3,5,7/2,6"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 2,
+    "support": [
+     "up:1-6",
+     "up:2-5",
+     "up:0-1-2",
+     "low:0-1-5",
+     "up:0-2-7",
+     "low:0-4-5",
+     "low:0-5-6",
+     "low:1-2-3",
+     "low:1-3-5",
+     "low:1-3-7",
+     "low:1-4-7",
+     "low:2-4-6",
+     "low:2-6-7",
+     "low:3-4-6",
+     "up:3-5-6",
+     "low:4-5-7"
+    ],
+    "ranges": {
+     "up:1-6": [
+      0.051802934997,
+      0.174466219936
+     ],
+     "up:2-5": [
+      0.051802934997,
+      0.174466219936
+     ],
+     "up:0-1-2": [
+      0.007117192636,
+      0.020287861883
+     ],
+     "low:0-1-5": [
+      0.011366444744,
+      0.150774588806
+     ],
+     "up:0-2-7": [
+      0.0,
+      0.053135509687
+     ],
+     "low:0-4-5": [
+      0.0,
+      0.084661818222
+     ],
+     "low:0-5-6": [
+      0.045102991883,
+      0.161611346596
+     ],
+     "low:1-2-3": [
+      0.045102991883,
+      0.161611346596
+     ],
+     "low:1-3-5": [
+      0.011366444744,
+      0.150774588806
+     ],
+     "low:1-3-7": [
+      0.0,
+      0.084661818222
+     ],
+     "low:1-4-7": [
+      0.01104317092,
+      0.026604370833
+     ],
+     "low:2-4-6": [
+      0.0,
+      0.202025548859
+     ],
+     "low:2-6-7": [
+      0.0,
+      0.202025548859
+     ],
+     "low:3-4-6": [
+      0.0,
+      0.053135509687
+     ],
+     "up:3-5-6": [
+      0.007117192636,
+      0.020287861883
+     ],
+     "low:4-5-7": [
+      0.01104317092,
+      0.026604370833
+     ]
+    },
+    "maxmin": {
+     "up:1-6": 0.113090420911,
+     "up:2-5": 0.113178734022,
+     "up:0-1-2": 0.013702527259,
+     "low:0-1-5": 0.110026414345,
+     "up:0-2-7": 0.039432982427,
+     "low:0-4-5": 0.025726957611,
+     "low:0-5-6": 0.079353670398,
+     "low:1-2-3": 0.127360668081,
+     "low:1-3-5": 0.052114619205,
+     "low:1-3-7": 0.058934860612,
+     "low:1-4-7": 0.022102890215,
+     "low:2-4-6": 0.063860840124,
+     "low:2-6-7": 0.138164708735,
+     "low:3-4-6": 0.013702527259,
+     "up:3-5-6": 0.013702527259,
+     "low:4-5-7": 0.015544651537
+    },
+    "maxmin_value": 0.013702527259254091,
+    "signed_dim": 3
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,4/;0,1,5/;0,2,4/3,7;0,2,5/7;0,3/4,7;0,5,6/1,4;0,6,7/1,2,5;1,2/5,6;1,3,4/6;1,3,5/2,6;1,4,7/0,5;1,6,7/0,3,4;2,3,6/;2,3,7/;2,4,6/3,7;3,5,7/2,6",
+    "graph_hash": "f7e48b77e04d"
+   },
+   "first_order": {
+    "rank": 13,
+    "dim_quotient": 13,
+    "kernel_dim": 0,
+    "sharp": true,
+    "multipliers_unique": false,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/critical_configurations.json",
+    "script": "jobs/atlas_export.py",
+    "commit": "a0f7ad5+dirty",
+    "pointer": "N8_best"
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 8,
+   "name": "N8_second",
+   "X": [
+    [
+     0.4627742987789345,
+     -0.24174651472808423,
+     0.852876644659994
+    ],
+    [
+     -0.4849359655238558,
+     0.2624077940996842,
+     0.8342537137688891
+    ],
+    [
+     -0.43379943798025006,
+     -0.18226620456056486,
+     -0.8823814811537612
+    ],
+    [
+     -0.4402935120685516,
+     0.8631166981634902,
+     -0.2473280990540599
+    ],
+    [
+     -0.7905020604830827,
+     -0.611469953533753,
+     0.03479925713906329
+    ],
+    [
+     0.5241698077539713,
+     0.8220177670455424,
+     0.22255966233939445
+    ],
+    [
+     0.39456559575015226,
+     -0.9021593565844984,
+     -0.17443189495436742
+    ],
+    [
+     0.7680212737726779,
+     -0.009900229901754088,
+     -0.6403478027451066
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.23086978175200867,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 16,
+    "hyperedges": [
+     {
+      "boundary": [
+       1,
+       2
+      ],
+      "interior": [
+       3,
+       4
+      ],
+      "branches": [
+       "up:1-2"
+      ],
+      "weight_range": [
+       0.047045020805,
+       0.175808518394
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       6
+      ],
+      "interior": [
+       0,
+       4
+      ],
+      "branches": [
+       "up:1-6"
+      ],
+      "weight_range": [
+       0.047045020805,
+       0.175808518394
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       2,
+       5
+      ],
+      "interior": [
+       3,
+       7
+      ],
+      "branches": [
+       "up:2-5"
+      ],
+      "weight_range": [
+       0.047045020805,
+       0.175808518394
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       5,
+       6
+      ],
+      "interior": [
+       0,
+       7
+      ],
+      "branches": [
+       "up:5-6"
+      ],
+      "weight_range": [
+       0.047045020805,
+       0.175808518394
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       5
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-5"
+      ],
+      "weight_range": [
+       0.0,
+       0.186480063156
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [
+       5,
+       6,
+       7
+      ],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "weight_range": [
+       0.004164455882,
+       0.009765708287
+      ],
+      "in_support": true,
+      "count": 6
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       7
+      ],
+      "interior": [
+       4,
+       6
+      ],
+      "branches": [
+       "up:0-2-7"
+      ],
+      "weight_range": [
+       0.0,
+       0.076736233476
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       0,
+       3,
+       6
+      ],
+      "interior": [
+       1,
+       2,
+       4
+      ],
+      "branches": [
+       "up:0-3-6"
+      ],
+      "weight_range": [
+       0.004164455882,
+       0.009765708287
+      ],
+      "in_support": true,
+      "count": 6
+     },
+     {
+      "boundary": [
+       0,
+       4,
+       5
+      ],
+      "interior": [
+       1,
+       3
+      ],
+      "branches": [
+       "low:0-4-5"
+      ],
+      "weight_range": [
+       0.0,
+       0.076736233476
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       5
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-3-5"
+      ],
+      "weight_range": [
+       0.0,
+       0.186480063156
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       7
+      ],
+      "interior": [
+       0,
+       5
+      ],
+      "branches": [
+       "low:1-3-7"
+      ],
+      "weight_range": [
+       0.0,
+       0.076736233476
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       1,
+       4,
+       7
+      ],
+      "interior": [
+       2,
+       3,
+       5
+      ],
+      "branches": [
+       "low:1-4-7"
+      ],
+      "weight_range": [
+       0.004164455881,
+       0.009765708287
+      ],
+      "in_support": true,
+      "count": 6
+     },
+     {
+      "boundary": [
+       2,
+       4,
+       6
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-4-6"
+      ],
+      "weight_range": [
+       0.0,
+       0.186480063156
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       2,
+       6,
+       7
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-6-7"
+      ],
+      "weight_range": [
+       0.0,
+       0.186480063156
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       3,
+       4,
+       6
+      ],
+      "interior": [
+       2,
+       7
+      ],
+      "branches": [
+       "low:3-4-6"
+      ],
+      "weight_range": [
+       0.0,
+       0.076736233476
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       4,
+       5,
+       7
+      ],
+      "interior": [
+       0,
+       1,
+       6
+      ],
+      "branches": [
+       "low:4-5-7"
+      ],
+      "weight_range": [
+       0.004164455881,
+       0.009765708287
+      ],
+      "in_support": true,
+      "count": 6
+     }
+    ],
+    "code": "0,1,4/;0,1,5/;0,2/5,7;0,3/4,7;0,4,6/1,5;0,6,7/1,3,4;1,2/5,6;1,3/4,6;1,5,7/0,4;1,6,7/0,2,5;2,3,6/;2,3,7/;2,4,5/0,3,7;2,4,7/3,6;3,4,5/1,2,6;3,5,6/2,7"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 2,
+    "support": [
+     "up:1-2",
+     "up:1-6",
+     "up:2-5",
+     "up:5-6",
+     "low:0-1-5",
+     "up:0-2-3",
+     "up:0-2-7",
+     "up:0-3-6",
+     "low:0-4-5",
+     "low:1-3-5",
+     "low:1-3-7",
+     "low:1-4-7",
+     "low:2-4-6",
+     "low:2-6-7",
+     "low:3-4-6",
+     "low:4-5-7"
+    ],
+    "ranges": {
+     "up:1-2": [
+      0.047045020805,
+      0.175808518394
+     ],
+     "up:1-6": [
+      0.047045020805,
+      0.175808518394
+     ],
+     "up:2-5": [
+      0.047045020805,
+      0.175808518394
+     ],
+     "up:5-6": [
+      0.047045020805,
+      0.175808518394
+     ],
+     "low:0-1-5": [
+      0.0,
+      0.186480063156
+     ],
+     "up:0-2-3": [
+      0.004164455882,
+      0.009765708287
+     ],
+     "up:0-2-7": [
+      0.0,
+      0.076736233476
+     ],
+     "up:0-3-6": [
+      0.004164455882,
+      0.009765708287
+     ],
+     "low:0-4-5": [
+      0.0,
+      0.076736233476
+     ],
+     "low:1-3-5": [
+      0.0,
+      0.186480063156
+     ],
+     "low:1-3-7": [
+      0.0,
+      0.076736233476
+     ],
+     "low:1-4-7": [
+      0.004164455881,
+      0.009765708287
+     ],
+     "low:2-4-6": [
+      0.0,
+      0.186480063156
+     ],
+     "low:2-6-7": [
+      0.0,
+      0.186480063156
+     ],
+     "low:3-4-6": [
+      0.0,
+      0.076736233476
+     ],
+     "low:4-5-7": [
+      0.004164455881,
+      0.009765708287
+     ]
+    },
+    "maxmin": {
+     "up:1-2": 0.1114267696,
+     "up:1-6": 0.1114267696,
+     "up:2-5": 0.1114267696,
+     "up:5-6": 0.111426769599,
+     "low:0-1-5": 0.093240031579,
+     "up:0-2-3": 0.006965082084,
+     "up:0-2-7": 0.038368116738,
+     "up:0-3-6": 0.006965082084,
+     "low:0-4-5": 0.038368116738,
+     "low:1-3-5": 0.093240031577,
+     "low:1-3-7": 0.038368116739,
+     "low:1-4-7": 0.006965082084,
+     "low:2-4-6": 0.093240031577,
+     "low:2-6-7": 0.09324003158,
+     "low:3-4-6": 0.038368116738,
+     "low:4-5-7": 0.006965082084
+    },
+    "maxmin_value": 0.006965082084126051,
+    "signed_dim": 3
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,4/;0,1,5/;0,2/5,7;0,3/4,7;0,4,6/1,5;0,6,7/1,3,4;1,2/5,6;1,3/4,6;1,5,7/0,4;1,6,7/0,2,5;2,3,6/;2,3,7/;2,4,5/0,3,7;2,4,7/3,6;3,4,5/1,2,6;3,5,6/2,7",
+    "graph_hash": "030dcd3929ab"
+   },
+   "first_order": {
+    "rank": 13,
+    "dim_quotient": 13,
+    "kernel_dim": 0,
+    "sharp": true,
+    "multipliers_unique": false,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/critical_configurations.json",
+    "script": "jobs/atlas_export.py",
+    "commit": "a0f7ad5+dirty",
+    "pointer": "N8_second"
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 8,
+   "name": "N8_third",
+   "X": [
+    [
+     0.4367327571880051,
+     0.3709699639544981,
+     0.8195399835533113
+    ],
+    [
+     -0.30746858556287626,
+     0.8579859215267377,
+     0.41148903673594883
+    ],
+    [
+     -0.5885826157919561,
+     -0.6467274327582748,
+     -0.4850918800654057
+    ],
+    [
+     -0.30639911223276417,
+     0.5109591392541428,
+     -0.8031440356720827
+    ],
+    [
+     -0.8481547907781797,
+     -0.23939446353656726,
+     0.4725714144000475
+    ],
+    [
+     0.6569389013077147,
+     0.6155133329807387,
+     -0.4354016730233761
+    ],
+    [
+     0.2411503419842426,
+     -0.8262133999471005,
+     0.5091344913760366
+    ],
+    [
+     0.6475301607281403,
+     -0.6082781939811652,
+     -0.459023234351379
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.2308889455821299,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 14,
+    "hyperedges": [
+     {
+      "boundary": [
+       1,
+       2
+      ],
+      "interior": [
+       3,
+       4
+      ],
+      "branches": [
+       "up:1-2"
+      ],
+      "weight_range": [
+       0.125211428454,
+       0.125211428454
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       6
+      ],
+      "interior": [
+       0,
+       4
+      ],
+      "branches": [
+       "up:1-6"
+      ],
+      "weight_range": [
+       0.166647963547,
+       0.166647963547
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       2,
+       5
+      ],
+      "interior": [
+       3,
+       7
+      ],
+      "branches": [
+       "up:2-5"
+      ],
+      "weight_range": [
+       0.060071356604,
+       0.060071356604
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       4,
+       6
+      ],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "weight_range": [
+       0.008338251296,
+       0.008338251296
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       5
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-5"
+      ],
+      "weight_range": [
+       0.014166178933,
+       0.014166178933
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       3,
+       6
+      ],
+      "interior": [
+       1,
+       2,
+       4
+      ],
+      "branches": [
+       "up:0-3-6"
+      ],
+      "weight_range": [
+       0.001738803393,
+       0.001738803393
+      ],
+      "in_support": true,
+      "count": 6
+     },
+     {
+      "boundary": [
+       0,
+       4,
+       5
+      ],
+      "interior": [
+       1,
+       3
+      ],
+      "branches": [
+       "low:0-4-5"
+      ],
+      "weight_range": [
+       0.004332644764,
+       0.004332644764
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       0,
+       5,
+       6
+      ],
+      "interior": [
+       7
+      ],
+      "branches": [
+       "low:0-5-6"
+      ],
+      "weight_range": [
+       0.091719609541,
+       0.091719609541
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       5
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-3-5"
+      ],
+      "weight_range": [
+       0.159252575689,
+       0.159252575689
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       7
+      ],
+      "interior": [
+       0,
+       5
+      ],
+      "branches": [
+       "low:1-3-7"
+      ],
+      "weight_range": [
+       0.077847563902,
+       0.077847563902
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       1,
+       4,
+       7
+      ],
+      "interior": [
+       2,
+       3,
+       5
+      ],
+      "branches": [
+       "low:1-4-7"
+      ],
+      "weight_range": [
+       0.013968668455,
+       0.013968668455
+      ],
+      "in_support": true,
+      "count": 6
+     },
+     {
+      "boundary": [
+       2,
+       6,
+       7
+      ],
+      "interior": [],
+      "branches": [
+       "low:2-6-7"
+      ],
+      "weight_range": [
+       0.197217288252,
+       0.197217288252
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       3,
+       4,
+       6
+      ],
+      "interior": [
+       2,
+       7
+      ],
+      "branches": [
+       "low:3-4-6"
+      ],
+      "weight_range": [
+       0.067655309606,
+       0.067655309606
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       4,
+       5,
+       7
+      ],
+      "interior": [
+       0,
+       1,
+       6
+      ],
+      "branches": [
+       "low:4-5-7"
+      ],
+      "weight_range": [
+       0.011832357564,
+       0.011832357564
+      ],
+      "in_support": true,
+      "count": 6
+     }
+    ],
+    "code": "0,1,2/;0,1,4/;0,2,3/5;0,2,7/1,4;0,5,7/1,2,3;0,6/4,5;1,2,6/3,7;1,3/2,7;1,4,5/0,2;1,5,7/0,4,6;1,6/4,7;2,3,4/1,6,7;3,4,7/5,6;3,5,6/"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "up:1-2",
+     "up:1-6",
+     "up:2-5",
+     "up:0-1-2",
+     "low:0-1-5",
+     "up:0-3-6",
+     "low:0-4-5",
+     "low:0-5-6",
+     "low:1-3-5",
+     "low:1-3-7",
+     "low:1-4-7",
+     "low:2-6-7",
+     "low:3-4-6",
+     "low:4-5-7"
+    ],
+    "ranges": {
+     "up:1-2": [
+      0.125211428454,
+      0.125211428454
+     ],
+     "up:1-6": [
+      0.166647963547,
+      0.166647963547
+     ],
+     "up:2-5": [
+      0.060071356604,
+      0.060071356604
+     ],
+     "up:0-1-2": [
+      0.008338251296,
+      0.008338251296
+     ],
+     "low:0-1-5": [
+      0.014166178933,
+      0.014166178933
+     ],
+     "up:0-3-6": [
+      0.001738803393,
+      0.001738803393
+     ],
+     "low:0-4-5": [
+      0.004332644764,
+      0.004332644764
+     ],
+     "low:0-5-6": [
+      0.091719609541,
+      0.091719609541
+     ],
+     "low:1-3-5": [
+      0.159252575689,
+      0.159252575689
+     ],
+     "low:1-3-7": [
+      0.077847563902,
+      0.077847563902
+     ],
+     "low:1-4-7": [
+      0.013968668455,
+      0.013968668455
+     ],
+     "low:2-6-7": [
+      0.197217288252,
+      0.197217288252
+     ],
+     "low:3-4-6": [
+      0.067655309606,
+      0.067655309606
+     ],
+     "low:4-5-7": [
+      0.011832357564,
+      0.011832357564
+     ]
+    },
+    "maxmin": {
+     "up:1-2": 0.125211428454,
+     "up:1-6": 0.166647963547,
+     "up:2-5": 0.060071356604,
+     "up:0-1-2": 0.008338251296,
+     "low:0-1-5": 0.014166178933,
+     "up:0-3-6": 0.001738803393,
+     "low:0-4-5": 0.004332644764,
+     "low:0-5-6": 0.091719609541,
+     "low:1-3-5": 0.159252575689,
+     "low:1-3-7": 0.077847563902,
+     "low:1-4-7": 0.013968668455,
+     "low:2-6-7": 0.197217288252,
+     "low:3-4-6": 0.067655309606,
+     "low:4-5-7": 0.011832357564
+    },
+    "maxmin_value": 0.001738803393428216,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,4/;0,2,3/5;0,2,7/1,4;0,5,7/1,2,3;0,6/4,5;1,2,6/3,7;1,3/2,7;1,4,5/0,2;1,5,7/0,4,6;1,6/4,7;2,3,4/1,6,7;3,4,7/5,6;3,5,6/",
+    "graph_hash": "e067455d4de0"
+   },
+   "first_order": {
+    "rank": 13,
+    "dim_quotient": 13,
+    "kernel_dim": 0,
+    "sharp": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/critical_configurations.json",
+    "script": "jobs/atlas_export.py",
+    "commit": "a0f7ad5+dirty",
+    "pointer": "N8_third"
+   }
+  }
+ ],
+ "shared_hashes": {}
+}

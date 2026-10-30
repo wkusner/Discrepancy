@@ -1,0 +1,922 @@
+{
+ "functional": {
+  "id": "cap_discrepancy_sup",
+  "definition": "D(X) = sup over closed spherical caps C of |#(X n C)/N - sigma(C)|, sigma the normalized area",
+  "sense": "minimize",
+  "container": "sphere",
+  "d": 3,
+  "critical_point": "balanced: a nonnegative combination of the gradients of the worst caps vanishes (Clarke stationary)",
+  "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)"
+ },
+ "N": 5,
+ "observations": [
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 5,
+   "name": "N5_best",
+   "X": [
+    [
+     1.2108446209949408e-16,
+     -8.287579015071667e-17,
+     1.0
+    ],
+    [
+     0.9995845456242276,
+     2.640793410813205e-17,
+     -0.028822493806168897
+    ],
+    [
+     -0.05748790239539036,
+     -0.09598536205863425,
+     -0.9937212644140464
+    ],
+    [
+     -0.5130094528241996,
+     -0.8565523530526504,
+     0.05603006151150341
+    ],
+    [
+     -0.4717888810235197,
+     0.881240327943159,
+     -0.028822493806207213
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.32332565099805666,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v2",
+     "level": 2,
+     "status": "interval-verified",
+     "value": {
+      "interval": [
+       "0.3233256509980512",
+       "0.32332565099805344"
+      ]
+     },
+     "note": "Krawczyk-verified (Arb), cross-verified with mpmath.iv",
+     "evidence": [
+      {
+       "file": "certificates/localcert_N5_best.json",
+       "file_sha256": "ded32ed82198967035f1e39967ab24ba946516d00bc813a85a1b180048a1ffe2"
+      },
+      {
+       "file": "certificates/xcheck_local_N5_best.json",
+       "file_sha256": "19970113ce3656662902d1fd624a74075a0caaae02a0b3c5473432bf69f5b95e"
+      }
+     ]
+    },
+    {
+     "id": "v3",
+     "level": 3,
+     "status": "exact (test-verified)",
+     "value": {
+      "minpoly": [
+       "173504",
+       "2726960",
+       "-16763225",
+       "-87317250",
+       "351851875",
+       "762400000",
+       "-1882875000",
+       "-1826875000",
+       "-8985937500",
+       "29968750000",
+       "-3437500000",
+       "-31250000000",
+       "15625000000"
+      ],
+      "isolating_interval": [
+       "498581982653447711044673620712871384614961599771170827430481/1542042770545448252031321302292191566321525693936389096322562",
+       "592503207922105600545117548032290979718845514585036727781656/1832527688703777666742276854898136096869101370023744873636991"
+      ],
+      "closed_form": null,
+      "decimal": "0.32332565099805260256879696844202364961"
+     },
+     "note": "minimal polynomial = P_N(N x) up to a constant; one root in the isolating interval",
+     "evidence": [
+      {
+       "file": "certificates/xcheck_roots.json",
+       "file_sha256": "bdb3daf6bcf67d661dc8a1492045b54d4eea36ae1d992f0305d0eac16e629700"
+      },
+      {
+       "file": "certificates/gramcert_N5_best.json",
+       "file_sha256": "bd8630a841cdcf4711d52e57939c10a9fd8a57d78a48b22ae5e940fbdbb8aa07"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "level": 2,
+    "status": "interval-verified",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       3
+      ],
+      "branches": [
+       "low:0-1-2"
+      ],
+      "weight_range": [
+       0.012278842181,
+       0.012278842181
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-4"
+      ],
+      "weight_range": [
+       0.175359304586,
+       0.175359304586
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       4
+      ],
+      "interior": [
+       3
+      ],
+      "branches": [
+       "low:0-2-4"
+      ],
+      "weight_range": [
+       0.012278842181,
+       0.012278842181
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-3-4"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:1-2-4"
+      ],
+      "weight_range": [
+       0.175359304586,
+       0.175359304586
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       2,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:2-3-4"
+      ],
+      "weight_range": [
+       0.156180926617,
+       0.156180926617
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;0,3,4/2;1,2,3/;1,2,4/;1,3,4/2",
+    "note": "counts of the worst caps frozen on the box of the local verification and every other cap below D* there (Arb, cross-verified with mpmath.iv)"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "low:0-1-2",
+     "low:0-1-3",
+     "up:0-1-4",
+     "low:0-2-4",
+     "low:0-3-4",
+     "low:1-2-3",
+     "up:1-2-4",
+     "up:2-3-4"
+    ],
+    "ranges": {
+     "low:0-1-2": [
+      0.012278842181,
+      0.012278842181
+     ],
+     "low:0-1-3": [
+      0.156180926617,
+      0.156180926617
+     ],
+     "up:0-1-4": [
+      0.175359304586,
+      0.175359304586
+     ],
+     "low:0-2-4": [
+      0.012278842181,
+      0.012278842181
+     ],
+     "low:0-3-4": [
+      0.156180926617,
+      0.156180926617
+     ],
+     "low:1-2-3": [
+      0.156180926617,
+      0.156180926617
+     ],
+     "up:1-2-4": [
+      0.175359304586,
+      0.175359304586
+     ],
+     "up:2-3-4": [
+      0.156180926617,
+      0.156180926617
+     ]
+    },
+    "maxmin": {
+     "low:0-1-2": 0.012278842181,
+     "low:0-1-3": 0.156180926617,
+     "up:0-1-4": 0.175359304586,
+     "low:0-2-4": 0.012278842181,
+     "low:0-3-4": 0.156180926617,
+     "low:1-2-3": 0.156180926617,
+     "up:1-2-4": 0.175359304586,
+     "up:2-3-4": 0.156180926617
+    },
+    "maxmin_value": 0.012278842180726396,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;0,3,4/2;1,2,3/;1,2,4/;1,3,4/2",
+    "graph_hash": "062ff563df4f"
+   },
+   "first_order": {
+    "rank": 7,
+    "dim_quotient": 7,
+    "kernel_dim": 0,
+    "sharp": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/critical_configurations.json",
+    "script": "jobs/atlas_export.py",
+    "commit": "a0f7ad5+dirty",
+    "pointer": "N5_best"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/gram_exact.json",
+     "file_sha256": "740a1f738febead9e92289df5184377636275b0d318b9f266cb44e5bca2fb16c",
+     "pointer": "/N5_best"
+    },
+    "cross_checks": [
+     {
+      "kernel": "exact: sympy + FLINT (fmpq_poly)"
+     },
+     {
+      "kernel": "intervals: Arb (python-flint) + mpmath.iv"
+     }
+    ],
+    "evidence": [
+     {
+      "file": "certificates/gramcert_N5_best.json",
+      "file_sha256": "bd8630a841cdcf4711d52e57939c10a9fd8a57d78a48b22ae5e940fbdbb8aa07"
+     }
+    ],
+    "note": "entries in Q(D) as (sum coeffs[i] D^i)/denom, labelled as the X of this record (checked numerically by the exporter); the certificate works in the labelling of the local verification, its field relabelling maps one to the other"
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 5,
+   "name": "N5_valley",
+   "X": [
+    [
+     1.6295546179902367e-17,
+     -5.100490974834916e-18,
+     1.0
+    ],
+    [
+     0.093539493579718,
+     3.816606229723185e-18,
+     -0.9956155699570242
+    ],
+    [
+     -0.9738069059994513,
+     -0.22274798586085442,
+     -0.04564476555650574
+    ],
+    [
+     0.6742658599611097,
+     -0.7378121061184765,
+     0.03160452745926214
+    ],
+    [
+     0.27656751582696865,
+     0.9609070502174146,
+     0.012963411270440862
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.3234105479511335,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 7,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1
+      ],
+      "interior": [
+       3,
+       4
+      ],
+      "branches": [
+       "up:0-1"
+      ],
+      "weight_range": [
+       0.016503707775,
+       0.016503707775
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "weight_range": [
+       0.166761559417,
+       0.166761559417
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-2-4"
+      ],
+      "weight_range": [
+       0.170896909995,
+       0.170896909995
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-3-4"
+      ],
+      "weight_range": [
+       0.154089676701,
+       0.154089676701
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "weight_range": [
+       0.166761559417,
+       0.166761559417
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:1-2-4"
+      ],
+      "weight_range": [
+       0.170896909995,
+       0.170896909995
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-3-4"
+      ],
+      "weight_range": [
+       0.154089676701,
+       0.154089676701
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;1,2,3/;1,2,4/;3,4/1,2"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "up:0-1",
+     "up:0-2-3",
+     "low:0-2-4",
+     "up:0-3-4",
+     "low:1-2-3",
+     "up:1-2-4",
+     "low:1-3-4"
+    ],
+    "ranges": {
+     "up:0-1": [
+      0.016503707775,
+      0.016503707775
+     ],
+     "up:0-2-3": [
+      0.166761559417,
+      0.166761559417
+     ],
+     "low:0-2-4": [
+      0.170896909995,
+      0.170896909995
+     ],
+     "up:0-3-4": [
+      0.154089676701,
+      0.154089676701
+     ],
+     "low:1-2-3": [
+      0.166761559417,
+      0.166761559417
+     ],
+     "up:1-2-4": [
+      0.170896909995,
+      0.170896909995
+     ],
+     "low:1-3-4": [
+      0.154089676701,
+      0.154089676701
+     ]
+    },
+    "maxmin": {
+     "up:0-1": 0.016503707775,
+     "up:0-2-3": 0.166761559417,
+     "low:0-2-4": 0.170896909995,
+     "up:0-3-4": 0.154089676701,
+     "low:1-2-3": 0.166761559417,
+     "up:1-2-4": 0.170896909995,
+     "low:1-3-4": 0.154089676701
+    },
+    "maxmin_value": 0.01650370777457451,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,3/;0,1,4/;0,2,3/;0,2,4/;1,2,3/;1,2,4/;3,4/1,2",
+    "graph_hash": "770b4118b655"
+   },
+   "first_order": {
+    "rank": 6,
+    "dim_quotient": 7,
+    "kernel_dim": 1,
+    "sharp": false,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/critical_configurations.json",
+    "script": "jobs/atlas_export.py",
+    "commit": "a0f7ad5+dirty",
+    "pointer": "N5_valley"
+   },
+   "second_order": {
+    "level": 0,
+    "status": "numerical",
+    "kernel_dim": 1,
+    "hessian_eigenvalues_on_kernel": [
+     -6e-08
+    ],
+    "descending": 0,
+    "ascending": 0,
+    "null": 1,
+    "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 5,
+   "name": "N5_third",
+   "X": [
+    [
+     7.577809969612336e-18,
+     -7.79886033130474e-17,
+     1.0
+    ],
+    [
+     0.9466658208496023,
+     2.7813540007451074e-17,
+     0.3222170442964628
+    ],
+    [
+     0.28263243596351634,
+     0.7687001649349949,
+     -0.5737760561144397
+    ],
+    [
+     -0.32433544887432664,
+     -0.8821234979418403,
+     -0.3415620748595211
+    ],
+    [
+     -0.8999308279703013,
+     0.12710924919882186,
+     -0.41709440614422016
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.33074228455730137,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "weight_range": [
+       0.204325315778,
+       0.204325315778
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "weight_range": [
+       0.170685069546,
+       0.170685069546
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       4
+      ],
+      "interior": [
+       2
+      ],
+      "branches": [
+       "up:0-1-4"
+      ],
+      "weight_range": [
+       0.068515273302,
+       0.068515273302
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       4
+      ],
+      "interior": [
+       1,
+       3
+      ],
+      "branches": [
+       "low:0-2-4"
+      ],
+      "weight_range": [
+       0.056474341375,
+       0.056474341375
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       0,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-3-4"
+      ],
+      "weight_range": [
+       0.170685069546,
+       0.170685069546
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       0,
+       4
+      ],
+      "branches": [
+       "up:1-2-3"
+      ],
+      "weight_range": [
+       0.056474341375,
+       0.056474341375
+      ],
+      "in_support": true,
+      "count": 5
+     },
+     {
+      "boundary": [
+       1,
+       3,
+       4
+      ],
+      "interior": [
+       2
+      ],
+      "branches": [
+       "up:1-3-4"
+      ],
+      "weight_range": [
+       0.068515273302,
+       0.068515273302
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       2,
+       3,
+       4
+      ],
+      "interior": [],
+      "branches": [
+       "up:2-3-4"
+      ],
+      "weight_range": [
+       0.204325315778,
+       0.204325315778
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,2/;0,1,3/;0,2,3/4;0,2,4/;0,3,4/1,2;1,2,3/4;1,2,4/0,3;1,3,4/"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-3",
+     "up:0-1-4",
+     "low:0-2-4",
+     "low:0-3-4",
+     "up:1-2-3",
+     "up:1-3-4",
+     "up:2-3-4"
+    ],
+    "ranges": {
+     "up:0-1-2": [
+      0.204325315778,
+      0.204325315778
+     ],
+     "low:0-1-3": [
+      0.170685069546,
+      0.170685069546
+     ],
+     "up:0-1-4": [
+      0.068515273302,
+      0.068515273302
+     ],
+     "low:0-2-4": [
+      0.056474341375,
+      0.056474341375
+     ],
+     "low:0-3-4": [
+      0.170685069546,
+      0.170685069546
+     ],
+     "up:1-2-3": [
+      0.056474341375,
+      0.056474341375
+     ],
+     "up:1-3-4": [
+      0.068515273302,
+      0.068515273302
+     ],
+     "up:2-3-4": [
+      0.204325315778,
+      0.204325315778
+     ]
+    },
+    "maxmin": {
+     "up:0-1-2": 0.204325315778,
+     "low:0-1-3": 0.170685069546,
+     "up:0-1-4": 0.068515273302,
+     "low:0-2-4": 0.056474341375,
+     "low:0-3-4": 0.170685069546,
+     "up:1-2-3": 0.056474341375,
+     "up:1-3-4": 0.068515273302,
+     "up:2-3-4": 0.204325315778
+    },
+    "maxmin_value": 0.05647434137474543,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,3/;0,2,3/4;0,2,4/;0,3,4/1,2;1,2,3/4;1,2,4/0,3;1,3,4/",
+    "graph_hash": "15a57680b8dd"
+   },
+   "first_order": {
+    "rank": 7,
+    "dim_quotient": 7,
+    "kernel_dim": 0,
+    "sharp": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/critical_configurations.json",
+    "script": "jobs/atlas_export.py",
+    "commit": "a0f7ad5+dirty",
+    "pointer": "N5_third"
+   }
+  }
+ ],
+ "shared_hashes": {}
+}
