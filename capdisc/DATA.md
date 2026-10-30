@@ -149,6 +149,11 @@ Line 1 has the variables, line 2 the characteristic (0), then comma-separated po
 `N5_C2v.ms` and `N6_D3.ms` are the symmetry-reduced area equations whose elimination gives
 P5 and P6. `N7_C2.ms` is being solved on w227.
 
+### `sphcap/data/search/`
+`search_N{9,10,11,12}.json`: the best classes of the N = 9–12 searches (w227, 2026-10-29; `jobs/search_parallel.py`,
+12 rounds), one record per class: `{D, hits, active, rank, dimq, min_lambda, sharp, aut, sources, points, worst_caps}`.
+Floating point (double precision). Input of `jobs/atlas_export.py` for `export/.../n9`–`n12`.
+
 ### Code (for reference, not data)
 `sphcap/` (Python package), `csrc/` (C mesh program: `capcert.c`, interval-verified mode `ia.h`,
 `rig.h`), and `jobs/` (search, identify, atlas, `local_cert.py`, `sym_cert.py`, `refine.py`).

@@ -129,14 +129,14 @@ def canonical_code(N, edges):
 def weight_space(G, names):
     m = len(G)
     A_eq = np.vstack([G.T, np.ones((1, m))]); b_eq = np.append(np.zeros(G.shape[1]), 1.0)
-    rng = []
+    rng = []; his = []
     for b in range(m):
         c = np.zeros(m); c[b] = 1
         lo = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=[(0, None)] * m, method='highs')
         hi = linprog(-c, A_eq=A_eq, b_eq=b_eq, bounds=[(0, None)] * m, method='highs')
         if lo.status != 0 or hi.status != 0:
             return dict(nonempty=False)
-        rng.append([float(lo.fun), float(-hi.fun)])
+        rng.append([float(lo.fun), float(-hi.fun)]); his.append(hi.x)
     supp = [b for b in range(m) if rng[b][1] > 1e-9]
     GS = G[supp]
     Mtop = np.vstack([GS.T, np.ones((1, len(supp)))])
@@ -148,12 +148,17 @@ def weight_space(G, names):
     lp = linprog(c, A_ub=np.hstack([-np.eye(ms), np.ones((ms, 1))]), b_ub=np.zeros(ms),
                  A_eq=np.hstack([Mtop, np.zeros((Mtop.shape[0], 1))]), b_eq=np.append(np.zeros(G.shape[1]), 1.0),
                  bounds=[(0, None)] * ms + [(None, None)], method='highs')
-    lam = np.zeros(m); lam[supp] = lp.x[:ms]
+    note = None
+    if lp.status == 0:
+        lam = np.zeros(m); lam[supp] = lp.x[:ms]; mmv = float(lp.x[-1])
+    else:   # numerically infeasible at HiGHS tolerances: use the centroid of the per-branch maximizers (a point of W, positive on the support)
+        lam = np.mean([his[b] for b in supp], axis=0); mmv = float(min(lam[b] for b in supp))
+        note = 'max-min LP failed numerically; centroid of the per-branch maximizers instead (a point of W, not the max-min point)'
     svG = np.linalg.svd(G, compute_uv=False)
     rkG = int(np.sum(svG > 1e-7 * svG.max()))
     return dict(nonempty=True, dim=len(supp) - rk, support=[names[b] for b in supp],
                 ranges={names[b]: [round(r[0], 12), round(r[1], 12)] for b, r in enumerate(rng)},
-                maxmin={names[b]: round(float(lam[b]), 12) for b in range(m)}, maxmin_value=float(lp.x[-1]),
+                maxmin={names[b]: round(float(lam[b]), 12) for b in range(m)}, maxmin_value=mmv, **({'maxmin_note': note} if note else {}),
                 signed_dim=m - rkG, _lam=lam, _supp=supp)
 
 
@@ -175,7 +180,12 @@ def observation(X, name, source, extra=None):
         e['count'] = len(e['boundary']) + len(e['interior'])
     full_code = canonical_code(N, [(e['boundary'], e['interior']) for e in edges if not e.get('point_cap')])
     supp_edges = [(e['boundary'], e['interior']) for e in edges if e.get('in_support') and not e.get('point_cap')]
-    code = canonical_code(N, supp_edges) if supp_edges else ''
+    if W.get('nonempty'):
+        code = canonical_code(N, supp_edges) if supp_edges else ''
+        kb_method = 'support-hypergraph canonical code (individualization-refinement)'
+    else:   # no balance at this tolerance (not first-order stationary): key on the full active hypergraph
+        code = full_code
+        kb_method = 'active-hypergraph canonical code (weight space empty at this tolerance)'
     sv = np.linalg.svd(G, compute_uv=False); rank = int(np.sum(sv > 1e-7 * sv.max()))
     dimq = 2 * N - 3; kdim = dimq - rank
     # sharp (first-order growth mod rotations): some balance with every lambda_b > 0, full rank, no coincident caps
@@ -188,9 +198,9 @@ def observation(X, name, source, extra=None):
         active=dict(level=0, status=LEVEL_LABEL[0], tolerance=TOL, n_hyperedges=len(edges), hyperedges=edges,
                     code=full_code),
         weights=dict(level=0, status=LEVEL_LABEL[0], **{k: v for k, v in W.items() if not k.startswith('_')}),
-        key_basis=dict(method='support-hypergraph canonical code (individualization-refinement)', code=code,
+        key_basis=dict(method=kb_method, code=code,
                        graph_hash=hashlib.sha256(f"sphere|d3|{FUNCTIONAL['id']}|N{N}|{code}".encode()).hexdigest()[:12]),
-        first_order=dict(rank=rank, dim_quotient=dimq, kernel_dim=kdim, sharp=sharp,
+        first_order=dict(rank=rank, dim_quotient=dimq, kernel_dim=kdim, sharp=sharp, stationary=bool(W.get('nonempty')),
                          multipliers_unique=bool(W.get('nonempty') and W['dim'] == 0), level=0, status=LEVEL_LABEL[0]),
         source=source)
     if kdim > 0 and W.get('nonempty'):
