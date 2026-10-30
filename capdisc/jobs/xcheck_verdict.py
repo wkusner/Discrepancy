@@ -1,5 +1,5 @@
 """Verdict of the second-kernel pipeline B (VERIFICATION.md).  For each N, B proves Theorem 10 on its
-own iff all of the following hold; then, with pipeline A, the theorem is certified.
+own iff all of the following hold; then, with pipeline A, the theorem is cross-verified.
   local (mpmath.iv), symmetric for every image (mpmath.iv, exact orbits, D_s < T, N D_s in the
   theorem interval), roots (sympy), elimination (msolve), mesh (capcert_arb, complete, T >= T_A)
   and refinement of all its survivors (mpmath.iv, complete, no failure).

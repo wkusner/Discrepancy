@@ -437,7 +437,7 @@ int main(int argc, char **argv) {
                        N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed) < 0 || fclose(df)) {
         perror(dfn); return 2;
     }
-    /* labels follow VERIFICATION.md: a single-kernel run is never called "certified" */
+    /* labels follow VERIFICATION.md: a single-kernel run is "interval-verified"; "cross-verified" needs a second kernel */
 #ifdef RIGOROUS
     if (tot.surv == 0) printf("INTERVAL-VERIFIED: D >= T on the whole fundamental domain\n");
 #else

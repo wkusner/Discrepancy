@@ -161,7 +161,7 @@ def run(N, T, min_eps=1e-4, batch=200_000, max_cells=None, verbose=True, log_eve
     q0, h0 = domain(N)
     stack_Q, stack_H = [q0[None]], [h0[None]]
     nQ = 1
-    stats = dict(processed=0, certified=0, pruned_symmetry=0, survivors=0, max_depth_eps=np.inf)
+    stats = dict(processed=0, bounded=0, pruned_symmetry=0, survivors=0, max_depth_eps=np.inf)
     surv_Q, surv_H, surv_lb = [], [], []
     t0 = tlast = time.time()
     while stack_Q:
@@ -185,7 +185,7 @@ def run(N, T, min_eps=1e-4, batch=200_000, max_cells=None, verbose=True, log_eve
             Q, H, X, E = Q[keep], H[keep], X[keep], E[keep]
             lb = lower_bound(X, E, axes)
             ok = lb >= T
-            stats["certified"] += int(ok.sum())
+            stats["bounded"] += int(ok.sum())
             Q, H, E, lb = Q[~ok], H[~ok], E[~ok], lb[~ok]
             emax = E.max(axis=1) if E.size else np.zeros(0)
             small = emax < min_eps
@@ -204,7 +204,7 @@ def run(N, T, min_eps=1e-4, batch=200_000, max_cells=None, verbose=True, log_eve
                             survivors_lb=_cat(surv_lb, None))
             if verbose and time.time() - tlast > log_every:
                 tlast = time.time()
-                print(f"  [{tlast - t0:7.1f}s] processed {stats['processed']:,} certified {stats['certified']:,} "
+                print(f"  [{tlast - t0:7.1f}s] processed {stats['processed']:,} bounded {stats['bounded']:,} "
                       f"sym {stats['pruned_symmetry']:,} surv {stats['survivors']:,} "
                       f"open {sum(p.shape[0] for p in pending_Q):,}", flush=True)
     stats["time"] = time.time() - t0

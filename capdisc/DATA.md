@@ -1,6 +1,6 @@
 # capdisc data guide (for readers and a website)
 
-Labels (certified / verified (method) / numerically identified / floating-point checked)
+Labels (cross-verified (kernels) / verified (method) / exact (kernel) / numerically identified / floating-point checked)
 follow `VERIFICATION.md`.
 
 Everything here is on GitHub, repo `wkusner/Discrepancy`, branch **`capdisc`**, folder
@@ -86,7 +86,9 @@ N = 9–12 search values only.
   `denom · g = Σ coeffs[i] · D^i`. So every Gram entry is a polynomial in D with rational
   coefficients, of degree < deg(D). Example, N6_best: two of the four distinct entries are
   6D² − 1/2 and 8D² − 8D/3 − 7/9.
-* These are numerical identifications (LLL at 600 digits, checked to 590). The exact
+* They were found by LLL (600 digits, checked to 590). For N5_best and N6_best they are now proved:
+  `certificates/gramcert_*.json` (cross-verified; atlas level 3). The other entries remain numerical
+  identifications. The exact
   symbolic parametrizations behind them are in the paper (Section 8):
   * N5: points (0, ±√(1−c²), c), (±√(1−e²), 0, e), (0, 0, 1), so G = {c·e, 2c²−1, c, e, 2e²−1}.
   * N6: the D3-orbit of (a, b, c), with a = (1−6D)/3, c = 2D and b = √(1 − a² − c²).
@@ -105,6 +107,39 @@ N = 9–12 search values only.
   `capcert_result` (summary line); `capcert_stamp` (settings and counts, with T in hex);
   `refine` (`input_cells, cells, bounded, sym, boxed, failed, time, verified`); `labels`; `machine`.
   `proof_N6.json` will be added when the w227 run finishes.
+
+* `gramcert_N5_best.json`, `gramcert_N6_best.json`: the exact Gram matrices (`jobs/gram_verify.py`):
+  `E1_minpoly_is_P_N`, `exact_sympy` and `exact_flint` (`E2_rank3`, `E3_caps` per worst cap),
+  `interval_arb` and `interval_mpmath.iv` (`positive_definite`, `in_box_B`, `signs`), `relabelling`
+  (from the labelling of `gram_exact.json` to image 0 of the local verification), `D_isolating_interval`
+  (exact rationals), `verified`, `label` ("cross-verified (exact: sympy + FLINT; intervals: Arb + mpmath.iv)"),
+  `atlas_level` (3), `statement`.
+
+### `export/sphere/d3/cap_discrepancy_sup/n<N>/observations.json`: observations for critconfig-atlas
+Written by `jobs/atlas_export.py` (extra inputs: search or atlas outputs with `points`). Top level
+`{functional, N, observations:[…], shared_hashes}`. `functional` = `{id: "cap_discrepancy_sup",
+definition, sense: "minimize", container: "sphere", d: 3, critical_point, gauge}`. Per observation:
+* `kind` ("find"), `functional`, `container`, `d`, `N`, `name`, `X` (N×3), `source` (file, pointer, script, commit).
+* `value`: list of descriptions `{id, level, status, value, note, evidence}`; level 0 double; for
+  N5_best and N6_best also level 2 (`{interval: [lo, hi]}`) and level 3
+  (`{minpoly (ascending, strings), isolating_interval (rationals), closed_form, decimal}`).
+* `active` — the **active hypergraph**: vertices are the points, hyperedges the worst caps, each written as
+  the over-full closed cap, `{boundary, interior, count, branches, weight_range, in_support}`
+  (`boundary`: points on the circle; `interior`: points strictly inside; an under-full open cap is
+  replaced by its complement; coincident caps are one hyperedge with several `branches`, the 2- or
+  3-point sets that define it, named `up:i-j-k` / `low:i-j-k`). `code`: canonical code of the whole
+  hypergraph. Level 0, or 2 for the proved minimizers.
+* `weights` — the **weight space** W = {λ ≥ 0, Σλ = 1, Σ λ_b ∇f_b = 0} over the branches (KKT multipliers):
+  `dim`, `support`, `ranges` ([min, max] of each λ_b on W), `maxmin` (the max-min point), `maxmin_value`,
+  `signed_dim` (dimension of the signed solutions).
+* `key_basis` = `{method, code, graph_hash}`: canonical code of the support hypergraph (hyperedges in the
+  support of W); `graph_hash` = first 12 hex of SHA-256 of `sphere|d3|cap_discrepancy_sup|N<N>|<code>`.
+  The atlas mints the ordinal of the key.
+* `first_order` = `{rank, dim_quotient (2N−3), kernel_dim, sharp, multipliers_unique}`; `second_order`
+  (only when kernel_dim > 0): eigenvalues of the Lagrangian Hessian on the kernel modulo rotations, and the
+  numbers of descending, ascending and null directions (finite differences, level 0).
+* `gram` (proved minimizers only): level 3, reference to `sphcap/data/gram_exact.json` with SHA-256 and the
+  evidence file `certificates/gramcert_*.json`.
 
 ### `msolve/*.ms`: polynomial systems (text, msolve input format)
 Line 1 has the variables, line 2 the characteristic (0), then comma-separated polynomials.

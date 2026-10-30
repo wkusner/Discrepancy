@@ -1,0 +1,113 @@
+{
+ "name": "N6_best",
+ "N": 6,
+ "image": 0,
+ "local_certificate": "certificates/localcert_N6_best.json",
+ "E1_minpoly_is_P_N": {
+  "sympy": true,
+  "flint": true,
+  "roots_in_theorem_interval": 1
+ },
+ "relabelling": [
+  0,
+  1,
+  2,
+  4,
+  3,
+  5
+ ],
+ "orientation_y2": 1,
+ "caps": [
+  "Cap(0, 5)+ n=4",
+  "Cap(1, 3)+ n=4",
+  "Cap(2, 4)+ n=4",
+  "Cap(0, 2, 4)- n=5",
+  "Cap(0, 3, 5)+ n=5",
+  "Cap(0, 4, 5)- n=5",
+  "Cap(1, 2, 3)- n=5",
+  "Cap(1, 2, 4)+ n=5",
+  "Cap(1, 3, 5)- n=5",
+  "Cap(1, 4, 5)+ n=3",
+  "Cap(0, 2, 3)+ n=3"
+ ],
+ "square_system": 10,
+ "exact_sympy": {
+  "E2_rank3": true,
+  "E3_caps": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "all": true
+ },
+ "exact_flint": {
+  "E2_rank3": true,
+  "E3_caps": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "all": true
+ },
+ "interval_arb": {
+  "positive_definite": true,
+  "in_box_B": true,
+  "signs": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "all": true
+ },
+ "interval_mpmath.iv": {
+  "positive_definite": true,
+  "in_box_B": true,
+  "signs": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "all": true
+ },
+ "verified": true,
+ "kernels": "exact: sympy + FLINT (fmpq_poly); intervals: Arb (python-flint) + mpmath.iv",
+ "label": "cross-verified (exact: sympy + FLINT; intervals: Arb + mpmath.iv)",
+ "atlas_level": 3,
+ "statement": "The Gram matrix of the minimizer of Theorem 10 (N = 6) is G_e of sphcap/data/gram_exact.json (N6_best), relabelled by 'relabelling'; its entries lie in Q(D*), with D* the root of D_minpoly_ascending in [0.278678815176241, 0.278678815176243].",
+ "D_isolating_interval": [
+  "738799426297323241903133709568058575599593733346669757511019/2651078539393426702914976433323486167191426685104190317183906",
+  "651564832226495545285522979805775335455564098198954718548133/2338049384250583470687162496017059166119678662834152670160763"
+ ]
+}

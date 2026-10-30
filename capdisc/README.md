@@ -5,24 +5,28 @@ Code, data and paper for the "cap capturing and balancing" program
 branch of `wkusner/Discrepancy`; the original 2014 Mathematica implementation of the
 enumeration algorithm (`MatrixSphericalDiscrepancy.nb`) is on `master`.
 
-**Labels.** Following the convention in `VERIFICATION.md`, a computational result is *certified*
-only after two independent kernels have checked it. A rigorous single-kernel computation is
-named by its method: *interval-verified*, *Arb-verified* or *Krawczyk-verified*.
+**Labels.** Following `VERIFICATION.md`, a rigorous computation is named by its method
+(*interval-verified*, *Arb-verified*, *Krawczyk-verified*, *exact (kernel)*), and a result checked
+by two independent kernels is *cross-verified*, with the kernels named, e.g. "cross-verified
+(Arb + mpmath.iv)". The word "certified" is not used for computations (in critconfig-atlas it is
+reserved for checker-accepted certificates).
 Current status: D_5 and D_6 are **proved**, with interval-verified, Arb-verified and
-Krawczyk-verified steps; the second-kernel cross-checks are in progress.
+Krawczyk-verified steps; every step for N = 5 is cross-verified, the N = 6 mesh cross-check is
+running. The Gram matrices of the two minimizers are exact and cross-verified (`certificates/gramcert_*.json`).
 
 | path | what |
 |---|---|
 | `sphcap/` | Python package: discrepancy (exact enumeration), `balance` (branches, forces, KKT/balance test, SLP descent), `gram` (Gram formulas, N=3/4 exact solutions, N=5 elimination), `highprec` (mpmath polishing, LLL identification), `search` (candidate search), `bnb` (Python branch-and-bound) |
 | `csrc/capcert.c` | C/OpenMP mesh program: shows D >= T cell by cell over the reduced configuration space (floating-point checked; interval-verified when built as `capcert_rig`) |
-| `jobs/` | server jobs: parallel search, identification, deep identification, atlas |
+| `jobs/` | server jobs: parallel search, identification, deep identification, atlas; `gram_verify.py` (exact Gram matrices of the minimizers); `atlas_export.py` (observations for critconfig-atlas) |
+| `export/` | observations for critconfig-atlas: functional tag, active hypergraph, weight space, key basis (`export/sphere/d3/cap_discrepancy_sup/n<N>/observations.json`; see `DATA.md`) |
 | `msolve/` | symmetry-reduced polynomial systems (area equations) for exact elimination |
 | `paper/` | the paper source and figures |
 | `run_all.sh` | orchestrator for all phases, N = 3..8 |
 | `run_xcheck.sh`, `build_arb.sh` | second-kernel pipeline: Krawczyk tests in mpmath.iv, root isolation in sympy, elimination in msolve, mesh in Arb (`capcert_arb`) + refinement in mpmath.iv (`xcheck_refine.py`) |
 | `run_proof.sh` | global proof for N = 5, 6: local and symmetric verification (Krawczyk, Arb), interval-verified mesh at T = D*_hi, Arb-verified refinement |
 | `status.py`, `push_status.sh` | STATUS.md writer and GitHub status push |
-| `VERIFICATION.md` | **verification vocabulary** (certified = cross-checked by two kernels; otherwise interval-verified, Arb-verified, Krawczyk-verified, numerically identified, floating-point checked) and the status of every claim |
+| `VERIFICATION.md` | **verification vocabulary** (cross-verified (kernels) = checked by two independent kernels; otherwise interval-verified, Arb-verified, Krawczyk-verified, exact (kernel), numerically identified, floating-point checked) and the status of every claim |
 | `DATA.md` | data guide: file formats, conventions, what is where (for readers and the website) |
 
 ## Running on w227
@@ -31,12 +35,12 @@ Krawczyk-verified steps; the second-kernel cross-checks are in progress.
 ssh -J wkusner@100.105.162.104 woden@w227
 git clone -b capdisc https://github.com/wkusner/Discrepancy.git ~/Discrepancy && cd ~/Discrepancy/capdisc
 bash setup_env.sh          # once: user-space Python env (+ msolve if conda-forge is reachable)
-bash build.sh              # compiles capcert, prints two CERTIFIED lines
+bash build.sh              # compiles capcert and capcert_rig; self-test prints FLOAT-CHECKED twice and INTERVAL-VERIFIED once
 tmux new -s capdisc
 bash run_all.sh            # Ctrl-b d to detach;  tmux attach -t capdisc  to come back
 ```
 
-Defaults: certifier 32 threads, search 12 workers, msolve 8 threads (52 of 64 — the
+Defaults: mesh program 32 threads, search 12 workers, msolve 8 threads (52 of 64 — the
 machine is shared). Change with `CERT_THREADS=… SEARCH_WORKERS=… MSOLVE_THREADS=…`.
 `NS="5 6"` restricts N. Everything is resumable: rerun `bash run_all.sh` after an
 interruption. `cat STATUS.md` any time for a summary (rewritten every 10 minutes).
@@ -70,15 +74,16 @@ export STATUS_REMOTE=github-capdisc:wkusner/Discrepancy.git
 
 ## What the phases establish
 
-* **ladder**: `CERTIFIED` for (N, eta) is a proof that D(X) >= D_best(N) - eta for
-  *every* configuration (floating point with explicit 1e-12 slack on all angles and
-  bounds; an interval-arithmetic recheck is planned). The cost per rung shows what full
-  certification (eta -> 0 plus local certificates at the minimisers) will cost.
+* **ladder**: `FLOAT-CHECKED` for (N, eta) (older outputs say `CERTIFIED`) is floating-point
+  evidence that D(X) >= D_best(N) - eta for every configuration (explicit 1e-12 slack on all
+  angles and bounds; not rigorous). The cost per rung shows what a proof (eta -> 0 plus local
+  verification at the minimisers) will cost; for N = 5, 6 the proof is `run_proof.sh`.
 * **search**: candidates for the minimisers (structured starts + basin hopping).
 * **identify**: 600-digit polishing, minimal polynomials of D and of the Gram entries
   (numerical identification by LLL); `deep_identify` tries degrees up to 160 at 4000 digits.
 * **msolve**: exact elimination of the symmetry-reduced area equations — the exact,
-  certified minimal polynomial of D (`N5_C2v` reproduces the known degree-12 polynomial).
+  minimal polynomial of D (`N5_C2v` reproduces the known degree-12 polynomial; msolve's rational
+  reconstruction is probabilistic, so for N = 5, 6 it is the second kernel next to sympy resultants).
 * **atlas** (`ATLAS=1`): all local minima below D_best + delta, N <= 6.
 
 ## Tests

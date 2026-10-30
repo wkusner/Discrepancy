@@ -4,7 +4,7 @@ Independent of Arb/python-flint and of sphcap.certify: cap geometry, forward AD 
 robust counts, the single-cap and LP-combined first-order bounds and the domain tests are
 re-implemented here on mpmath.iv.  The same survivor cells of the interval-verified mesh stage
 (capcert_arb, pipeline B; or capcert_rig with --mesh rigorous) are bisected until every piece is
-  * inside a box B of the local verification (certified), or
+  * inside a box B of the local verification (cross-verified: Arb + mpmath.iv), or
   * provably outside the fundamental domain, or
   * shown to satisfy D >= T by
         D(Y) >= sum_C lam_C a_C - sum_j |sum_C lam_C m_Cj| w_j      (lam >= 0, sum lam = 1),
@@ -263,7 +263,7 @@ def main():
     lc = json.load(open(os.path.join(CERT, f'localcert_{name}.json')))
     xl = json.load(open(os.path.join(CERT, f'xcheck_local_{name}.json')))
     xs = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(CERT, f'xcheck_sym_{name}_img*.json')))]
-    assert lc.get('verified') and xl.get('verified'), "local verification not certified"
+    assert lc.get('verified') and xl.get('verified'), "local verification not verified in both kernels"
     assert len(xs) == len(lc['images']) and all(d.get('verified') for d in xs), "symmetric second-kernel check missing or failed"
     boxes = [(im['q_center'], lc['box_radius']) for im in lc['images']]
     T = max(im['D_enclosure'][1] for im in lc['images'])

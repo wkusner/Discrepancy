@@ -78,7 +78,7 @@ for f in sorted(glob.glob('logs/msolve_*.log')):
 # ---------------------------------------------------------------- global proof (run_proof.sh)
 pr = sorted(glob.glob(f'{R}/proof_N*.out')) + sorted(glob.glob(f'{R}/proof_N*.refine.json'))
 if pr or os.path.exists('logs/proof.log'):
-    out.append("\n## Global proof (interval-verified mesh + Arb-verified refinement + Krawczyk-verified local checks; not yet certified, see VERIFICATION.md)\n")
+    out.append("\n## Global proof (interval-verified mesh + Arb-verified refinement + Krawczyk-verified local checks; second kernels below, see VERIFICATION.md)\n")
     for f in sorted(glob.glob(f'{R}/localcert_*.json')):
         d = json.load(open(f)); out.append(f"- local verification {d['name']}: {'Krawczyk-verified (Arb)' if d.get('verified', d.get('certified')) else 'failed'}, box {d['box_radius']}, D* in {d['images'][0].get('D_enclosure')}\n")
     for f in sorted(glob.glob('certificates/symcert_*.json')):
@@ -93,7 +93,7 @@ if pr or os.path.exists('logs/proof.log'):
 
 # ---------------------------------------------------------------- second-kernel pipeline (run_xcheck.sh)
 if os.path.exists('logs/xcheck.log'):
-    out.append("\n## Second-kernel checks (VERIFICATION.md: certified = two kernels agree)\n")
+    out.append("\n## Second-kernel checks (VERIFICATION.md: cross-verified = two kernels agree)\n")
     for f in sorted(glob.glob('certificates/xcheck_*.json')):
         d = json.load(open(f)); ok = d.get('verified', None)
         out.append(f"- {os.path.basename(f)}: {'agrees' if ok else ('see file' if ok is None else 'DOES NOT AGREE')}\n")
