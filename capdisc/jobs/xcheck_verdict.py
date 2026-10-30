@@ -3,7 +3,9 @@ own iff all of the following hold; then, with pipeline A, the theorem is cross-v
   local (mpmath.iv), symmetric for every image (mpmath.iv, exact orbits, D_s < T, N D_s in the
   theorem interval), roots (sympy), elimination (msolve), mesh (capcert_arb, complete, T >= T_A)
   and refinement of all its survivors (mpmath.iv, complete, no failure).
-usage: python jobs/xcheck_verdict.py [RESULTS_DIR]          writes certificates/xcheck_verdict.json"""
+usage: python jobs/xcheck_verdict.py [RESULTS_DIR]
+  writes RESULTS_DIR/xcheck_verdict.json; also certificates/xcheck_verdict.json with UPDATE_CERTS=1, or when the
+  mesh and refinement are taken from the records certificates/pipelineB_N*.json (no xproof files in RESULTS_DIR)"""
 import json, os, sys, glob
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, '..'); CERT = os.path.join(ROOT, 'certificates')
 R = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'results')
@@ -16,6 +18,9 @@ for N in (5, 6):
     xs = [ld(os.path.join(CERT, f'xcheck_sym_{nm}_img{k}.json')) for k in range(len(lc['images']))]
     done = os.path.join(R, f'xproof_N{N}.done'); xr = ld(os.path.join(R, f'xproof_N{N}.xrefine.json'))
     st = dict(kv.split('=', 1) for kv in open(done).read().split()) if os.path.exists(done) else None
+    rec = ld(os.path.join(CERT, f'pipelineB_N{N}.json'))
+    if (st is None or xr is None) and rec:      # the mesh and refinement ran elsewhere: their records, verbatim
+        st = dict(kv.split('=', 1) for kv in rec['mesh']['done_stamp'].split()); xr = rec['refine']['xrefine']
     checks = dict(
         local=bool(xl and xl.get('verified') and xl.get('T') == T),
         symmetric=bool(all(d and d.get('verified') and d.get('T') == T for d in xs)),
@@ -27,4 +32,7 @@ for N in (5, 6):
     out[N] = dict(checks=checks, pipeline_B_proves=all(checks.values()), T=T)
     print(f"N={N}: " + ", ".join(f"{k}={'ok' if v else 'MISSING/FAILED'}" for k, v in checks.items())
           + f"  ->  {'pipeline B proves Theorem 10 (second kernels)' if all(checks.values()) else 'incomplete'}")
-json.dump(out, open(os.path.join(CERT, 'xcheck_verdict.json'), 'w'), indent=1)
+# results/ always; certificates/ (tracked in git) only on request, so that git pull on the server keeps working
+os.makedirs(R, exist_ok=True); json.dump(out, open(os.path.join(R, 'xcheck_verdict.json'), 'w'), indent=1)
+if os.environ.get('UPDATE_CERTS', '0') == '1' or len(sys.argv) <= 1 and not os.path.exists(os.path.join(R, 'xproof_N5.done')):
+    json.dump(out, open(os.path.join(CERT, 'xcheck_verdict.json'), 'w'), indent=1)

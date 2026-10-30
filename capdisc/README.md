@@ -11,8 +11,8 @@ by two independent kernels is *cross-verified*, with the kernels named, e.g. "cr
 (Arb + mpmath.iv)". The word "certified" is not used for computations (in critconfig-atlas it is
 reserved for checker-accepted certificates).
 Current status: D_5 and D_6 are **proved**, with interval-verified, Arb-verified and
-Krawczyk-verified steps; every step for N = 5 is cross-verified, the N = 6 mesh cross-check is
-running. The Gram matrices of the two minimizers are exact and cross-verified (`certificates/gramcert_*.json`).
+Krawczyk-verified steps, and every step is cross-verified for N = 5 and N = 6 (pipeline B, second
+kernels throughout, proves the theorem on its own). The Gram matrices of the two minimizers are exact and cross-verified (`certificates/gramcert_*.json`).
 
 | path | what |
 |---|---|

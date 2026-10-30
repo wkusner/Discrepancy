@@ -106,7 +106,11 @@ N = 9–12 search values only.
 * `proof_N5.json`: the global proof record for N=5. Fields: `T` (threshold);
   `capcert_result` (summary line); `capcert_stamp` (settings and counts, with T in hex);
   `refine` (`input_cells, cells, bounded, sym, boxed, failed, time, verified`); `labels`; `machine`.
-  `proof_N6.json` will be added when the w227 run finishes.
+  `proof_N6.json`: the same for N=6.
+* `pipelineB_N5_local.json`, `pipelineB_N6.json`: pipeline B (second kernels): the mesh record of `capcert_arb`
+  (`result` line, `done_stamp`) and the mpmath.iv refinement record (`xrefine`), copied verbatim; `xcheck_verdict.py`
+  reads them when the server's `results/` files are not present.
+* `xcheck_verdict.json`: per N, the checks of pipeline B and `pipeline_B_proves`.
 
 * `gramcert_N5_best.json`, `gramcert_N6_best.json`: the exact Gram matrices (`jobs/gram_verify.py`):
   `E1_minpoly_is_P_N`, `exact_sympy` and `exact_flint` (`E2_rank3`, `E3_caps` per worst cap),

@@ -1,0 +1,33 @@
+{
+ "N": 6,
+ "pipeline": "B (second kernels)",
+ "mesh": {
+  "kernel": "arb (capcert_arb, FLINT C, static build)",
+  "threads": 32,
+  "result": "RESULT N=6 T=0.27867881517624277 MIN_EPS=0.03 cells=52698474 bounded=20782513 sym=5153165 survivors=446327 time=997s kernel=arb",
+  "done_stamp": "N=6 T=0x1.1d5dfab514789p-2 MIN_EPS=0x1.eb851eb851eb8p-6 nf=65536 mode=arb keep=0x1p+0 balls=0 survivors=446327 cells=52698474"
+ },
+ "refine": {
+  "xrefine": {
+   "N": 6,
+   "T": 0.27867881517624277,
+   "mesh_stamp": {"N": "6", "T": "0x1.1d5dfab514789p-2", "MIN_EPS": "0x1.eb851eb851eb8p-6", "nf": "65536", "mode": "arb", "keep": "0x1p+0", "balls": "0", "survivors": "446327", "cells": "52698474"},
+   "mesh_kernel": "arb",
+   "input_cells": 446327,
+   "complete": true,
+   "cells": 483847,
+   "bounded": 461944,
+   "boxed": 8,
+   "sym": 3135,
+   "failed": 0,
+   "fails": [],
+   "time": 359.83877396583557,
+   "verified": true,
+   "kernel": "mpmath.iv",
+   "label": "interval-verified (mpmath.iv), second kernel for the refinement"
+  }
+ },
+ "verdict_line": "N=6: local=ok, symmetric=ok, roots=ok, elimination=ok, mesh=ok, refinement=ok  ->  pipeline B proves Theorem 10 (second kernels)",
+ "dates": "mesh 2026-10-29 16:25-16:42, refinement 16:42-16:48 (run_xcheck.sh on the department server)",
+ "note": "records copied verbatim from results/xproof_N6.done, results/xproof_N6.out and results/xproof_N6.xrefine.json"
+}
