@@ -23,8 +23,7 @@ The work has four layers, each with its own data:
    (minimal polynomial), exact Gram matrices, and Gröbner bases with msolve.
 3. **Proof by computer**: an interval-verified and Arb-verified computation showing that the candidate is the
    global minimum (done for N=5; N=6 running on w227).
-4. **Paper**: `paper/capture_balance.tex` and the PDF built from it, written for the
-   American Mathematical Monthly.
+4. **Papers**: kept in a separate repository (not part of this one).
 
 Status: N ≤ 4 proved by hand; N = 5, 6 proved (computer-assisted: interval-, Arb- and
 Krawczyk-verified; second-kernel cross-checks in progress); N = 7, 8 numerical candidates;
@@ -149,12 +148,6 @@ definition, sense: "minimize", container: "sphere", d: 3, critical_point, gauge}
 Line 1 has the variables, line 2 the characteristic (0), then comma-separated polynomials.
 `N5_C2v.ms` and `N6_D3.ms` are the symmetry-reduced area equations whose elimination gives
 P5 and P6. `N7_C2.ms` is being solved on w227.
-
-### `paper/`
-`capture_balance.pdf` (current draft), `capture_balance.tex`, `refs.bib` (with verification
-notes), `refs_clean.bib`, and `figs/*.png|pdf`
-(`fig_n4_cubic`: the N=4 family; `fig_n5_n6`: the best N=5 and N=6 configurations with
-their worst caps).
 
 ### Code (for reference, not data)
 `sphcap/` (Python package), `csrc/` (C mesh program: `capcert.c`, interval-verified mode `ia.h`,
