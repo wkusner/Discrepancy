@@ -35,7 +35,7 @@ Rules:
   level 2 (`interval-verified`); exact results accepted by an exact test are level 3
   (`exact (test-verified)`); the second kernel goes into a `cross_checks` list, not into the level.
 
-## Status (2026-10-29)
+## Status (2026-10-30)
 
 | claim | step | label now | kernels |
 |---|---|---|---|
@@ -47,6 +47,8 @@ Rules:
 | P_N irreducible, one root in the interval | root isolation | **cross-verified (FLINT + sympy)** | `certificates/xcheck_roots.json` |
 | Gram matrix of the minimizer = G_e, entries in Q(D*) (N = 5, 6) | `gram_verify.py` | **cross-verified (exact: sympy + FLINT; intervals: Arb + mpmath.iv)**; atlas level 3 | `certificates/gramcert_N{5,6}_best.json` |
 | exact Gram matrices of the other critical configurations; minimal polynomials for N ≥ 7 | `gram_exact.py`, `identify.py` | numerically identified | — |
+| N = 7: the C2-symmetric area equations are zero-dimensional; rational parametrization of degree 1440, so deg D_7 ≤ 1440 if the optimum is among the solutions | msolve (`run_msolve.sh`, `msolve/N7_C2.ms`) | computed (exact, one run; not cross-checked); minimal polynomial not yet extracted | — |
+| N = 9–12: best classes, ranks, weights, second-order data (N = 9 best: rank 14/15, positive Hessian on the kernel) | `search_parallel.py`, `atlas_export.py` (`sphcap/data/search/`, `export/`) | floating-point checked | — |
 | D_N ≥ D_best − η (ladder) | `capcert` (float) | floating-point checked | superseded by the proof for N = 5, 6 |
 
 **The exact Gram matrices** (`jobs/gram_verify.py`). The entries in `sphcap/data/gram_exact.json`

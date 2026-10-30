@@ -32,7 +32,7 @@ kernels throughout, proves the theorem on its own). The Gram matrices of the two
 ## Running on w227
 
 ```bash
-ssh -J wkusner@100.105.162.104 woden@w227
+ssh <server>               # the department server (log in as usual)
 git clone -b capdisc https://github.com/wkusner/Discrepancy.git ~/Discrepancy && cd ~/Discrepancy/capdisc
 bash setup_env.sh          # once: user-space Python env (+ msolve if conda-forge is reachable)
 bash build.sh              # compiles capcert and capcert_rig; self-test prints FLOAT-CHECKED twice and INTERVAL-VERIFIED once
