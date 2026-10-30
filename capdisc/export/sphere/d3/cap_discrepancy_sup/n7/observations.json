@@ -395,6 +395,7 @@
     "dim_quotient": 11,
     "kernel_dim": 0,
     "sharp": true,
+    "stationary": true,
     "multipliers_unique": true,
     "level": 0,
     "status": "numerical"
@@ -402,7 +403,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "613d696",
+    "commit": "4aefc55",
     "pointer": "N7_best"
    }
   }

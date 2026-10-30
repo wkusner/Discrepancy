@@ -431,6 +431,7 @@
     "dim_quotient": 9,
     "kernel_dim": 0,
     "sharp": true,
+    "stationary": true,
     "multipliers_unique": false,
     "level": 0,
     "status": "numerical"
@@ -438,7 +439,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "613d696",
+    "commit": "4aefc55",
     "pointer": "N6_best"
    },
    "gram": {
@@ -831,6 +832,7 @@
     "dim_quotient": 9,
     "kernel_dim": 0,
     "sharp": true,
+    "stationary": true,
     "multipliers_unique": false,
     "level": 0,
     "status": "numerical"
@@ -838,7 +840,7 @@
    "source": {
     "file": "sphcap/data/critical_configurations.json",
     "script": "jobs/atlas_export.py",
-    "commit": "613d696",
+    "commit": "4aefc55",
     "pointer": "N6_second"
    }
   }
