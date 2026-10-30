@@ -213,7 +213,7 @@ for rk in (1e-30, 1e-25, 1e-20):
             for l in range(n): cij -= arb(float(Minv[i, l])) * JZ[l][j]
             acc += cij * (Z[j] - mb[j])
         K.append(acc)
-        ok = ok and acc.lower() > Z[i].lower() and acc.upper() < Z[i].upper()
+        ok = ok and (acc - arb(mb[i].mid())).abs_upper() < arb(rk)   # K(Z) inside the open box mid +- rk (rigorous)
     if ok: break
 assert ok, "Krawczyk test failed in symmetric coordinates"
 s_box, D_s = K[:-1], K[-1]
@@ -352,5 +352,10 @@ res = dict(name=name, N=N, group_order=len(group), orbits=[repr(r) for r, _ in o
            verified=bool(ok and inK and inD and same_counts and cover and only_P),
            kernel='arb (python-flint) + sympy resultants + flint factorization', label='Krawczyk-verified (Arb); elimination exact (sympy)')
 res['image'] = IMG
+# the symmetric Krawczyk box Z (exact midpoints, radius rk) and the enclosure K(Z) of its unique zero, written as
+# Arb ball strings (outward), for the congruence check of the images (jobs/congruence_cert.py)
+res['s_box_mid'] = [mb[i].mid().str(40, radius=False) for i in range(len(mb))]
+res['s_box_radius'] = rk
+res['s_enclosure'] = [K[i].str(40, radius=True) for i in range(len(K))]
 json.dump(res, open(os.path.join(CERT, f'symcert_{name}_img{IMG}.json'), 'w'), indent=1)
 print("KRAWCZYK-VERIFIED (Arb): minimizer symmetric, N*D* is the root of P_N in the enclosure" if res['verified'] else "NOT VERIFIED")

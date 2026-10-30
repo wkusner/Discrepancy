@@ -1,0 +1,28 @@
+{
+ "name": "N6_best",
+ "images": [
+  {
+   "image": 0,
+   "sigma": [
+    1,
+    1,
+    1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  },
+  {
+   "image": 1,
+   "sigma": [
+    1,
+    1,
+    -1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  }
+ ],
+ "congruent": true,
+ "kernel": "arb (python-flint)",
+ "label": "Krawczyk-verified (Arb)"
+}

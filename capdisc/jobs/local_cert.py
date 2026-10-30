@@ -67,7 +67,9 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
                 for l in range(n): cij = cij - arb(Yinv[i, l]) * JX[l][j]
                 acc = acc + cij * (Xb[j] - arb(m[j]))
             K.append(acc)
-            if not (acc.lower() > Xb[i].lower() and acc.upper() < Xb[i].upper()):
+            # K(Z) inside the open box m +- rk: a rigorous upper bound of |acc - m_i| below rk (the ball Xb[i]
+            # has exact midpoint m_i and radius >= rk, so this is conservative)
+            if not ((acc - arb(m[i])).abs_upper() < arb(rk)):
                 ok = False
         if ok: break
     report['krawczyk'] = ok
