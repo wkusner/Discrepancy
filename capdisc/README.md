@@ -21,7 +21,7 @@ kernels throughout, proves the theorem on its own). The Gram matrices of the two
 | `jobs/` | server jobs: parallel search, identification, deep identification, atlas; `gram_verify.py` (exact Gram matrices of the minimizers); `atlas_export.py` (observations for critconfig-atlas) |
 | `export/` | observations for critconfig-atlas: functional tag, active hypergraph, weight space, key basis (`export/sphere/d3/cap_discrepancy_sup/n<N>/observations.json`; see `DATA.md`) |
 | `msolve/` | symmetry-reduced polynomial systems (area equations) for exact elimination |
-| `paper/` | the paper source and figures |
+| `paper/` | the paper: full version `capture_balance.tex` (for arXiv), and the split drafts `monthly/capture_balance_monthly.tex` (capture, balance, N ≤ 4) and `expmath/cap_discrepancy_expmath.tex` (N = 5–12, the computer proof, data) |
 | `run_all.sh` | orchestrator for all phases, N = 3..8 |
 | `run_xcheck.sh`, `build_arb.sh` | second-kernel pipeline: Krawczyk tests in mpmath.iv, root isolation in sympy, elimination in msolve, mesh in Arb (`capcert_arb`) + refinement in mpmath.iv (`xcheck_refine.py`) |
 | `run_proof.sh` | global proof for N = 5, 6: local and symmetric verification (Krawczyk, Arb), interval-verified mesh at T = D*_hi, Arb-verified refinement |
