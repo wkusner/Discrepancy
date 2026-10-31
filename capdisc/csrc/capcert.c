@@ -269,7 +269,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     N = atoi(argv[1]); TGT = atof(argv[2]); MIN_EPS = atof(argv[3]); const char *out = argv[4];
-    int threads = 0; long frontier = 0, maxc = 0; const char *balls = NULL;
+    int threads = 0; long frontier = 0, maxc = 0; const char *balls = NULL, *roots = NULL;
     for (int a = 5; a < argc; a++) {
         if (!strcmp(argv[a], "--threads")) threads = atoi(argv[++a]);
         else if (!strcmp(argv[a], "--frontier")) frontier = atol(argv[++a]);
@@ -278,6 +278,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[a], "--keep-prob")) KEEP_PROB = atof(argv[++a]);
         else if (!strcmp(argv[a], "--split-alpha")) SPLIT_ALPHA = atof(argv[++a]);
         else if (!strcmp(argv[a], "--first-order")) FO = 1;
+        else if (!strcmp(argv[a], "--roots")) roots = argv[++a];   /* testing only: run these root cells; never complete */
         else if (!strcmp(argv[a], "--fo-emax")) FO_EMAX = atof(argv[++a]);
         else if (!strcmp(argv[a], "--smear")) SMEAR = 1;
 #ifdef RIGOROUS
@@ -373,7 +374,7 @@ int main(int argc, char **argv) {
             if (line[0]) fprintf(stderr, "warning: legacy progress file without header; resuming as before\n");
 #endif
         }
-        long idx, p, cc, s, b, v; double ml;
+        long idx, p, cc, s, b, v; double ml;   /* done[i]: 1 finished, 2 skipped (--roots) */
         while (fscanf(pf, "%ld %ld %ld %ld %ld %ld %lf", &idx, &p, &cc, &s, &b, &v, &ml) == 7) {
             if (idx >= 0 && (size_t)idx < nf && !done[idx]) {
                 done[idx] = 1; tot.processed += p; tot.certified += cc; tot.sym += s; tot.ball += b; tot.surv += v;
@@ -393,7 +394,13 @@ int main(int argc, char **argv) {
             }
         }
     }
-    long ndone = 0; for (size_t i = 0; i < nf; i++) ndone += done[i];
+    if (roots) {                        /* testing: skip every root not listed (the run then cannot complete) */
+        char *sel = calloc(nf, 1), *buf = strdup(roots);
+        for (char *t = strtok(buf, ","); t; t = strtok(NULL, ",")) { long r = atol(t); if (r >= 0 && (size_t)r < nf) sel[r] = 1; }
+        for (size_t i = 0; i < nf; i++) if (!sel[i]) done[i] = 2;
+        free(buf); free(sel);
+    }
+    long ndone = 0; for (size_t i = 0; i < nf; i++) ndone += done[i] == 1;
     fprintf(stderr, "capcert%s N=%d T=%.17g MIN_EPS=%g threads=%d frontier=%zu (resuming %ld done) balls=%d\n",
 #ifdef RIGOROUS
             " (RIGOROUS)",
