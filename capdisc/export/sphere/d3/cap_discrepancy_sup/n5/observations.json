@@ -371,6 +371,12 @@
      }
     ],
     "note": "entries in Q(D) as (sum coeffs[i] D^i)/denom, labelled as the X of this record (checked numerically by the exporter); the certificate works in the labelling of the local verification, its field relabelling maps one to the other"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -635,6 +641,13 @@
     "ascending": 0,
     "null": 1,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -918,6 +931,12 @@
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47",
     "pointer": "N5_third"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -1196,6 +1215,12 @@
     "pointer": 0,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -1461,6 +1486,13 @@
     "ascending": 0,
     "null": 1,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum (probe descends: not a local minimum)",
+    "flat_dim": 1
    }
   },
   {
@@ -1745,6 +1777,12 @@
     "pointer": 2,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   }
  ],

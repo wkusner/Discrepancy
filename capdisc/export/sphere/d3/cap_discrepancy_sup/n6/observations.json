@@ -465,6 +465,12 @@
      }
     ],
     "note": "entries in Q(D) as (sum coeffs[i] D^i)/denom, labelled as the X of this record (checked numerically by the exporter); the certificate works in the labelling of the local verification, its field relabelling maps one to the other"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -842,6 +848,12 @@
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47",
     "pointer": "N6_second"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   }
  ],

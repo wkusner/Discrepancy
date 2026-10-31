@@ -405,6 +405,12 @@
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47",
     "pointer": "N7_best"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   }
  ],

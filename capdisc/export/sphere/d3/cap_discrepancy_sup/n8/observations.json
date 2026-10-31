@@ -514,6 +514,12 @@
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47",
     "pointer": "N8_best"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -1022,6 +1028,12 @@
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47",
     "pointer": "N8_second"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -1480,6 +1492,12 @@
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47",
     "pointer": "N8_third"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   }
  ],
