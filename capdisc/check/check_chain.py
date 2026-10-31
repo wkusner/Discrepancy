@@ -18,6 +18,10 @@ numerics beyond exact rational comparisons of the values stored in the certifica
   C8  all certificates come from commits with the same proof code (proof/, csrc/, verify.sh, build.sh),
       with no modified proof/ or csrc/ files.
 
+For N = 7 (paper_values level "verified") C2 and C3 are skipped, C5 requires T > the largest upper end of the
+local D* enclosures (verify.sh takes the next double), C6 uses the local enclosures, and C7 compares them with the
+reported digits only.
+
 usage: python check/check_chain.py N DIR        (DIR as written by verify.sh, e.g. results/verify_N5)
 writes DIR/chain_N<N>.json and exits 0 if every check passes.
 """
@@ -28,6 +32,7 @@ N, DIR = int(sys.argv[1]), sys.argv[2]
 HERE = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.dirname(HERE)
 paper = json.load(open(os.path.join(HERE, 'paper_values.json')))[str(N)]
 name = paper['name']
+VERIFIED_ONLY = paper.get('level') == 'verified'
 checks, notes = {}, []
 
 
@@ -68,22 +73,32 @@ imgs = lc['images']
 check('C1', lc['verified'] and all(i['verified'] for i in imgs), 'local certificate not verified')
 check('C1', len(imgs) == paper['images'], f"{len(imgs)} images, papers expect {paper['images']}")
 
-Dstar = []
-for i in imgs:
-    k = i['image']
-    sc = load(f'symcert_{name}_img{k}.json')
-    check('C2', sc['verified'] and sc['image'] == k, f'image {k}: symmetric certificate not verified')
-    check('C2', sc.get('P_N') == paper['P_N'], f'image {k}: P_N differs from the papers')
-    check('C2', sc.get('P_N_irreducible') is True and sc.get('P_N_is_the_factor') is True, f'image {k}: P_N not shown irreducible / not the factor')
-    check('C2', sc.get('group_order') == paper['group_order'], f'image {k}: group order')
-    dlo, dhi = ball(sc['s_enclosure'][-1])
-    elo, ehi = (hexq(x) for x in i['D_enclosure_hex']) if 'D_enclosure_hex' in i else (Q(x) for x in i['D_enclosure'])
-    check('C2', elo <= dlo and dhi <= ehi, f'image {k}: symmetric D* not inside the local enclosure')
-    Dstar.append((dlo, dhi))
 
-cg = load(f'congruence_{name}.json')
-check('C3', cg['congruent'] and sorted(o['image'] for o in cg['images']) == sorted(i['image'] for i in imgs)
-      and all(o['contained_in_Z0'] and o['verified_image'] for o in cg['images']), 'congruence')
+def local_enc(i):
+    return tuple(hexq(x) for x in i['D_enclosure_hex']) if 'D_enclosure_hex' in i else tuple(Q(x) for x in i['D_enclosure'])
+
+
+Dstar, cg = [], None
+if VERIFIED_ONLY:
+    Dstar = [local_enc(i) for i in imgs]
+    notes.append('level verified: no symmetric (C2) or congruence (C3) step')
+else:
+    for i in imgs:
+        k = i['image']
+        sc = load(f'symcert_{name}_img{k}.json')
+        check('C2', sc['verified'] and sc['image'] == k, f'image {k}: symmetric certificate not verified')
+        check('C2', sc.get('P_N') == paper['P_N'], f'image {k}: P_N differs from the papers')
+        check('C2', sc.get('P_N_irreducible') is True and sc.get('P_N_is_the_factor') is True, f'image {k}: P_N not shown irreducible / not the factor')
+        check('C2', sc.get('group_order') == paper['group_order'], f'image {k}: group order')
+        dlo, dhi = ball(sc['s_enclosure'][-1])
+        elo, ehi = (hexq(x) for x in i['D_enclosure_hex']) if 'D_enclosure_hex' in i else (Q(x) for x in i['D_enclosure'])
+        check('C2', elo <= dlo and dhi <= ehi, f'image {k}: symmetric D* not inside the local enclosure')
+        Dstar.append((dlo, dhi))
+
+    cg = load(f'congruence_{name}.json')
+    check('C3', cg['congruent'] and sorted(o['image'] for o in cg['images']) == sorted(i['image'] for i in imgs)
+          and all(o['contained_in_Z0'] and o['verified_image'] for o in cg['images']), 'congruence')
+
 
 stamp = dict(kv.split('=', 1) for kv in open(os.path.join(DIR, 'mesh.done')).read().split())
 T_mesh = Q(float.fromhex(stamp['T']))
@@ -94,7 +109,12 @@ rf = load('mesh.refine.json')
 T = max(hexq(i['D_enclosure_hex'][1]) if 'D_enclosure_hex' in i else Q(i['D_enclosure'][1]) for i in imgs)
 check('C4', T_mesh >= T, 'mesh threshold below the refinement threshold')
 check('C5', rf['verified'] and rf['failed'] == 0, 'refinement left cells')
-check('C5', hexq(rf['T_hex']) == T, 'refinement threshold is not the largest upper end of the D* enclosures')
+if VERIFIED_ONLY:
+    check('C5', hexq(rf['T_hex']) > T, 'refinement threshold is not above the largest upper end of the D* enclosures')
+    check('C4', T_mesh >= hexq(rf['T_hex']), 'mesh threshold below the refinement threshold')
+    T = hexq(rf['T_hex'])
+else:
+    check('C5', hexq(rf['T_hex']) == T, 'refinement threshold is not the largest upper end of the D* enclosures')
 boxes = sorted((tuple(hexq(x) for x in b['center']), hexq(b['radius'])) for b in rf['exclusion_boxes'])
 local_boxes = sorted((tuple(Q(x) for x in i['q_center']), Q(lc['box_radius'])) for i in imgs)
 check('C5', boxes == local_boxes, 'exclusion boxes differ from the local boxes')
@@ -110,12 +130,13 @@ if '--hash-survivors' in sys.argv:
 
 check('C6', all(dhi < T for _, dhi in Dstar), 'D* is not strictly below T')
 
-lo, hi = (Q(x) for x in paper['u_interval'])
 pr = Q(paper['D_printed']); ulp = Q(1, 10 ** (len(paper['D_printed']) - 2))
-check('C7', all(lo <= N * dlo and N * dhi <= hi for dlo, dhi in Dstar), 'N D* outside the isolating interval')
+if not VERIFIED_ONLY:
+    lo, hi = (Q(x) for x in paper['u_interval'])
+    check('C7', all(lo <= N * dlo and N * dhi <= hi for dlo, dhi in Dstar), 'N D* outside the isolating interval')
 check('C7', all(pr <= dlo and dhi < pr + ulp for dlo, dhi in Dstar), 'D* does not match the printed digits')
 
-stamps = [lc['stamp'], cg['stamp'], rf['stamp']] + [load(f'symcert_{name}_img{i["image"]}.json')['stamp'] for i in imgs]
+stamps = [lc['stamp'], rf['stamp']] + ([] if VERIFIED_ONLY else [cg['stamp']] + [load(f'symcert_{name}_img{i["image"]}.json')['stamp'] for i in imgs])
 commits = sorted({s['commit'] for s in stamps if s['commit']})
 CODE = ['capdisc/proof', 'capdisc/csrc', 'capdisc/verify.sh', 'capdisc/build.sh']
 
@@ -131,7 +152,7 @@ check('C8', len(commits) >= 1 and all(same_code(commits[0], c) for c in commits[
 check('C8', not any(s['tree_dirty'] for s in stamps), f'modified proof code: {[s["step"] for s in stamps if s["tree_dirty"]]}')
 
 ok = all(checks.values())
-out = dict(N=N, name=name, directory=DIR, checks=checks, notes=notes, verdict='chain complete' if ok else 'CHAIN INCOMPLETE',
+out = dict(N=N, name=name, level=paper.get('level', 'certified'), directory=DIR, checks=checks, notes=notes, verdict='chain complete' if ok else 'CHAIN INCOMPLETE',
            T=str(T), D_star_upper=str(max(d for _, d in Dstar)),
            files={f: sha(os.path.join(DIR, f)) for f in sorted(os.listdir(DIR)) if f.endswith('.json') and not f.startswith('chain_')})
 json.dump(out, open(os.path.join(DIR, f'chain_N{N}.json'), 'w'), indent=1)
