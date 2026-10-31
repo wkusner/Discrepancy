@@ -1,6 +1,7 @@
 {
  "N": 5,
  "name": "N5_best",
+ "level": "certified",
  "directory": "certificates/verify_N5",
  "checks": {
   "C1": true,
