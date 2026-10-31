@@ -8,7 +8,7 @@ certificate records the versions it was produced with (`stamp.versions`).
 
 | component | used for | trusted for | version (reference run) |
 |---|---|---|---|
-| IEEE 754 binary64 hardware, round-to-nearest | mesh `capcert_rig` (`csrc/capcert.c` built with `-DRIGOROUS`, `csrc/ia.h`, `csrc/rig.h`) | correct rounding of +, −, ×, ÷, √ | x86-64 |
+| IEEE 754 binary64 hardware, round-to-nearest | mesh `capcert_rig` (`csrc/capcert.c` built with `-DRIGOROUS`, `csrc/ia.h`, `csrc/rig.h`, `csrc/fo.h`) | correct rounding of +, −, ×, ÷, √ | x86-64 |
 | C compiler, flags `-O3 -march=native -fopenmp -DRIGOROUS -ffp-contract=off -fno-fast-math` | building `capcert_rig` | compiling the source as written: no contraction into FMA, no value-changing optimization | gcc 13.3 |
 | python-flint / FLINT (Arb) | Steps 3–6 (`proof/`) | ball arithmetic: every operation returns a ball containing the exact result; comparisons are true only when certain; `sqrt`, `sin`, `cos`, `acos`, `atan2` enclose the exact value | python-flint 0.9.0, FLINT 3.6.0 |
 | sympy | Step 5 (resultants, factorization of the eliminant), Step 7 | exact rational and polynomial arithmetic; real-root counting | 1.14.0 |
@@ -51,6 +51,7 @@ false check pass. Floating-point output is never used as a bound.
 ```
 proof/*.py                    ~1,050 lines   (Steps 1, 3–6, bookkeeping)
 csrc/capcert.c (rigorous path) + ia.h + rig.h   ~700 lines   (Step 2)
+csrc/fo.h (first-order bound in the mesh)      ~220 lines   (Step 2, with --first-order; tests/test_capcert_fo.py)
 ```
 
 (`csrc/capcert.c` still contains the floating-point exploration mode behind `#ifndef RIGOROUS`; splitting it

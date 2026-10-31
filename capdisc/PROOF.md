@@ -62,7 +62,7 @@ or some pair closer than (x₁, x₂) throughout.
 
 | | pipeline A | pipeline B |
 |---|---|---|
-| mesh | `csrc/capcert.c` (`-DRIGOROUS`), IEEE intervals `csrc/ia.h`, `csrc/rig.h` | `csrc/capcert_arb.c` (Arb) |
+| mesh | `csrc/capcert.c` (`-DRIGOROUS`), IEEE intervals `csrc/ia.h`, `csrc/rig.h`, `csrc/fo.h` | `csrc/capcert_arb.c` (Arb) |
 | refinement | `proof/domain.py::misses_domain` (Arb) | `jobs/xcheck_refine.py::misses_domain` (mpmath.iv) |
 
 *Covering.* The initial box is widened by one ulp beyond [0, fl(π)] etc., and every bisection
@@ -75,6 +75,14 @@ enlarges the children's half-widths to cover the rounding of their centers (Exp.
 motion bounds E_i (equation `eq:motion`) and any axis w, D(Y) ≥ k/N − (1 − c_(k))/2 and
 D(Y) ≥ (1 − C_(k))/2 − (k−1)/N for all Y in B. Axes are those of the capture caps of X
 (Lemma `lem:capture`), both orientations.
+
+With `--first-order` the mesh also uses the first-order bound of Step 3 (`eq:lpbound`) on cells whose largest
+motion bound is below `--fo-emax` (default in `verify.sh`: 0.1), in IEEE interval arithmetic (`csrc/fo.h`):
+counts frozen from interval margins, gradient enclosures of the pair and triple caps, trigonometric
+enclosures guarded by |d| ≤ h (cos d ≥ cos h for h < 3.1, |sin d| ≤ sin h for h < 1.5). The weights are a choice
+(exponentiated-gradient ascent in floating point); only the final evaluation is rigorous, so a wrong choice
+can only weaken the bound. On cells that size the second-order remainder is small enough for the linear term to
+win; on larger cells the bound costs time and closes almost nothing.
 
 *What the code does.* `capcert_rig N T MIN_EPS OUT` bisects F and proves D ≥ T on every cell except
 the *survivors*, which it writes to `OUT.surv.*` once they are smaller than MIN_EPS.
