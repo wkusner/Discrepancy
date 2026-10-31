@@ -164,7 +164,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 4 (local verification)",
-  "commit": "92e337a7761d924f05e42454466a35172766d227",
+  "commit": "ab96162faeac7988b3974a3656a47de35d659fed",
   "tree_dirty": false,
   "versions": {
    "python": "3.13.16",
@@ -184,8 +184,8 @@
    "results/verify_N5"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-10-31T12:55:05Z",
-  "seconds": 0.9,
+  "date_utc": "2026-10-31T21:38:48Z",
+  "seconds": 0.8,
   "inputs": {
    "proof/hints/N5_best.json": "a31bee8eeef48ec2eb3429139c27f7ec4b9dd142495c8e2aa709df09212942e7"
   }

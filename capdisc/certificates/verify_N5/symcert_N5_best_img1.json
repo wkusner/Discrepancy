@@ -125,7 +125,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 5 (symmetry and exact value)",
-  "commit": "92e337a7761d924f05e42454466a35172766d227",
+  "commit": "ab96162faeac7988b3974a3656a47de35d659fed",
   "tree_dirty": false,
   "versions": {
    "python": "3.13.16",
@@ -145,10 +145,10 @@
    "results/verify_N5"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-10-31T12:55:07Z",
-  "seconds": 0.6,
+  "date_utc": "2026-10-31T21:38:49Z",
+  "seconds": 0.5,
   "inputs": {
-   "results/verify_N5/localcert_N5_best.json": "7ee47b5bcaa9ae03a185ddfc7758abd4f22ef8a258119ed2a4a60cecacabceb5"
+   "results/verify_N5/localcert_N5_best.json": "b42821791787bdf7879d228113ed42de0d211d8eb82acfcd3e341637d53884e3"
   }
  }
 }

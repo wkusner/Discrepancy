@@ -10,17 +10,19 @@
   "mode": "rigorous",
   "keep": "0x1p+0",
   "balls": "0",
-  "survivors": "590986",
-  "cells": "14828254"
+  "survivors": "14085",
+  "cells": "5094342",
+  "fo": "1",
+  "smear": "0"
  },
- "input_cells": 590986,
- "cells": 846240,
- "bounded": 632783,
+ "input_cells": 14085,
+ "cells": 242707,
+ "bounded": 104800,
  "boxed": 10,
- "sym": 85820,
+ "sym": 23586,
  "failed": 0,
  "fails": [],
- "time": 1797.509924173355,
+ "time": 593.218962430954,
  "verified": true,
  "kernel": "arb (python-flint)",
  "label": "Arb-verified",
@@ -64,7 +66,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 3 (refinement)",
-  "commit": "1dca4b1c1b3ddf2909c97438ed01fcb4534f44f0",
+  "commit": "cb0b5097df1d155e9902fe2082dc16a5bbbd0e85",
   "tree_dirty": false,
   "versions": {
    "python": "3.13.16",
@@ -87,13 +89,13 @@
    "1e-7"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-10-31T13:27:06Z",
-  "seconds": 1797.8,
+  "date_utc": "2026-10-31T21:50:30Z",
+  "seconds": 593.5,
   "inputs": {
-   "results/verify_N5/localcert_N5_best.json": "7ee47b5bcaa9ae03a185ddfc7758abd4f22ef8a258119ed2a4a60cecacabceb5",
-   "results/verify_N5/mesh.done": "e5ca5dd100d758056c043fdee64575e418cfc312f362fec6c1c30cb28565c5e2",
-   "results/verify_N5/mesh.surv.0": "5f9ed917b10199133962abbb43ba0804d750760ba6275d8693398033347c72d5",
-   "results/verify_N5/mesh.surv.1": "7ac3ee51533378a39022722e8dddf48bbaaa1703f2ea1a8f140fda741fdfe460"
+   "results/verify_N5/localcert_N5_best.json": "b42821791787bdf7879d228113ed42de0d211d8eb82acfcd3e341637d53884e3",
+   "results/verify_N5/mesh.done": "abec778402145bec784bd0dedcb4ae98fe4467f6b9a0aa6f66ae9189c7d986c2",
+   "results/verify_N5/mesh.surv.0": "d92c8d9e6f02ac02916f3662e287613d3b5831533ad19318ebb77c9a98aab132",
+   "results/verify_N5/mesh.surv.1": "2b45bc8fff20aa3427106bf87e5fa99b1073417ae5dbb1a840862dee0cdc87f2"
   }
  }
 }
