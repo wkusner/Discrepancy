@@ -3,6 +3,7 @@
   "checks": {
    "local": true,
    "symmetric": true,
+   "congruence": true,
    "roots": true,
    "elimination": true,
    "mesh": true,
@@ -15,6 +16,7 @@
   "checks": {
    "local": true,
    "symmetric": true,
+   "congruence": true,
    "roots": true,
    "elimination": true,
    "mesh": true,

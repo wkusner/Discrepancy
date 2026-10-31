@@ -32,7 +32,10 @@ checks, notes = {}, []
 
 
 def load(fn):
-    return json.load(open(os.path.join(DIR, fn)))
+    path = os.path.join(DIR, fn)
+    if not os.path.exists(path):
+        print(f'missing certificate: {fn}\nCHAIN INCOMPLETE'); sys.exit(1)
+    return json.load(open(path))
 
 
 def sha(path):
@@ -95,15 +98,15 @@ check('C5', hexq(rf['T_hex']) == T, 'refinement threshold is not the largest upp
 boxes = sorted((tuple(hexq(x) for x in b['center']), hexq(b['radius'])) for b in rf['exclusion_boxes'])
 local_boxes = sorted((tuple(Q(x) for x in i['q_center']), Q(lc['box_radius'])) for i in imgs)
 check('C5', boxes == local_boxes, 'exclusion boxes differ from the local boxes')
-ins = rf['stamp']['inputs']
-lc_path = os.path.relpath(os.path.join(DIR, f'localcert_{name}.json'), REPO)
-check('C5', ins.get(lc_path) == sha(os.path.join(REPO, lc_path)), 'refinement read a different local certificate')
-done_path = os.path.relpath(os.path.join(DIR, 'mesh.done'), REPO)
-check('C5', ins.get(done_path) == sha(os.path.join(REPO, done_path)), 'refinement read a different mesh stamp')
+# inputs are recorded by path relative to the repository at run time; match them by file name, so that the
+# directory can be moved (e.g. from results/verify_N5 to certificates/verify_N5)
+ins = {os.path.basename(p): h for p, h in rf['stamp']['inputs'].items()}
+for fn, what in ((f'localcert_{name}.json', 'local certificate'), ('mesh.done', 'mesh stamp')):
+    check('C5', ins.get(fn) == sha(os.path.join(DIR, fn)), f'refinement read a different {what}')
 check('C5', rf['input_cells'] >= int(stamp['survivors']), 'refinement read fewer survivors than the mesh wrote')
 if '--hash-survivors' in sys.argv:
-    for p, h in ins.items():
-        if '.surv.' in p: check('C5', sha(os.path.join(REPO, p)) == h, f'{p}: hash')
+    for fn, h in ins.items():
+        if '.surv.' in fn: check('C5', os.path.exists(os.path.join(DIR, fn)) and sha(os.path.join(DIR, fn)) == h, f'{fn}: hash')
 
 check('C6', all(dhi < T for _, dhi in Dstar), 'D* is not strictly below T')
 

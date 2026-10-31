@@ -1,0 +1,3 @@
+capcert (RIGOROUS) N=5 T=0.32332565099805344 MIN_EPS=0.04 threads=2 frontier=4096 (resuming 0 done) balls=0
+[    75s] roots 1438/4096  cells 7056518  bounded 2663558  sym 594606  ball 0  survivors 270814  min_surv_lb 0.308172236896
+[   120s] roots 4096/4096  cells 14828254  bounded 5578361  sym 1246828  ball 0  survivors 590986  min_surv_lb 0.308172236896

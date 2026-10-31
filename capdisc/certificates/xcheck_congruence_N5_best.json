@@ -1,0 +1,36 @@
+{
+ "name": "N5_best",
+ "images": [
+  {
+   "image": 0,
+   "sigma": [
+    1,
+    1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  },
+  {
+   "image": 1,
+   "sigma": [
+    1,
+    1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  },
+  {
+   "image": 2,
+   "sigma": [
+    1,
+    1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  }
+ ],
+ "congruent": true,
+ "kernel": "mpmath.iv (50 digits)",
+ "label": "Krawczyk-verified (mpmath.iv)",
+ "independent_of": "arb/python-flint and proof/"
+}

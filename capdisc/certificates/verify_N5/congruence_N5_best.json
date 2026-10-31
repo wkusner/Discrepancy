@@ -1,0 +1,64 @@
+{
+ "name": "N5_best",
+ "images": [
+  {
+   "image": 0,
+   "sigma": [
+    1,
+    1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  },
+  {
+   "image": 1,
+   "sigma": [
+    1,
+    1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  },
+  {
+   "image": 2,
+   "sigma": [
+    1,
+    1
+   ],
+   "contained_in_Z0": true,
+   "verified_image": true
+  }
+ ],
+ "congruent": true,
+ "kernel": "arb (python-flint)",
+ "label": "Krawczyk-verified (Arb)",
+ "stamp": {
+  "step": "PROOF.md Step 6 (congruence of the images)",
+  "commit": "92e337a7761d924f05e42454466a35172766d227",
+  "tree_dirty": false,
+  "versions": {
+   "python": "3.13.16",
+   "python-flint": "0.9.0",
+   "FLINT": "3.6.0",
+   "numpy": "2.5.3",
+   "scipy": "1.18.1",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0"
+  },
+  "prec": 128,
+  "argv": [
+   "/home/claude/discrepancy/capdisc/proof/congruence.py",
+   "N5_best",
+   "--dir",
+   "results/verify_N5"
+  ],
+  "machine": "Linux x86_64, 2 cpus",
+  "date_utc": "2026-10-31T12:55:08Z",
+  "seconds": 0.3,
+  "inputs": {
+   "results/verify_N5/symcert_N5_best_img0.json": "baa3c28485774aa66ad437851dd33f8f57ec13f696625eb0e59f63ab56724394",
+   "results/verify_N5/symcert_N5_best_img1.json": "288ac171e4f1daf4fa575b23b010f839696ac0ce664288a17731da6c17c3b1bd",
+   "results/verify_N5/symcert_N5_best_img2.json": "89e49860f9544cf822bbb16f74113603c3212c080200bcc050addf2f7fec5ecb"
+  }
+ }
+}

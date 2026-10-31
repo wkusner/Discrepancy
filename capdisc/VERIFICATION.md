@@ -35,7 +35,7 @@ Rules:
   level 2 (`interval-verified`); exact results accepted by an exact test are level 3
   (`exact (test-verified)`); the second kernel goes into a `cross_checks` list, not into the level.
 
-## Status (2026-10-30)
+## Status (2026-10-31)
 
 | claim | step | label now | kernels |
 |---|---|---|---|
@@ -43,7 +43,7 @@ Rules:
 | | pipeline B: mesh `capcert_arb` (Arb, C) + refinement `xcheck_refine.py` (mpmath.iv) | N = 5, 6: **cross-verified** (pipelines A and B agree; `certificates/pipelineB_N5.json` (re-run of `pipelineB_N5_local.json`), `certificates/pipelineB_N6.json`: 52,698,474 cells, 446,327 survivors refined into 483,847 cells, 0 failed) | IEEE intervals + Arb; Arb + mpmath.iv |
 | minimizer unique in its box, D(q*) = D* | `local_cert.py` / `xcheck_local.py` | **cross-verified (Arb + mpmath.iv)** | independent code (`certificates/xcheck_local_*.json`) |
 | minimizer symmetric, (q*, D*) = (q(Y(s*)), D_s) | `sym_cert.py` / `xcheck_sym.py` | **cross-verified (Arb + mpmath.iv)** | independent code (`certificates/xcheck_sym_*.json`); the orbit structure is exact combinatorics |
-| the boxed images of the minimizer are congruent (closes 'unique up to symmetry') | `congruence_cert.py` (from `symcert_*_img*.json`) | Krawczyk-verified (Arb); pipeline-B analogue to do | `certificates/congruence_N{5,6}_best.json` |
+| the boxed images of the minimizer are congruent (closes 'unique up to symmetry') | `proof/congruence.py` (Arb) / `jobs/xcheck_congruence.py` (mpmath.iv) | **cross-verified (Arb + mpmath.iv)** | `certificates/congruence_N{5,6}_best.json`, `certificates/xcheck_congruence_N{5,6}_best.json` |
 | N·D* is a root of P_N | elimination | **cross-verified (sympy + msolve)** | sympy resultants of the geometric orbit equations (`sym_cert.py`) + msolve Gröbner elimination of the paper's equations `msolve/*.ms` (`xcheck_elim.py`, `certificates/xcheck_elim.json`) |
 | P_N irreducible, one root in the interval | root isolation | **cross-verified (FLINT + sympy)** | `certificates/xcheck_roots.json` |
 | Gram matrix of the minimizer = G_e, entries in Q(D*) (N = 5, 6) | `gram_verify.py` | **cross-verified (exact: sympy + FLINT; intervals: Arb + mpmath.iv)**; atlas level 3 | `certificates/gramcert_N{5,6}_best.json` |
@@ -67,6 +67,10 @@ per N whether it proves the theorem on its own (`certificates/xcheck_verdict.jso
 audited independently; the audit's findings (outward box B, D* < T and N·D* in the theorem interval
 checked in B, exact symmetry group and orbits of all worst caps checked in B, exact Krawczyk box
 hand-off, stale-file and failure handling) are fixed.
+
+Pipeline A has been re-run for N = 5 with the trusted core `proof/` (`verify.sh 5`; every inequality decided in
+Arb), and its certificate chain passes `check/check_chain.py` (C1-C8): `certificates/verify_N5/`. The N = 6 re-run
+is in progress on the department server.
 
 The theorem for N = 5, 6 is **proved**, with interval-verified, Arb-verified and Krawczyk-verified
 steps, and every step is cross-verified for N = 5 and N = 6: pipeline B proves the theorem on its own

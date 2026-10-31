@@ -1,0 +1,99 @@
+{
+ "N": 5,
+ "T": 0.32332565099805344,
+ "T_hex": "0x1.4b15e123fa6b2p-2",
+ "capcert_stamp": {
+  "N": "5",
+  "T": "0x1.4b15e123fa6b2p-2",
+  "MIN_EPS": "0x1.47ae147ae147bp-5",
+  "nf": "4096",
+  "mode": "rigorous",
+  "keep": "0x1p+0",
+  "balls": "0",
+  "survivors": "590986",
+  "cells": "14828254"
+ },
+ "input_cells": 590986,
+ "cells": 846240,
+ "bounded": 632783,
+ "boxed": 10,
+ "sym": 85820,
+ "failed": 0,
+ "fails": [],
+ "time": 1797.509924173355,
+ "verified": true,
+ "kernel": "arb (python-flint)",
+ "label": "Arb-verified",
+ "exclusion_boxes": [
+  {
+   "center": [
+    "0x1.83c5cc46e03bdp+0",
+    "0x1.9980e172a913fp+0",
+    "0x1.0e225fbb5761dp+1",
+    "0x1.9980e172a9142p+0",
+    "-0x1.0e225fbb5761cp+1",
+    "0x1.83c5cc46e03bbp+1",
+    "0x1.721e192c0d250p-56"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  },
+  {
+   "center": [
+    "0x1.83c5cc46e03bdp+0",
+    "0x1.83c5cc46e03b9p+0",
+    "0x1.921fb54442d18p+1",
+    "0x1.0e391747431c4p+1",
+    "-0x1.921fb54442d19p+0",
+    "0x1.0e391747431c4p+1",
+    "0x1.921fb54442d19p+0"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  },
+  {
+   "center": [
+    "0x1.83c5cc46e03bcp+0",
+    "0x1.83c5cc46e03b9p+0",
+    "0x1.921fb54442d18p+1",
+    "0x1.0e391747431c4p+1",
+    "0x1.921fb54442d1ap+0",
+    "0x1.0e391747431c4p+1",
+    "-0x1.921fb54442d18p+0"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  }
+ ],
+ "stamp": {
+  "step": "PROOF.md Step 3 (refinement)",
+  "commit": "1dca4b1c1b3ddf2909c97438ed01fcb4534f44f0",
+  "tree_dirty": false,
+  "versions": {
+   "python": "3.13.16",
+   "python-flint": "0.9.0",
+   "FLINT": "3.6.0",
+   "numpy": "2.5.3",
+   "scipy": "1.18.1",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0"
+  },
+  "prec": 53,
+  "argv": [
+   "/home/claude/discrepancy/capdisc/proof/refine.py",
+   "5",
+   "results/verify_N5/mesh",
+   "results/verify_N5/localcert_N5_best.json",
+   "--workers",
+   "2",
+   "--min-width",
+   "1e-7"
+  ],
+  "machine": "Linux x86_64, 2 cpus",
+  "date_utc": "2026-10-31T13:27:06Z",
+  "seconds": 1797.8,
+  "inputs": {
+   "results/verify_N5/localcert_N5_best.json": "7ee47b5bcaa9ae03a185ddfc7758abd4f22ef8a258119ed2a4a60cecacabceb5",
+   "results/verify_N5/mesh.done": "e5ca5dd100d758056c043fdee64575e418cfc312f362fec6c1c30cb28565c5e2",
+   "results/verify_N5/mesh.surv.0": "5f9ed917b10199133962abbb43ba0804d750760ba6275d8693398033347c72d5",
+   "results/verify_N5/mesh.surv.1": "7ac3ee51533378a39022722e8dddf48bbaaa1703f2ea1a8f140fda741fdfe460"
+  }
+ }
+}

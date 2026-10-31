@@ -1,0 +1,154 @@
+{
+ "name": "N5_best",
+ "N": 5,
+ "group_order": 4,
+ "orbits": [
+  "Cap(0, 1, 3)+",
+  "Cap(1, 2, 3)-",
+  "Cap(1, 3, 4)-"
+ ],
+ "orbit_caps": [
+  [
+   [
+    0,
+    1,
+    3
+   ],
+   1
+  ],
+  [
+   [
+    0,
+    1,
+    4
+   ],
+   -1
+  ],
+  [
+   [
+    0,
+    2,
+    3
+   ],
+   -1
+  ],
+  [
+   [
+    0,
+    2,
+    4
+   ],
+   1
+  ],
+  [
+   [
+    1,
+    2,
+    3
+   ],
+   -1
+  ],
+  [
+   [
+    1,
+    2,
+    4
+   ],
+   1
+  ],
+  [
+   [
+    1,
+    3,
+    4
+   ],
+   -1
+  ],
+  [
+   [
+    2,
+    3,
+    4
+   ],
+   1
+  ]
+ ],
+ "counts_consistent": true,
+ "krawczyk_symmetric": true,
+ "krawczyk_radius": 1e-30,
+ "D_s": [
+  0.3233256509980526,
+  0.3233256509980526
+ ],
+ "gauge_in_local_box": true,
+ "D_in_local_enclosure": true,
+ "eliminant_degree": 12,
+ "P_divides_eliminant": true,
+ "factors_meeting_enclosure": [
+  [
+   "15625000000*D**12 - 31250000000*D**11 - 3437500000*D**10 + 2",
+   12
+  ]
+ ],
+ "verified": true,
+ "kernel": "arb (python-flint) + sympy resultants + flint factorization",
+ "label": "Krawczyk-verified (Arb); elimination exact (sympy)",
+ "P_N": [
+  64,
+  -640,
+  -352,
+  15344,
+  -23004,
+  -23384,
+  -120504,
+  243968,
+  562963,
+  -698538,
+  -670529,
+  545392,
+  173504
+ ],
+ "P_N_variable": "u = N D, coefficients from u^12 down",
+ "P_N_irreducible": true,
+ "P_N_is_the_factor": true,
+ "image": 2,
+ "s_box_mid": [
+  "0.05603006151144918756391141032971825677858",
+  "-0.5144112469030804361128133312024887336481",
+  "0.3233256509980526025687969684420236496152"
+ ],
+ "s_box_radius": 1e-30,
+ "s_enclosure": [
+  "[0.0560300615114491875639114103297182568 +/- 6.93e-38]",
+  "[-0.514411246903080436112813331202488734 +/- 4.14e-37]",
+  "[0.3233256509980526025687969684420236496 +/- 2.92e-38]"
+ ],
+ "stamp": {
+  "step": "PROOF.md Step 5 (symmetry and exact value)",
+  "commit": "92e337a7761d924f05e42454466a35172766d227",
+  "tree_dirty": false,
+  "versions": {
+   "python": "3.13.16",
+   "python-flint": "0.9.0",
+   "FLINT": "3.6.0",
+   "numpy": "2.5.3",
+   "scipy": "1.18.1",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0"
+  },
+  "prec": 128,
+  "argv": [
+   "/home/claude/discrepancy/capdisc/proof/symmetric.py",
+   "N5_best",
+   "2",
+   "--dir",
+   "results/verify_N5"
+  ],
+  "machine": "Linux x86_64, 2 cpus",
+  "date_utc": "2026-10-31T12:55:08Z",
+  "seconds": 0.5,
+  "inputs": {
+   "results/verify_N5/localcert_N5_best.json": "7ee47b5bcaa9ae03a185ddfc7758abd4f22ef8a258119ed2a4a60cecacabceb5"
+  }
+ }
+}

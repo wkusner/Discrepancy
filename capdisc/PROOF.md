@@ -237,10 +237,11 @@ scipy's LP solver, every floating-point result, msolve (a check only).
 
 *Still open:*
 
-1. **N = 6 reference run of pipeline A** with the new core, on the server (`verify.sh 6`), and storing the
-   reference outputs of both N in `certificates/verify_N{5,6}/`.
-2. **Congruence in pipeline B.** Step 6 has no second-kernel version yet; pipeline B is not yet driven by a
-   `verify.sh`-style script or checked by the chain checker.
+1. **N = 6 reference run of pipeline A** with the new core, on the server (`verify.sh 6`). The N = 5 reference
+   run is stored in `certificates/verify_N5/` (survivor files omitted; their SHA-256 are in `mesh.refine.json`)
+   and passes the chain checker.
+2. **Pipeline B** now checks congruence too (`jobs/xcheck_congruence.py`, mpmath.iv; same σ as the Arb version),
+   but it is not yet driven by a `verify.sh`-style script, stamped, or checked by the chain checker.
 3. **The mesh source** `csrc/capcert.c` still contains the floating-point exploration mode behind
    `#ifndef RIGOROUS`; the rigorous mesh should be its own file.
 4. **Step 7** (`jobs/gram_verify.py`, `jobs/xcheck_roots.py`) is not yet in `proof/` and not stamped.
