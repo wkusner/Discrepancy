@@ -1,0 +1,26 @@
+[
+ {
+  "D": 0.2786788151762454,
+  "n_active": 11,
+  "rank": 9,
+  "dim": 9,
+  "min_lambda": 0.039578922474205566,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N6_best"
+ },
+ {
+  "D": 0.295088545789485,
+  "n_active": 11,
+  "rank": 9,
+  "dim": 9,
+  "min_lambda": 0.0062598421882695135,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N6_second"
+ }
+]

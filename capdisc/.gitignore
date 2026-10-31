@@ -7,3 +7,4 @@ logs/
 results/
 capcert_arb
 build_arb.err
+explore/classify_all.log

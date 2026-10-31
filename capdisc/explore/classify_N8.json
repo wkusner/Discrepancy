@@ -1,0 +1,38 @@
+[
+ {
+  "D": 0.23079914617978103,
+  "n_active": 16,
+  "rank": 13,
+  "dim": 13,
+  "min_lambda": 0.013702527259254091,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N8_best"
+ },
+ {
+  "D": 0.23086978175200867,
+  "n_active": 16,
+  "rank": 13,
+  "dim": 13,
+  "min_lambda": 0.006965082084126051,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N8_second"
+ },
+ {
+  "D": 0.2308889455821299,
+  "n_active": 14,
+  "rank": 13,
+  "dim": 13,
+  "min_lambda": 0.001738803393428216,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N8_third"
+ }
+]

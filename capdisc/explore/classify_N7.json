@@ -1,0 +1,14 @@
+[
+ {
+  "D": 0.2608588072703534,
+  "n_active": 12,
+  "rank": 11,
+  "dim": 11,
+  "min_lambda": 0.006314870860978193,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N7_best"
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "D": 0.32332565099805666,
+  "n_active": 8,
+  "rank": 7,
+  "dim": 7,
+  "min_lambda": 0.012278842180726423,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N5_best"
+ },
+ {
+  "D": 0.3234105479511335,
+  "n_active": 7,
+  "rank": 6,
+  "dim": 7,
+  "min_lambda": 0.01650370777457451,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 2.9629076969683865e-15,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   -5.892937228147899e-08
+  ],
+  "probe_min_D": 0.3234105479511335,
+  "cls": "non-strict minimum",
+  "name": "N5_valley"
+ },
+ {
+  "D": 0.33074228455730137,
+  "n_active": 8,
+  "rank": 7,
+  "dim": 7,
+  "min_lambda": 0.05647434137474543,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "N5_third"
+ },
+ {
+  "D": 0.32332565099805977,
+  "n_active": 8,
+  "rank": 7,
+  "dim": 7,
+  "min_lambda": 0.012278842180726772,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "atlas_N5_levels#0"
+ },
+ {
+  "D": 0.3234105479512766,
+  "n_active": 7,
+  "rank": 6,
+  "dim": 7,
+  "min_lambda": 0.01650370777546952,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -8.462675005205256e-14,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   -4.9447871946965056e-08
+  ],
+  "probe_min_D": 0.32332565099806454,
+  "cls": "non-strict minimum (probe descends: not a local minimum)",
+  "name": "atlas_N5_levels#1"
+ },
+ {
+  "D": 0.330742284557316,
+  "n_active": 8,
+  "rank": 7,
+  "dim": 7,
+  "min_lambda": 0.0564743413748113,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "atlas_N5_levels#2"
+ }
+]

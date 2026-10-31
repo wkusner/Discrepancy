@@ -1,0 +1,225 @@
+[
+ {
+  "D": 0.21689031077387033,
+  "n_active": 15,
+  "rank": 14,
+  "dim": 15,
+  "min_lambda": 0.004483547648146096,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 8.412266443331984e-09,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   0.004508468975482681
+  ],
+  "probe_min_D": 0.21689031077379717,
+  "cls": "strict minimum",
+  "name": "search_N9#0"
+ },
+ {
+  "D": 0.21717608152066303,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.00030373324487945394,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N9#1"
+ },
+ {
+  "D": 0.21717619114405307,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 6.254250642258542e-05,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N9#2"
+ },
+ {
+  "D": 0.2172476278345294,
+  "n_active": 15,
+  "rank": 14,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -4.4699144385873524e-10,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   0.0004541113494553201
+  ],
+  "probe_min_D": 0.21724762783435958,
+  "cls": "strict minimum",
+  "name": "search_N9#3"
+ },
+ {
+  "D": 0.21760923384067504,
+  "n_active": 15,
+  "rank": 14,
+  "dim": 15,
+  "min_lambda": 0.01644725353902623,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 3.397202702482005e-08,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   0.03813467130773769
+  ],
+  "probe_min_D": 0.21760923384063413,
+  "cls": "strict minimum",
+  "name": "search_N9#4"
+ },
+ {
+  "D": 0.21772498071790614,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0018663114989913958,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N9#5"
+ },
+ {
+  "D": 0.21777159002833807,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0054579821816585295,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N9#6"
+ },
+ {
+  "D": 0.21777372843450177,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 1.3003460110072584e-07,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   0.004214426331558438
+  ],
+  "probe_min_D": 0.2177737284344935,
+  "cls": "strict minimum",
+  "name": "search_N9#7"
+ },
+ {
+  "D": 0.2177737284364774,
+  "n_active": 16,
+  "rank": 14,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 2.837001319977439e-08,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   0.004214426803732576
+  ],
+  "probe_min_D": 0.21777372843402593,
+  "cls": "strict minimum",
+  "name": "search_N9#8"
+ },
+ {
+  "D": 0.21777372843742915,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 1.6324891762009575e-07,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   0.004214426784359988
+  ],
+  "probe_min_D": 0.21777372843742915,
+  "cls": "strict minimum",
+  "name": "search_N9#9"
+ },
+ {
+  "D": 0.21777372846111875,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 1.3399841870820328e-07,
+  "flat_dim": 1,
+  "hessian_flat_eigs": [
+   0.004214421860984562
+  ],
+  "probe_min_D": 0.21777372843387116,
+  "cls": "strict minimum",
+  "name": "search_N9#10"
+ },
+ {
+  "D": 0.2177737285667793,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 4.879511485249288e-07,
+  "flat_dim": 0,
+  "probe_min_D": 0.21777372843402198,
+  "cls": "strict minimum",
+  "name": "search_N9#11"
+ },
+ {
+  "D": 0.2177737285814264,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 2.6072916306518756e-07,
+  "flat_dim": 0,
+  "probe_min_D": 0.2177737284339588,
+  "cls": "strict minimum",
+  "name": "search_N9#12"
+ },
+ {
+  "D": 0.2177737287616468,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 8.146827626259734e-07,
+  "flat_dim": 0,
+  "probe_min_D": 0.2177737285506373,
+  "cls": "strict minimum",
+  "name": "search_N9#13"
+ },
+ {
+  "D": 0.2177737289655568,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 15,
+  "min_lambda": 0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": 5.693083012679387e-07,
+  "flat_dim": 0,
+  "probe_min_D": 0.21777372843490694,
+  "cls": "strict minimum",
+  "name": "search_N9#14"
+ }
+]
