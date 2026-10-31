@@ -13,6 +13,7 @@ import argparse, glob, json, os, sys, time
 from multiprocessing import Pool
 import numpy as np
 import flint
+from flint import arb
 from .arith import all_caps
 from .cellbound import cell_lower_bound
 from .domain import misses_domain
@@ -27,9 +28,10 @@ def init(N, T, boxes, min_width):
 
 
 def inside_box(c, w):
-    # cell c +- w inside the box m +- r; float rounding of |c - m| + w is absorbed by the factor
+    """the cell c +- w lies in the closed box m +- r of a local verification (decided in Arb)."""
     for (m, r) in G['boxes']:
-        if np.all(np.abs(c - m) + w <= r * (1 - 1e-12)):
+        rb = arb(r)
+        if all(abs(arb(c[j]) - arb(m[j])) + arb(w[j]) <= rb for j in range(len(c))):
             return True
     return False
 
@@ -58,9 +60,12 @@ def process(cell):
             continue
         j = split_dim(c, w, N); h = w.copy(); h[j] = w[j] / 2
         a = c.copy(); a[j] = c[j] - h[j]; b = c.copy(); b[j] = c[j] + h[j]
-        # children c -+ w/2 with radius w/2 cover the parent up to the rounding of the new centres;
-        # enlarge the radius by a bound for that rounding error
-        h[j] = np.nextafter(h[j] + (abs(c[j]) + w[j]) * 2.0**-52, np.inf)
+        # the children (centres a_j, b_j rounded to doubles) get the half-width
+        #   rho = w_j/2 + max(|a_j - (c_j - w_j/2)|, |b_j - (c_j + w_j/2)|)   (computed in Arb, rounded up),
+        # so that [a_j - rho, a_j + rho] and [b_j - rho, b_j + rho] cover [c_j - w_j, c_j + w_j]
+        hj = arb(h[j]); cj = arb(c[j])
+        err = max(abs(arb(a[j]) - (cj - hj)).abs_upper(), abs(arb(b[j]) - (cj + hj)).abs_upper())
+        h[j] = certio.float_up((hj + arb(err)).upper())
         stack += [(a, h), (b, h)]
     return st
 

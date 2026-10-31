@@ -1,0 +1,7 @@
+{
+ "note": "Values printed in the papers (Monthly: thm:computer and Section 7; Exp. Math.: Section 5). The chain checker compares the certificates with these.",
+ "5": {"name": "N5_best", "P_N": [64, -640, -352, 15344, -23004, -23384, -120504, 243968, 562963, -698538, -670529, 545392, 173504],
+       "u_interval": ["1.616628254990254", "1.616628254990268"], "D_printed": "0.32332565099805", "images": 3, "group_order": 4},
+ "6": {"name": "N6_best", "P_N": [25, -496, 3524, -9120, -5298, 69920, -102348, -58272, 278817, -207344, -29312, 43520, 25600],
+       "u_interval": ["1.672072891057447", "1.672072891057457"], "D_printed": "0.27867881517624", "images": 2, "group_order": 6}
+}

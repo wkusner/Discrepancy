@@ -12,6 +12,7 @@ so phi(Y) >= a + m.v with a = phi(c) - sum_j r_j w_j.  For ANY weights lambda >=
     D(Y) >= max_C phi_C(Y) >= sum_C lambda_C a_C - sum_j |sum_C lambda_C m_Cj| w_j     (*)
 
 (Exp. Math. paper, eq. lpbound).  lambda is chosen by a floating-point LP; (*) is evaluated in ball arithmetic.
+No inequality in this file is decided in floating point: every value that enters a bound is an Arb ball.
 """
 import numpy as np
 from flint import arb
@@ -26,13 +27,25 @@ def _mv_interval(center_val: arb, grad_box: dict, w):
     return out
 
 
+class CapData:
+    """Enclosures for one cap over a cell c + [-w, w], all in exact ball arithmetic:
+    a      lower bound for phi(c) - sum_j r_j w_j, so that phi(c + v) >= a + m.v on the cell;
+    m, r   the gradient of phi over the cell lies in [m_j - r_j, m_j + r_j] (m_j, r_j exact Arb values);
+    g      the gradient balls themselves (lower and upper ends are exact: g_j.lower(), g_j.upper());
+    n      robust count (points in the closed cap throughout the cell), n_up upper count;
+    phi_up upper bound for phi over the cell with the upper count;
+    m_float the midpoints as doubles, for the LP that chooses weights (selection only)."""
+    __slots__ = ('a', 'm', 'r', 'g', 'n', 'n_up', 'phi_up', 'm_float')
+
+
 def cap_data(qc, w, N, caps):
-    """For each cap: (a_lower_center_value, mid_grad (np), rad_grad (np), robust_count) or None.
-    phi = n/N - (1 - t)/2.  Uses center evaluation (point balls) for values and box evaluation
-    for gradients."""
+    """For each cap a CapData, or None if the cap is degenerate somewhere on the cell.
+    phi = n/N - (1 - t)/2.  Values at the center (point balls), gradients over the cell (box balls).
+    qc, w: sequences of doubles (exact as balls)."""
     nq = 2 * N - 3
     qcb = [arb(x) for x in qc]
     qbox = [arb(qc[k], w[k]) for k in range(nq)]
+    wb = [arb(x) for x in w]
     Pc = points_ad(qcb, N); Pb = points_ad(qbox, N)
     out = []
     for cap in caps:
@@ -52,35 +65,37 @@ def cap_data(qc, w, N, caps):
             elif mj < 0: pass
             else:        # undecided: outside for the lower bound, inside for the upper bound
                 n_up += 1
+        d = CapData()
+        d.n, d.n_up = n, n_up
+        d.g = [tb.d.get(k, ZERO) / 2 for k in range(nq)]         # d phi / dq = + dt/dq / 2, over the cell
+        d.m = [arb(gk.mid()) for gk in d.g]                      # exact midpoints
+        d.r = [arb(gk.rad()) for gk in d.g]                      # exact radii
+        d.m_float = np.array([float(gk.mid()) for gk in d.g])
         phi_c = arb(n) / N - (1 - tc.v) / 2
-        mid = np.zeros(nq); rad = np.zeros(nq)
-        for k, g in tb.d.items():
-            gg = g / 2               # d phi / dq = + dt/dq / 2
-            mid[k] = float(gg.mid()); rad[k] = (float(gg.rad()) + 2.3e-16 * abs(mid[k]) + 1e-300) * (1 + 1e-12)
-        a = phi_c - arb(float(np.dot(rad, w)) * (1 + 1e-12) + 1e-300)
-        # account for rounding of mid to float: absorb into rad (done above)
-        # upper enclosure of phi over the box (count upper bound n_up), for 'below D*' checks
-        phi_up = (arb(n_up) / N - (1 - tc.v) / 2) + arb(float(np.dot(np.abs(mid) + rad, w)) * (1 + 1e-12) + 1e-300)
-        out.append((a, mid, rad, n, phi_up, n_up))
+        d.a = phi_c - sum((rk * wk for rk, wk in zip(d.r, wb)), ZERO)
+        phi_c_up = arb(n_up) / N - (1 - tc.v) / 2
+        d.phi_up = phi_c_up + sum(((abs(mk) + rk) * wk for mk, rk, wk in zip(d.m, d.r, wb)), ZERO)
+        out.append(d)
     return out
 
 
 def cell_lower_bound(qc, w, N, T, caps=None, use_lp=True):
-    """Rigorous lower bound for D over the cell (arb).  Returns (lb_float_lower, info)."""
+    """Rigorous lower bound (an Arb ball whose lower end is the bound) for D over the cell; (bound, info)."""
     from scipy.optimize import linprog
     caps = caps or all_caps(N)
     data = cap_data(qc, w, N, caps)
-    rows = [(i, d) for i, d in enumerate(data) if d is not None]
-    best = arb(1) / N
-    # single caps
-    for i, (a, mid, rad, n, _pu, _nu) in rows:
-        lb1 = a - arb(float(np.dot(np.abs(mid), w)) * (1 + 1e-12) + 1e-300)
+    rows = [d for d in data if d is not None]
+    wb = [arb(x) for x in w]
+    best = ONE / N
+    # single caps: phi(c + v) >= a + m.v >= a - sum_j |m_j| w_j
+    for d in rows:
+        lb1 = d.a - sum((abs(mk) * wk for mk, wk in zip(d.m, wb)), ZERO)
         if lb1 > best: best = lb1
     if best >= T or not use_lp:
         return best, dict(method='single')
-    # LP: min s s.t. s >= a_b + m_b.v, -w <= v <= w
-    A = np.array([np.append(d[1], -1.0) for _, d in rows])
-    av = np.array([float(d[0].mid()) for _, d in rows])
+    # weights from an LP (selection only): min s s.t. s >= a_b + m_b.v, -w <= v <= w
+    A = np.array([np.append(d.m_float, -1.0) for d in rows])
+    av = np.array([float(d.a.mid()) for d in rows])
     nq = len(w)
     c = np.zeros(nq + 1); c[-1] = 1
     res = linprog(c, A_ub=A, b_ub=-av, bounds=[(-wk, wk) for wk in w] + [(None, None)], method='highs')
@@ -89,20 +104,13 @@ def cell_lower_bound(qc, w, N, T, caps=None, use_lp=True):
     lam = np.maximum(-res.ineqlin.marginals, 0.0)
     if lam.sum() <= 0:
         return best, dict(method='lp-zero')
-    lam = lam / lam.sum()
-    # rigorous evaluation of (*) with these lambda (exact rationals not needed: any lam>=0, renormalized in arb)
+    # rigorous evaluation of (*) with weights L_C / S, L_C = lam_C as exact balls, S = sum L_C
     L = [arb(float(x)) for x in lam]; S = sum(L, ZERO)
-    acc = ZERO
-    for (i, d), l in zip(rows, L):
-        acc = acc + l * d[0]
-    gsum = np.zeros(nq)
-    for (i, d), l in zip(rows, lam):
-        gsum += l * d[1]
-    # bound |sum lam m| rigorously: the float sum has rounding error <= 1e-15 * sum|...|
-    err = 1e-12 * sum(abs(l) * np.abs(d[1]) for (_, d), l in zip(rows, lam))
-    pen = arb(float(np.dot(np.abs(gsum) + err, w)) * (1 + 1e-12))
+    acc = sum((l * d.a for l, d in zip(L, rows)), ZERO)
+    pen = ZERO
+    for j in range(nq):
+        gj = sum((l * d.m[j] for l, d in zip(L, rows)), ZERO)       # sum_C L_C m_Cj (a ball)
+        pen = pen + arb(gj.abs_upper()) * wb[j]
     lb = (acc - pen) / S
     if lb > best: best = lb
     return best, dict(method='lp', lp_value=res.fun)
-
-

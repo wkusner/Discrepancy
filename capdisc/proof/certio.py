@@ -65,6 +65,24 @@ def exact(x):
     return float(x).hex()
 
 
+def float_up(x):
+    """the smallest double >= the exact Arb value x (x a point ball, e.g. b.upper())."""
+    import math
+    from flint import arb
+    f = float(x)
+    while arb(f) < x: f = math.nextafter(f, math.inf)
+    return f
+
+
+def float_down(x):
+    """the largest double <= the exact Arb value x."""
+    import math
+    from flint import arb
+    f = float(x)
+    while arb(f) > x: f = math.nextafter(f, -math.inf)
+    return f
+
+
 def from_exact(s):
     return float.fromhex(s) if isinstance(s, str) else float(s)
 

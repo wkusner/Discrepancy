@@ -81,22 +81,25 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
     if not ok: return report
     report['krawczyk_radius'] = rk
     Dstar = K[-1]
-    report['D_enclosure'] = [float(Dstar.lower()), float(Dstar.upper())]
+    report['D_enclosure'] = [certio.float_down(Dstar.lower()), certio.float_up(Dstar.upper())]   # doubles, outward
+    report['D_enclosure_hex'] = [certio.exact(x) for x in report['D_enclosure']]
+    report['D_ball'] = certio.ball(Dstar)
     report['q_center'] = m[:-1].tolist()
     # other caps below D* on the Krawczyk box (so D(q*) = D*)
     allc = all_caps(N); kb = [arb(m[k], rk) for k in range(nq)]
     datK = cap_data(m[:-1], np.full(nq, rk), N, allc)
-    worst_other = -1.0
+    worst_other = -1.0; below = bool(arb(1) / N < Dstar)        # Arb comparisons: true only if certain
     act = {(c.I, c.side if len(c.I) == 3 else 0) for c in list(caps) + list(extra)}
     for c, dd in zip(allc, datK):
         if (c.I, c.side if len(c.I) == 3 else 0) in act: continue
-        if dd is None: worst_other = float('inf'); continue     # cannot be bounded: verification fails
-        worst_other = max(worst_other, float(dd[4].upper()))
+        if dd is None: worst_other = float('inf'); below = False; continue     # cannot be bounded: fails
+        below = below and bool(dd.phi_up < Dstar)
+        worst_other = max(worst_other, certio.float_up(dd.phi_up.upper()))
     report['max_other_caps_on_K'] = worst_other
-    report['others_below'] = bool(worst_other < float(Dstar.lower()) and float(arb(1) / N) < float(Dstar.lower()))
+    report['others_below'] = below
     if extra:   # redundant worst caps (forced by symmetry): report their enclosure on K
         datE = cap_data(m[:-1], np.full(nq, rk), N, list(extra))
-        report['redundant_caps_on_K'] = [[float((dd[0]).lower()), float(dd[4].upper())] for dd in datE]
+        report['redundant_caps_on_K'] = [[certio.float_down(dd.a.lower()), certio.float_up(dd.phi_up.upper())] for dd in datE]
     # ---------- 2. sharpness on the big box
     w = np.full(nq, r_big)
     # only the square system enters the sharpness test: for these caps phi_b(q*) = D* exactly
@@ -104,12 +107,13 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
     caps_all = list(caps); counts_all = list(counts)
     datB = cap_data(m[:-1], w, N, caps_all)
     # lower AND upper counts must equal the frozen count (no point may cross a worst-cap boundary)
-    counts_ok = all(dd is not None and dd[3] == n and dd[5] == n for dd, n in zip(datB, counts_all))
+    counts_ok = all(dd is not None and dd.n == n and dd.n_up == n for dd, n in zip(datB, counts_all))
     report['counts_frozen_on_box'] = counts_ok
     if not counts_ok: return report
     # gradient enclosures [mid - rad, mid + rad], rounded outward by one ulp (float subtraction)
-    lo = np.nextafter(np.array([dd[1] - dd[2] for dd in datB]), -np.inf)
-    hi = np.nextafter(np.array([dd[1] + dd[2] for dd in datB]), np.inf)
+    # gradient enclosures over B: exact lower and upper ends of the Arb balls (and doubles for the LP)
+    loA = [[gk.lower() for gk in dd.g] for dd in datB]; hiA = [[gk.upper() for gk in dd.g] for dd in datB]
+    lo = np.array([[float(x) for x in row] for row in loA]); hi = np.array([[float(x) for x in row] for row in hiA])
     nfail = 0
     for s in itertools.product((1, -1), repeat=nq):
         s = np.array(s)
@@ -123,10 +127,11 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
         if res.status != 0 or -res.fun <= 0: nfail += 1; continue
         mu = np.maximum(res.x[:-1], 0.0)                   # the argument needs mu >= 0
         if mu.sum() <= 0: nfail += 1; continue
-        # rigorous check in ball arithmetic (Gs are outward-rounded endpoints)
+        # rigorous check in ball arithmetic, with the exact ends of the gradient enclosures
         for j in range(nq):
             acc = arb(0)
-            for b in range(len(caps_all)): acc = acc + arb(float(mu[b])) * arb(float(Gs[b, j]))
+            for b in range(len(caps_all)):
+                acc = acc + arb(float(mu[b])) * (loA[b][j] if s[j] > 0 else hiA[b][j])
             if not (acc * int(s[j]) > 0): nfail += 1; break
     report['orthants_failed'] = nfail
     report['box_radius'] = r_big

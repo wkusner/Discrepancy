@@ -357,7 +357,8 @@ res = dict(name=name, N=N, group_order=len(group), orbits=[repr(r) for r, _ in o
            D_s=[float(D_s.lower()), float(D_s.upper())], gauge_in_local_box=bool(inK), D_in_local_enclosure=bool(inD),
            eliminant_degree=R.degree(), P_divides_eliminant=bool(divides), factors_meeting_enclosure=hits,
            verified=bool(ok and inK and inD and same_counts and cover and only_P),
-           kernel='arb (python-flint) + sympy resultants + flint factorization', label='Krawczyk-verified (Arb); elimination exact (sympy)')
+           kernel='arb (python-flint) + sympy resultants + flint factorization', label='Krawczyk-verified (Arb); elimination exact (sympy)',
+           P_N=P_N, P_N_variable='u = N D, coefficients from u^12 down', P_N_irreducible=bool(irreducible), P_N_is_the_factor=bool(same))
 res['image'] = IMG
 # the symmetric Krawczyk box Z (exact midpoints, radius rk) and the enclosure K(Z) of its unique zero, written as
 # Arb ball strings (outward), for the congruence check of the images (jobs/congruence_cert.py)
