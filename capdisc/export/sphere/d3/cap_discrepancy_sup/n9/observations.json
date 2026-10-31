@@ -535,6 +535,13 @@
     "ascending": 1,
     "null": 0,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -1074,6 +1081,12 @@
     "pointer": 1,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -1610,6 +1623,12 @@
     "pointer": 2,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -2132,6 +2151,13 @@
     "ascending": 1,
     "null": 0,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -2466,6 +2492,13 @@
     "pointer": 4,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -3002,6 +3035,12 @@
     "pointer": 5,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -3545,6 +3584,12 @@
     "pointer": 6,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -3896,6 +3941,13 @@
     "pointer": 7,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -4247,6 +4299,13 @@
     "pointer": 8,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -4598,6 +4657,13 @@
     "pointer": 9,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -4949,6 +5015,13 @@
     "pointer": 10,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "strict minimum",
+    "flat_dim": 1
    }
   },
   {
@@ -5300,6 +5373,13 @@
     "pointer": 11,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum (zero weights on some worst caps)",
+    "flat_dim": 0
    }
   },
   {
@@ -5651,6 +5731,13 @@
     "pointer": 12,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum (zero weights on some worst caps)",
+    "flat_dim": 0
    }
   },
   {
@@ -6002,6 +6089,13 @@
     "pointer": 13,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum (zero weights on some worst caps)",
+    "flat_dim": 0
    }
   },
   {
@@ -6353,6 +6447,13 @@
     "pointer": 14,
     "script": "jobs/atlas_export.py",
     "commit": "0d4ed47"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum (zero weights on some worst caps)",
+    "flat_dim": 0
    }
   }
  ],
