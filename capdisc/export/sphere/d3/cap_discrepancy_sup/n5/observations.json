@@ -1491,7 +1491,7 @@
     "level": 0,
     "status": "numerical",
     "script": "sphcap/stuck.py",
-    "class": "non-strict minimum (probe descends: not a local minimum)",
+    "class": "non-strict minimum",
     "flat_dim": 1
    }
   },

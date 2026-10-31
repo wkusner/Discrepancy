@@ -65,8 +65,8 @@
   "hessian_flat_eigs": [
    -4.9447871946965056e-08
   ],
-  "probe_min_D": 0.32332565099806454,
-  "cls": "non-strict minimum (probe descends: not a local minimum)",
+  "probe_min_D": 0.3234105479512766,
+  "cls": "non-strict minimum",
   "name": "atlas_N5_levels#1"
  },
  {

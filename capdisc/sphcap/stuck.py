@@ -73,14 +73,34 @@ def aligned_distance(X, Y):
     return float(np.linalg.norm(Y @ Q - X, axis=1).max())
 
 
-def probe(X, D0, rng, trials=12, radius=0.05):
-    """lowest D reached by descent from small perturbations, among end points that stay within `radius` of X
-    (so that falling into a neighbouring basin is not counted as a local descent)"""
+def local_descent(Y, D0, cap, iters=300, margin=0.05, tol=1e-9):
+    """sequential-LP descent from Y with the trust region capped at `cap`; stops at the first iterate with
+    D < D0 - 1e-9 and returns it (or the last iterate)."""
+    Y = B.normalize(Y); D = B.discrepancy(Y, tol); delta = cap; n = 2 * len(Y)
+    for _ in range(iters):
+        if D < D0 - 1e-9: break
+        near = [b for b in B.branches(Y, tol) if b.value >= D - margin]
+        G, E = B.gradient_matrix(Y, near); fv = np.array([b.value for b in near])
+        res = linprog(np.append(np.zeros(n), 1.0), A_ub=np.hstack([G, -np.ones((len(near), 1))]), b_ub=-fv,
+                      bounds=[(-delta, delta)] * n + [(None, None)], method='highs')
+        if res.status != 0: delta *= 0.5; continue
+        Z = B.retract(Y, E, res.x[:n]); Dn = B.discrepancy(Z, tol)
+        if Dn < D - 1e-15: Y, D = Z, Dn; delta = min(2 * delta, cap)
+        else: delta *= 0.5
+        if delta < 1e-13: break
+    return Y, D
+
+
+def probe(X, D0, rng, trials=12):
+    """lowest D found near X: from a perturbation of size s, a descent whose steps are at most 10 s, accepted only
+    if it gets below D0 within distance 20 s of X.  (A plain descent from a perturbation may cross a low ridge into
+    a neighbouring basin: from the N = 5 valley, perturbations of size 1e-4 start above D0 and descend to the
+    optimum 0.031 away, which says nothing about points arbitrarily close to the valley.)"""
     best = D0
     for _ in range(trials):
-        Y = B.normalize(X + rng.normal(scale=rng.choice([1e-5, 1e-4, 1e-3]), size=X.shape))
-        Yd, Dy = B.slp_descent(Y, iters=200)
-        if aligned_distance(X, Yd) < radius: best = min(best, Dy)
+        sc = rng.choice([1e-6, 1e-5, 1e-4])
+        Y, Dy = local_descent(X + rng.normal(scale=sc, size=X.shape), D0, cap=10 * sc)
+        if Dy < D0 - 1e-9 and aligned_distance(X, Y) < 20 * sc: best = min(best, Dy)
     return best
 
 
