@@ -136,6 +136,7 @@ static int outside_domain_r(const Cell *c, const CellR *R) {
 }
 
 /* split along the widest coordinate; children cover the parent exactly (see header) */
+static void split_rj(const Cell *c, Cell *a, Cell *b, int j);
 static void split_r(const Cell *c, Cell *a, Cell *b) {
     int j = 0; double wmax = -1;
     for (int k = 0; k < NQ; k++) {
@@ -145,6 +146,11 @@ static void split_r(const Cell *c, Cell *a, Cell *b) {
         }
         if (wk > wmax) { wmax = wk; j = k; }
     }
+    split_rj(c, a, b, j);
+}
+
+/* split along coordinate j */
+static void split_rj(const Cell *c, Cell *a, Cell *b, int j) {
     *a = *c; *b = *c;
     double hh = nup(c->h[j] * 0.5 + nup((fabs(c->q[j]) + c->h[j]) * 0x1p-52));
     a->h[j] = b->h[j] = hh;

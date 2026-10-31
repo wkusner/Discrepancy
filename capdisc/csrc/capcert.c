@@ -56,6 +56,9 @@
 static int N, NQ, NT3, NP2;
 static int T3[120][3], P2[45][2];
 static double TGT, MIN_EPS;
+static int FO = 0;            /* rigorous mode: also try the first-order bound (fo.h) on cells where the zeroth-order bound fails */
+static double FO_EMAX = 0.5;  /* ... if the largest motion bound of the cell is below this */
+static int SMEAR = 0;         /* rigorous mode: split the coordinate with the largest smear (fo.h) */
 static double KEEP_PROB = 1.0; /* fraction of survivor cells written to disk (all are counted) */
 static int NBALLS = 0;
 static double (*BALL_Z)[NMAX][3] = NULL;
@@ -65,6 +68,7 @@ static double *BALL_R = NULL;
 #include "ia.h"
 typedef struct { double q[QMAX], h[QMAX]; I sq[QMAX], cq[QMAX]; double E[NMAX]; I sE[NMAX], cE[NMAX]; } Cell;
 #include "rig.h"
+#include "fo.h"
 #else
 typedef struct { double q[QMAX], h[QMAX]; } Cell;
 #endif
@@ -179,7 +183,7 @@ static void split(const Cell *c, Cell *a, Cell *b) {
     b->q[j] = c->q[j] + c->h[j] / 2;
 }
 
-typedef struct { long processed, certified, sym, ball, surv; double min_surv_lb; } Stats;
+typedef struct { long processed, certified, sym, ball, surv; double min_surv_lb; long fo; } Stats;
 static volatile int IO_ERROR = 0;
 static void *xmalloc(size_t n) { void *p = malloc(n); if (!p) { fprintf(stderr, "out of memory\n"); exit(3); } return p; }
 
@@ -213,6 +217,14 @@ static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
         const double *E = c.E;
 #endif
         double emax = 0; for (int i = 0; i < N; i++) if (E[i] > emax) emax = E[i];
+#ifdef RIGOROUS
+        int have_smear = 0;
+        if (FO && emax < FO_EMAX) {
+            double lb1 = first_order_bound_r(&c, &R); have_smear = 1;
+            if (lb1 >= TGT) { st->certified++; st->fo++; continue; }
+            if (lb1 > lb) lb = lb1;
+        }
+#endif
         if (emax < MIN_EPS || (max_cells && local > max_cells)) {
             st->surv++;
             if (lb < st->min_surv_lb) st->min_surv_lb = lb;
@@ -228,7 +240,11 @@ static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
         }
         if (top + 2 > cap) { cap *= 2; stack = realloc(stack, cap * sizeof(Cell)); if (!stack) { fprintf(stderr, "out of memory\n"); exit(3); } }
 #ifdef RIGOROUS
-        split_r(&c, &stack[top], &stack[top + 1]); top += 2;
+        if (SMEAR && have_smear) {
+            int j = 0; for (int k = 1; k < NQ; k++) if (FO_SMEAR[k] > FO_SMEAR[j]) j = k;
+            split_rj(&c, &stack[top], &stack[top + 1], j);
+        } else split_r(&c, &stack[top], &stack[top + 1]);
+        top += 2;
 #else
         split(&c, &stack[top], &stack[top + 1]); top += 2;
 #endif
@@ -261,6 +277,12 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[a], "--max-cells-per-root")) maxc = atol(argv[++a]);
         else if (!strcmp(argv[a], "--keep-prob")) KEEP_PROB = atof(argv[++a]);
         else if (!strcmp(argv[a], "--split-alpha")) SPLIT_ALPHA = atof(argv[++a]);
+        else if (!strcmp(argv[a], "--first-order")) FO = 1;
+        else if (!strcmp(argv[a], "--fo-emax")) FO_EMAX = atof(argv[++a]);
+        else if (!strcmp(argv[a], "--smear")) SMEAR = 1;
+#ifdef RIGOROUS
+        else if (!strcmp(argv[a], "--smear-mix")) SMEAR_MIX = atof(argv[++a]);
+#endif
     }
     if (N < 3 || N > NMAX) { fprintf(stderr, "N must be in 3..%d\n", NMAX); return 1; }
     NQ = 2 * N - 3; NT3 = 0; NP2 = 0;
@@ -278,7 +300,7 @@ int main(int argc, char **argv) {
                && fread(&dummy, sizeof(double), 1, ef) == 1) {
 #ifdef RIGOROUS
             init_cache(&c); CellR R; prep_r(&c, &R);
-            printf("%.17g %d\n", cell_bound_r(&c, &R, 1e9), outside_domain_r(&c, &R));
+            printf("%.17g %d %.17g\n", cell_bound_r(&c, &R, 1e9), outside_domain_r(&c, &R), first_order_bound_r(&c, &R));
 #else
             double X[NMAX][3], E[NMAX]; points(c.q, X); motion(c.q, c.h, E);
             printf("%.17g %d\n", cell_bound(X, E, 1e9), outside_domain(c.q, c.h, X, E));
@@ -327,11 +349,11 @@ int main(int argc, char **argv) {
 #else
     const char *mode = "float";
 #endif
-    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld\n",
-             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc);
+    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld fo=%d fo_emax=%a smear=%d\n",
+             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc, FO, FO_EMAX, SMEAR);
     char *done = calloc(nf, 1);
     if (!done) { fprintf(stderr, "out of memory\n"); return 3; }
-    Stats tot = {0, 0, 0, 0, 0, INFINITY};
+    Stats tot = {0, 0, 0, 0, 0, INFINITY, 0};
     FILE *pf = fopen(fn, "r");
     int have_header = 0;
     if (pf) {
@@ -398,7 +420,7 @@ int main(int argc, char **argv) {
 #pragma omp for schedule(dynamic, 1)
         for (long r = 0; r < (long)nf; r++) {
             if (done[r]) continue;
-            Stats st = {0, 0, 0, 0, 0, INFINITY};
+            Stats st = {0, 0, 0, 0, 0, INFINITY, 0};
             if (IO_ERROR) continue;
             dfs(&F[r], &st, sf, maxc);
             if (fflush(sf)) IO_ERROR = 1;
@@ -409,7 +431,7 @@ int main(int argc, char **argv) {
                         st.min_surv_lb);
                 fflush(pf);
                 tot.processed += st.processed; tot.certified += st.certified; tot.sym += st.sym; tot.ball += st.ball;
-                tot.surv += st.surv; if (st.min_surv_lb < tot.min_surv_lb) tot.min_surv_lb = st.min_surv_lb;
+                tot.surv += st.surv; tot.fo += st.fo; if (st.min_surv_lb < tot.min_surv_lb) tot.min_surv_lb = st.min_surv_lb;
                 finished++;
                 time_t now = time(NULL);
                 if (now - tlast >= 60 || finished == (long)nf) {
@@ -424,8 +446,8 @@ int main(int argc, char **argv) {
     }
     fclose(pf);
     if (IO_ERROR) { fprintf(stderr, "I/O ERROR writing survivors: run is incomplete\n"); printf("INCOMPLETE (I/O error)\n"); return 2; }
-    printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld bounded=%ld sym=%ld ball=%ld survivors=%ld min_surv_lb=%.17g time=%lds\n",
-           N, TGT, MIN_EPS, tot.processed, tot.certified, tot.sym, tot.ball, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
+    printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld bounded=%ld (first-order %ld) sym=%ld ball=%ld survivors=%ld min_surv_lb=%.17g time=%lds\n",
+           N, TGT, MIN_EPS, tot.processed, tot.certified, tot.fo, tot.sym, tot.ball, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
     #ifdef RIGOROUS
     printf("MODE rigorous (interval arithmetic, outward rounding)\n");
 #endif
@@ -433,8 +455,8 @@ int main(int argc, char **argv) {
     /* completion stamp, read by jobs/refine.py */
     char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
     FILE *df = fopen(dfn, "w");
-    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld\n",
-                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed) < 0 || fclose(df)) {
+    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld fo=%d smear=%d\n",
+                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, SMEAR) < 0 || fclose(df)) {
         perror(dfn); return 2;
     }
     /* labels follow VERIFICATION.md: a single-kernel run is "interval-verified"; "cross-verified" needs a second kernel */
