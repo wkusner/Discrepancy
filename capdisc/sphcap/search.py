@@ -167,8 +167,12 @@ class Klass:
 
 
 def descend(X, rng, max_kicks=6):
-    """SLP descent; if the end point is not sharp, kick and retry, keeping the best."""
+    """SLP descent; at a stuck point that is not sharp, first follow exit directions (switching incident points to
+    the other side of a worst cap's circle, sphcap.stuck), then kick and retry, keeping the best."""
+    from .stuck import follow_exits
     Y, D = B.slp_descent(X)
+    if not B.balance_report(Y).sharp:
+        Y, D = follow_exits(Y, D)
     best = (D, Y)
     for _ in range(max_kicks):
         rep = B.balance_report(best[1])
