@@ -6,10 +6,11 @@ paper). It is meant to be read next to the code. Every step names the lemma it u
 checks it, the arithmetic it trusts, and the certificate file it writes. The words *verified*,
 *cross-verified* etc. are used as defined in [VERIFICATION.md](VERIFICATION.md).
 
-> **Status (draft, 2026-10-30).** This document describes the code as it stands at commit
-> `d8831ce`. Section 6 lists the places where the code or its records fall short of what is
-> described here; they are being fixed in the refactor described in
-> [REFACTOR_PLAN.md](REFACTOR_PLAN.md).
+> **Status (draft, 2026-10-31).** Pipeline A now runs from the trusted core `proof/` (branch
+> `audit-refactor`), driven by `verify.sh N` and checked by `check/check_chain.py`. The trusted base is in
+> [TRUST.md](TRUST.md). Section 6 lists what is fixed and what is still open; the certificates in
+> `certificates/` are those of the reference runs at commit `d8831ce` until the new reference runs are stored
+> in `certificates/verify_N{5,6}/`.
 
 ## 0. The claim
 
@@ -62,11 +63,11 @@ or some pair closer than (x₁, x₂) throughout.
 | | pipeline A | pipeline B |
 |---|---|---|
 | mesh | `csrc/capcert.c` (`-DRIGOROUS`), IEEE intervals `csrc/ia.h`, `csrc/rig.h` | `csrc/capcert_arb.c` (Arb) |
-| refinement | `sphcap/certify.py::misses_domain` (Arb) | `jobs/xcheck_refine.py::misses_domain` (mpmath.iv) |
+| refinement | `proof/domain.py::misses_domain` (Arb) | `jobs/xcheck_refine.py::misses_domain` (mpmath.iv) |
 
 *Covering.* The initial box is widened by one ulp beyond [0, fl(π)] etc., and every bisection
 enlarges the children's half-widths to cover the rounding of their centers (Exp. Math. §6.3,
-"Covering"; `jobs/refine.py::process`).
+"Covering"; in the refinement the enlarged half-width is computed in Arb, `proof/refine.py::process`).
 
 ### Step 2. The mesh: D ≥ T on every cell but the survivors
 
@@ -78,8 +79,9 @@ D(Y) ≥ (1 − C_(k))/2 − (k−1)/N for all Y in B. Axes are those of the cap
 *What the code does.* `capcert_rig N T MIN_EPS OUT` bisects F and proves D ≥ T on every cell except
 the *survivors*, which it writes to `OUT.surv.*` once they are smaller than MIN_EPS.
 
-*Certificate.* `certificates/proof_N{5,6}.json` (`capcert_result`, `capcert_stamp`).
-Pipeline B: `capcert_arb`, records in `certificates/pipelineB_N{5,6}.json`.
+*Certificate.* `mesh.out` and the completion stamp `mesh.done` (N, T as a hex float, mode, keep fraction,
+exclusion balls, survivor count), in the output directory of `verify.sh`; formerly
+`certificates/proof_N{5,6}.json`. Pipeline B: `capcert_arb`, records in `certificates/pipelineB_N{5,6}.json`.
 
 ### Step 3. Refinement: D ≥ T on every survivor, outside the boxes
 
@@ -88,12 +90,14 @@ and gradient enclosures m_C ± r_C, for any weights λ ≥ 0 with Σλ = 1,
 D(Y) ≥ Σ λ_C a_C − Σ_j |Σ λ_C m_Cj| h_j. The weights come from a floating-point LP; only the
 right-hand side is evaluated rigorously.
 
-*What the code does.* `jobs/refine.py N PREFIX LOCALCERT` takes every survivor and closes it when
-(a) it lies inside one of the boxes B_k of Step 4, (b) it misses F, or (c) the bound above is ≥ T
-(`sphcap/certify.py::cell_lower_bound`, Arb). Otherwise it bisects, down to a minimum width;
+*What the code does.* `python -m proof.refine N PREFIX LOCALCERT` takes every survivor and closes it when
+(a) it lies inside one of the boxes B_k of Step 4 (decided in Arb), (b) it misses F, or (c) the bound above
+is ≥ T (`proof/cellbound.py::cell_lower_bound`; every quantity in the bound is an Arb ball). Otherwise it bisects, down to a minimum width;
 a cell that still fails is reported, and the proof fails.
 
-*Certificate.* `certificates/proof_N{5,6}.json`, field `refine`: `failed = 0`. For N = 5: 590,986
+*Certificate.* `mesh.refine.json`: `failed = 0`, `T_hex`, `exclusion_boxes`, and the SHA-256 of the local
+certificate, the mesh stamp and every survivor file it read. Reference runs at `d8831ce`
+(`certificates/proof_N{5,6}.json`): for N = 5, 590,986
 survivors refined into 846,246 cells, 10 of them inside boxes. For N = 6: 6,509,863 survivors into
 6,531,051 cells, 8 inside boxes. Pipeline B: `jobs/xcheck_refine.py` (mpmath.iv),
 `certificates/pipelineB_N{5,6}.json`.
@@ -101,7 +105,9 @@ survivors refined into 846,246 cells, 10 of them inside boxes. For N = 6: 6,509,
 ### Step 4. Local verification at each image of the minimizer
 
 A configuration on the boundary of F has several representatives ("images") in F. The optimum has
-3 images for N = 5 and 2 for N = 6 (`sphcap/certify.py::domain_images`); each gets its own box.
+3 images for N = 5 and 2 for N = 6; each gets its own box. Finding the images, and the worst caps of
+each, is a *choice* made by untrusted code (`explore/make_hints.py` → `proof/hints/<NAME>.json`): a missed
+image would leave cells that the refinement cannot close, and a wrong cap or count makes Step 4 fail.
 
 *Mathematics.* For image k, let A be its 2N−2 worst caps and Φ(q, D) = (φ_C(q) − D)_{C∈A}.
 
@@ -114,15 +120,17 @@ A configuration on the boundary of F has several representatives ("images") in F
    D > D*_k on B_k \ {q*_k}.
 4. *Other caps.* Every cap of the capture list outside A is below D*_k on Z, so D(q*_k) = D*_k.
 
-*What the code does.* `jobs/local_cert.py NAME r` (Arb). Pipeline B: `jobs/xcheck_local.py`
-(mpmath.iv, independently written).
+*What the code does.* `python -m proof.local NAME r` (Arb; the orthant test uses the exact ends of the
+gradient balls, and "other caps below D*" is decided in Arb). Pipeline B: `jobs/xcheck_local.py` (mpmath.iv,
+independently written).
 
-*Certificate.* `certificates/localcert_N{5,6}_best.json`: per image `krawczyk`, `D_enclosure`,
+*Certificate.* `localcert_<NAME>.json`: per image `krawczyk`, `D_enclosure` (doubles rounded outward;
+also `D_enclosure_hex` and the Arb ball `D_ball`),
 `counts_frozen_on_box`, `orthants_failed = 0`, `others_below`. Pipeline B:
 `certificates/xcheck_local_N{5,6}_best.json`.
 
-*Hand-off to Step 3.* T is the largest upper end of the D*_k enclosures (`run_proof.sh`), and the
-boxes B_k are the exclusion boxes of the refinement.
+*Hand-off to Step 3.* T is the largest upper end of the D*_k enclosures (`verify.sh`), and the
+boxes B_k are the exclusion boxes of the refinement; `check/check_chain.py` checks both (C4, C5).
 
 ### Step 5. Symmetry and the exact value, per image
 
@@ -134,12 +142,12 @@ Y(s*) solves Φ = 0 inside Z, so it *is* q*_k. Iterated resultants of the square
 give a polynomial in D vanishing at D*; interval evaluation selects the factor that can vanish
 there, and that factor is P_N(N·D) up to a constant.
 
-*What the code does.* `jobs/sym_cert.py NAME k` (Arb + sympy resultants + FLINT factorization).
+*What the code does.* `python -m proof.symmetric NAME k` (Arb + sympy resultants + FLINT factorization).
 Pipeline B: `jobs/xcheck_sym.py` (mpmath.iv); elimination cross-checked by msolve Gröbner bases
 (`jobs/xcheck_elim.py`; probabilistic rational reconstruction, so a check, not the proof).
 
-*Certificate.* `certificates/symcert_N{5,6}_best_img{k}.json`: `krawczyk_symmetric`,
-`gauge_in_local_box`, `D_in_local_enclosure`, `P_divides_eliminant`, `s_box_mid`,
+*Certificate.* `symcert_<NAME>_img<k>.json`: `krawczyk_symmetric`, `gauge_in_local_box`,
+`D_in_local_enclosure`, `P_divides_eliminant`, `P_N`, `P_N_irreducible`, `P_N_is_the_factor`, `s_box_mid`,
 `s_box_radius`, `s_enclosure`. Pipeline B: `certificates/xcheck_sym_*.json`,
 `certificates/xcheck_elim.json`.
 
@@ -152,16 +160,16 @@ family (N = 5: the identity; N = 6: sign changes, which are the reflections in t
 planes) with σ(enclosure of s*_k) inside the symmetric Krawczyk box of image 0. Since the solution
 there is unique, σ(s*_k) = s*₀, so Y(s*_k) is congruent to Y(s*₀).
 
-*What the code does.* `jobs/congruence_cert.py NAME` (Arb). The choice of σ is numerical; the
+*What the code does.* `python -m proof.congruence NAME` (Arb). The choice of σ is numerical; the
 containment is checked in Arb, against a box shrunk by the factor 1 − 10⁻⁶.
 
-*Certificate.* `certificates/congruence_N{5,6}_best.json`: `congruent = true`.
+*Certificate.* `congruence_<NAME>.json`: `congruent = true`.
 Pipeline B: **not yet implemented** (Section 6).
 
 ### Step 7. Exact data
 
 * *Root isolation.* P_N is irreducible over ℚ and has exactly one root in the isolating interval
-  (`jobs/xcheck_roots.py`, sympy; FLINT in `jobs/sym_cert.py`). Certificate
+  (`jobs/xcheck_roots.py`, sympy; FLINT in `proof/symmetric.py`). Certificate
   `certificates/xcheck_roots.json`.
 * *Gram matrix.* `jobs/gram_verify.py` proves that the integer-relation guess G_e in
   `sphcap/data/gram_exact.json` is the Gram matrix of q*: rank 3 and every worst-cap equation hold
@@ -202,58 +210,50 @@ the papers and are not checked by any program:
 Both pipelines implement the same lemmas, so a misapplied lemma would not be caught by the
 cross-check. That is why the lemmas are written out and proved by hand.
 
-## 5. Trusted base (summary; details to go in TRUST.md)
+## 5. Trusted base
 
-* IEEE 754 correct rounding of +, −, ×, ÷, √ on the build machine, with `-ffp-contract=off
-  -fno-fast-math` (pipeline A mesh). sin and cos are *not* trusted: they are Taylor polynomials
-  with a Lagrange remainder.
-* Arb / FLINT (via python-flint and from C), mpmath's `iv` module, sympy's exact arithmetic and
-  real-root isolation.
-* The C compiler, the Python interpreter, numpy (only where floating-point values are converted to
-  balls; see Section 6), and the operating system.
-* Not trusted: the search, scipy's LP solver, every floating-point result, msolve (a check only).
+See [TRUST.md](TRUST.md). In short: IEEE 754 correct rounding and the C compiler (mesh of pipeline A); Arb
+(python-flint and FLINT from C); mpmath's `iv`; sympy's exact arithmetic. Not trusted: the search, the hints,
+scipy's LP solver, every floating-point result, msolve (a check only).
 
-## 6. Known gaps in the current code and records (to be fixed in the refactor)
+## 6. Status of the gaps found in the code audit
 
-These do not, as far as we know, make any step false, but they make the steps harder to audit or
-leave a record incomplete.
+*Fixed on `audit-refactor`:*
 
-1. **N = 6, pipeline A record.** `certificates/proof_N6.json` was transcribed from the server log;
-   it has no `capcert_stamp`, and the local certificate used on the server is not stored. Re-run
-   `run_proof.sh` for N = 6 with `UPDATE_CERTS=1` and store all outputs.
-2. **Congruence in pipeline B.** Step 6 has no second-kernel version yet.
-3. **Floating point inside the trusted core.** Some rigorous bounds are assembled from
-   floating-point quantities with explicit slack factors, e.g. `np.dot(rad, w) * (1 + 1e-12)` in
-   `sphcap/certify.py::cap_data`, and the box test `np.abs(c - m) + w <= r * (1 - 1e-12)` in
-   `jobs/refine.py::inside_box` (correct because c − m is exact by Sterbenz's lemma when c is
-   close to m, but that takes an argument). Every such inequality should be done in Arb, so that an
-   auditor needs to trust only the ball arithmetic.
-4. **Decimal values in JSON.** Box centers and enclosures are stored as decimal strings; they
-   should be stored as exact binary values (hex floats or Arb ball strings with outward rounding),
-   so that reading a certificate back cannot change it.
-5. **Versions.** Library versions, compiler flags and the commit are not recorded in every
-   certificate, and `flint.ctx.prec` is set implicitly in some scripts.
-6. **Resume.** `run_proof.sh` allows resuming a mesh run from a progress file; in proof mode a run
-   should start clean, and record per-root survivor counts.
-7. **Chain checking.** Nothing yet checks mechanically that the certificates fit together: that
-   the boxes excluded in Step 3 are exactly the boxes B_k of Step 4, that T is the value Step 4
-   produced, that every image of `domain_images` has a local, symmetric and congruence
-   certificate, and that all files come from the same commit.
-8. **The polynomials are not in the certificates.** P₅ and P₆ appear only as literals in the
-   scripts; the root and elimination certificates should record them (and their hash), so that the
-   chain checker can compare them with the papers.
-9. **Tests.** The unit tests for the interval kernel, the cell bound and the Krawczyk test exist
-   only as scratch scripts.
+* **Floating point inside the trusted core** (old item 3): every inequality of Steps 3–6 is decided in Arb;
+  no slack factors, no Sterbenz arguments (`proof/cellbound.py`, `proof/local.py`, `proof/refine.py`).
+* **Exact values in certificates** (old item 4): doubles are written rounded outward and as hex floats; balls
+  as Arb strings (`proof/certio.py`).
+* **Versions and stamps** (old item 5): every certificate carries a stamp (step, commit, versions, precision,
+  command line, machine type, date, run time, inputs by SHA-256); `flint.ctx.prec` is set explicitly.
+* **Resume** (old item 6): `verify.sh` deletes its output directory and runs every step from scratch.
+* **Chain checking** (old item 7): `check/check_chain.py` (standard library only) checks C1–C8: images,
+  symmetric and congruence certificates for every image, proof-mode mesh, T and the exclusion boxes, input
+  hashes, D* < T strictly, agreement with the papers' P_N, interval and digits, one commit.
+* **Polynomials in the certificates** (old item 8): the symmetric certificates record P_N and its
+  irreducibility; `check/paper_values.json` holds the values printed in the papers.
+* **Tests** (old item 9): `tests/test_proof_core.py` (cell bound against the exact discrepancy, bisection
+  covering, outward rounding, domain test, and mutation tests that must make Step 4 fail).
 
-## 7. How to re-run (current state)
+*Still open:*
+
+1. **N = 6 reference run of pipeline A** with the new core, on the server (`verify.sh 6`), and storing the
+   reference outputs of both N in `certificates/verify_N{5,6}/`.
+2. **Congruence in pipeline B.** Step 6 has no second-kernel version yet; pipeline B is not yet driven by a
+   `verify.sh`-style script or checked by the chain checker.
+3. **The mesh source** `csrc/capcert.c` still contains the floating-point exploration mode behind
+   `#ifndef RIGOROUS`; the rigorous mesh should be its own file.
+4. **Step 7** (`jobs/gram_verify.py`, `jobs/xcheck_roots.py`) is not yet in `proof/` and not stamped.
+
+## 7. How to re-run
 
 ```
-bash build.sh                       # capcert (float) and capcert_rig (interval), with self-tests
-THREADS=16 NS="5 6" bash run_proof.sh      # pipeline A: Steps 2-5
-python jobs/congruence_cert.py N5_best     # Step 6 (and N6_best)
-python jobs/gram_verify.py N5_best         # Step 7 (and N6_best)
-THREADS=32 NS="5 6" bash run_xcheck.sh     # pipeline B: Steps 2-5 and 7, then a verdict
+bash build.sh                                 # capcert_rig (interval mesh), with self-tests
+python -m pytest tests/test_proof_core.py -q  # tests of the trusted core (a few seconds)
+THREADS=16 bash verify.sh 5                   # pipeline A, Steps 4, 5, 6, 2, 3 -> results/verify_N5/
+python3 check/check_chain.py 5 results/verify_N5          # chain checker, C1-C8
+python jobs/gram_verify.py N5_best            # Step 7 (and N6_best)
+THREADS=32 NS="5 6" bash run_xcheck.sh        # pipeline B: Steps 2-5 and 7, then a verdict
 ```
 
-N = 5 takes about an hour on 4 threads; N = 6 about 75 minutes on 32 threads. The refactor replaces
-this with one command per N and a checker for the certificate chain.
+N = 5 takes about 2 hours on 2 threads; N = 6 about 75 minutes on 32 threads.

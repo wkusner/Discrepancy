@@ -81,6 +81,13 @@ the verdict.
 * chain checker: fails on each kind of mismatch (a deleted certificate, a changed T, a changed box,
   a different commit).
 
+## Progress (2026-10-31)
+
+Done on `audit-refactor`: steps 1, 2 and 3 below for pipeline A (TRUST.md, `proof/certio.py`, the core moved into
+`proof/` and checked bit for bit against the old scripts, every inequality in Arb); `verify.sh`, the chain
+checker, and the first tests (part of 5 and 6). Open: the reference runs (7), pipeline B (4), the rigorous mesh
+as its own file, Step 7 in `proof/`, and the independent audit (8).
+
 ## Order of work
 
 1. TRUST.md; `certio.py` (exact serialization) and stamps.
