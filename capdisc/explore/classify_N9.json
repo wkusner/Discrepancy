@@ -177,7 +177,7 @@
   "first_order_rate": 4.879511485249288e-07,
   "flat_dim": 0,
   "probe_min_D": 0.21777372843402198,
-  "cls": "strict minimum",
+  "cls": "sharp minimum (zero weights on some worst caps)",
   "name": "search_N9#11"
  },
  {
@@ -191,7 +191,7 @@
   "first_order_rate": 2.6072916306518756e-07,
   "flat_dim": 0,
   "probe_min_D": 0.2177737284339588,
-  "cls": "strict minimum",
+  "cls": "sharp minimum (zero weights on some worst caps)",
   "name": "search_N9#12"
  },
  {
@@ -205,7 +205,7 @@
   "first_order_rate": 8.146827626259734e-07,
   "flat_dim": 0,
   "probe_min_D": 0.2177737285506373,
-  "cls": "strict minimum",
+  "cls": "sharp minimum (zero weights on some worst caps)",
   "name": "search_N9#13"
  },
  {
@@ -219,7 +219,7 @@
   "first_order_rate": 5.693083012679387e-07,
   "flat_dim": 0,
   "probe_min_D": 0.21777372843490694,
-  "cls": "strict minimum",
+  "cls": "sharp minimum (zero weights on some worst caps)",
   "name": "search_N9#14"
  }
 ]

@@ -1,0 +1,210 @@
+[
+ {
+  "D": 0.19693348849111392,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.007877893332926529,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#0"
+ },
+ {
+  "D": 0.19785976562167795,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.020181366211305115,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#1"
+ },
+ {
+  "D": 0.19787778874296924,
+  "n_active": 18,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 1.4544755574828473e-05,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#2"
+ },
+ {
+  "D": 0.19797388012485295,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.018030760633822977,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#3"
+ },
+ {
+  "D": 0.19803552485127468,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.004378268176820962,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#4"
+ },
+ {
+  "D": 0.19807538225986343,
+  "n_active": 18,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 4.639607642464969e-05,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#5"
+ },
+ {
+  "D": 0.19810023234631213,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.016580385086998235,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#6"
+ },
+ {
+  "D": 0.1981307993704695,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.0025061404212634616,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#7"
+ },
+ {
+  "D": 0.19822985246361685,
+  "n_active": 18,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.0013477849005815437,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#8"
+ },
+ {
+  "D": 0.1982928701281389,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.015612850034487516,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#9"
+ },
+ {
+  "D": 0.19844817565319728,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 17,
+  "min_lambda": 0.0006150768967770775,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "flat_dim": 2,
+  "hessian_flat_eigs": [
+   -7.985366193531477e-11,
+   3.2234498820214253e-10
+  ],
+  "probe_min_D": 0.19844817565313477,
+  "cls": "non-strict minimum",
+  "name": "search_N10#10"
+ },
+ {
+  "D": 0.1984481756533327,
+  "n_active": 16,
+  "rank": 15,
+  "dim": 17,
+  "min_lambda": 0.0006150768972733464,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "flat_dim": 2,
+  "hessian_flat_eigs": [
+   4.992100296753985e-10,
+   6.362145358471299e-10
+  ],
+  "probe_min_D": 0.19844817565331382,
+  "cls": "non-strict minimum",
+  "name": "search_N10#11"
+ },
+ {
+  "D": 0.19845246129724575,
+  "n_active": 20,
+  "rank": 17,
+  "dim": 17,
+  "min_lambda": 0.024487809287087995,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "cls": "sharp minimum",
+  "name": "search_N10#12"
+ },
+ {
+  "D": 0.19845800271541647,
+  "n_active": 14,
+  "rank": 13,
+  "dim": 17,
+  "min_lambda": 0.005045773826615706,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "flat_dim": 4,
+  "hessian_flat_eigs": [
+   -5.077137089588615e-10,
+   -5.3739620917387664e-11,
+   -1.4596239257789698e-11,
+   1.8351271238198857e-26
+  ],
+  "probe_min_D": 0.19845800271540975,
+  "cls": "non-strict minimum",
+  "name": "search_N10#13"
+ },
+ {
+  "D": 0.19845800271542507,
+  "n_active": 15,
+  "rank": 14,
+  "dim": 17,
+  "min_lambda": -0.0,
+  "incidences": 0,
+  "act_tol": 1e-07,
+  "first_order_rate": -0.0,
+  "flat_dim": 4,
+  "hessian_flat_eigs": [
+   -1.2779564037224066e-10,
+   -3.3956963863733467e-28,
+   2.0256682963496894e-10,
+   5.536215606446224e-10
+  ],
+  "probe_min_D": 0.19845800271540393,
+  "cls": "non-strict minimum",
+  "name": "search_N10#14"
+ }
+]
