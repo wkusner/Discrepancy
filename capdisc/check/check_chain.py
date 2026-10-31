@@ -15,7 +15,8 @@ numerics beyond exact rational comparisons of the values stored in the certifica
   C6  D* < T strictly, with D* taken from the 128-bit symmetric enclosure (this gives D >= T > D* outside the
       boxes, PROOF.md Section 3);
   C7  N D* lies in the papers' isolating interval of P_N, and D* agrees with the digits printed in the papers;
-  C8  all certificates come from the same commit, with no modified proof/ or csrc/ files.
+  C8  all certificates come from commits with the same proof code (proof/, csrc/, verify.sh, build.sh),
+      with no modified proof/ or csrc/ files.
 
 usage: python check/check_chain.py N DIR        (DIR as written by verify.sh, e.g. results/verify_N5)
 writes DIR/chain_N<N>.json and exits 0 if every check passes.
@@ -112,9 +113,19 @@ check('C7', all(lo <= N * dlo and N * dhi <= hi for dlo, dhi in Dstar), 'N D* ou
 check('C7', all(pr <= dlo and dhi < pr + ulp for dlo, dhi in Dstar), 'D* does not match the printed digits')
 
 stamps = [lc['stamp'], cg['stamp'], rf['stamp']] + [load(f'symcert_{name}_img{i["image"]}.json')['stamp'] for i in imgs]
-commits = {s['commit'] for s in stamps}
-check('C8', len(commits) == 1 and not any(s['tree_dirty'] for s in stamps),
-      f'commits {sorted(c[:8] for c in commits if c)}; dirty: {[s["step"] for s in stamps if s["tree_dirty"]]}')
+commits = sorted({s['commit'] for s in stamps if s['commit']})
+CODE = ['capdisc/proof', 'capdisc/csrc', 'capdisc/verify.sh', 'capdisc/build.sh']
+
+
+def same_code(a, b):              # commits that differ only outside the proof code (e.g. in documentation)
+    import subprocess
+    r = subprocess.run(['git', '-C', REPO, 'diff', '--quiet', a, b, '--', *CODE], capture_output=True)
+    return r.returncode == 0
+
+
+check('C8', len(commits) >= 1 and all(same_code(commits[0], c) for c in commits[1:]),
+      f'commits {[c[:8] for c in commits]} differ in the proof code')
+check('C8', not any(s['tree_dirty'] for s in stamps), f'modified proof code: {[s["step"] for s in stamps if s["tree_dirty"]]}')
 
 ok = all(checks.values())
 out = dict(N=N, name=name, directory=DIR, checks=checks, notes=notes, verdict='chain complete' if ok else 'CHAIN INCOMPLETE',
