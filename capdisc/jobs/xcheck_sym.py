@@ -8,13 +8,14 @@ Re-proves, independently of Arb/python-flint and sphcap.certify:
 The orbit structure (which caps are images of which under the exact symmetry group) is exact
 combinatorics and is taken from certificates/symcert_<NAME>_img<k>.json; the elimination to P_N is
 cross-checked separately (sympy resultants vs msolve Groebner bases).
-usage: python jobs/xcheck_sym.py NAME IMAGE        writes certificates/xcheck_sym_<NAME>_img<k>.json
+usage: python jobs/xcheck_sym.py NAME IMAGE [--dir DIR]   reads and writes DIR (default certificates/)
 """
 import sys, os, json, itertools, re
 import numpy as np
 from mpmath import iv, mp
 iv.dps = 40
 HERE = os.path.dirname(os.path.abspath(__file__)); CERT = os.path.join(HERE, '..', 'certificates')
+if '--dir' in sys.argv: CERT = sys.argv[sys.argv.index('--dir') + 1]
 sys.path.insert(0, HERE)
 name, IMG = sys.argv[1], int(sys.argv[2])
 lc = json.load(open(os.path.join(CERT, f'localcert_{name}.json')))
@@ -232,6 +233,10 @@ res = dict(name=name, image=IMG, kernel='mpmath.iv (interval arithmetic, 40 digi
            D_s=[mp.nstr(mp.mpf(Ds.a), 30), mp.nstr(mp.mpf(Ds.b), 30)], gauge_in_local_box=bool(inK), D_in_local_box=bool(inD),
            T=T, D_below_T=bool(belowT), group_order=len(group), orbits_exact=bool(orbits_ok),
            theorem_interval=THM, N_D_in_theorem_interval=bool(in_thm),
-           verified=bool(ok and inK and inD and belowT and orbits_ok and in_thm))
+           verified=bool(ok and inK and inD and belowT and orbits_ok and in_thm),
+           # the symmetric Krawczyk box Z and the enclosure K(Z) of its unique zero, with exact endpoints
+           # (mpmath _mpf_ tuples: sign, mantissa, exponent, bitcount), for jobs/xcheck_congruence.py
+           s_box=[[list(mp.mpf(z.a)._mpf_), list(mp.mpf(z.b)._mpf_)] for z in Z],
+           s_enclosure=[[list(mp.mpf(kk.a)._mpf_), list(mp.mpf(kk.b)._mpf_)] for kk in K])
 json.dump(res, open(os.path.join(CERT, f'xcheck_sym_{name}_img{IMG}.json'), 'w'), indent=1)
 print("KRAWCZYK-VERIFIED (mpmath.iv): second kernel agrees" if res['verified'] else "SECOND KERNEL DOES NOT CONFIRM")

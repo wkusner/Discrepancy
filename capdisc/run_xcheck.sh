@@ -25,6 +25,8 @@ for N in $NS; do
   nimg=$("$PY" -c "import json;print(len(json.load(open('certificates/localcert_$nm.json'))['images']))")
   ok=1; for k in $(seq 0 $((nimg - 1))); do step "symmetric N=$N image $k" "$PY" jobs/xcheck_sym.py $nm $k || ok=0; done
   [ $ok = 1 ] || continue
+  log "N=$N: congruence of the images in mpmath.iv"
+  step "congruence N=$N" "$PY" jobs/xcheck_congruence.py $nm || continue
   T=$("$PY" -c "import json;d=json.load(open('certificates/localcert_$nm.json'));print(repr(max(i['D_enclosure'][1] for i in d['images'])))")
   log "N=$N: capcert_arb T=$T MIN_EPS=${EPS[$N]} ($THREADS threads)"
   rm -f results/xproof_N$N.surv.* results/xproof_N$N.done results/xproof_N$N.xrefine.json
