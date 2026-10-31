@@ -11,6 +11,9 @@ set -euo pipefail
 cd "$(dirname "$0")"
 N=${1:?usage: verify.sh N}
 THREADS=${THREADS:-4}
+# mesh bounds: zeroth order everywhere, the first-order bound (csrc/fo.h) on cells with motion bound < 0.1
+# (measured on N = 7 root cells: same time as zeroth order alone, 36x fewer survivors; MESH_OPTS= turns it off)
+MESH_OPTS=${MESH_OPTS---first-order --fo-emax 0.1}
 PY=${PY:-$HOME/sphcap-env/bin/python}; [ -x "$PY" ] || PY=python3
 declare -A NAME=([5]=N5_best [6]=N6_best) RBOX=([5]=3e-4 [6]=1e-4) EPS=([5]=0.04 [6]=0.02)
 nm=${NAME[$N]}; OUT=results/verify_N$N
@@ -29,9 +32,9 @@ log "Step 6: congruence"
 $PY -m proof.congruence "$nm" --dir "$OUT" 2>&1 | tee -a "$OUT/verify.log"
 
 T=$($PY -c "import json;d=json.load(open('$OUT/localcert_$nm.json'));print(repr(max(i['D_enclosure'][1] for i in d['images'])))")
-log "Step 2: mesh capcert_rig N=$N T=$T MIN_EPS=${EPS[$N]} ($THREADS threads)"
+log "Step 2: mesh capcert_rig N=$N T=$T MIN_EPS=${EPS[$N]} ($THREADS threads) $MESH_OPTS"
 [ -x capcert_rig ] || bash build.sh
-./capcert_rig "$N" "$T" "${EPS[$N]}" "$OUT/mesh" --threads "$THREADS" > "$OUT/mesh.out" 2> "$OUT/mesh.err"
+./capcert_rig "$N" "$T" "${EPS[$N]}" "$OUT/mesh" --threads "$THREADS" $MESH_OPTS > "$OUT/mesh.out" 2> "$OUT/mesh.err"
 cat "$OUT/mesh.out" | tee -a "$OUT/verify.log"
 [ -f "$OUT/mesh.done" ] || { log "mesh did not complete"; exit 1; }
 
