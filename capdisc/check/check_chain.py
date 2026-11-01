@@ -8,7 +8,8 @@ numerics beyond exact rational comparisons of the values stored in the certifica
       and identified as the factor that vanishes, and with the symmetric zero inside that image's enclosure;
   C3  the congruence certificate covers every image and is verified;
   C4  the mesh ran in rigorous mode, kept every survivor, used no exclusion balls, and its threshold T_mesh is
-      at least the refinement threshold T;
+      at least the refinement threshold T; if there is a second pass (mesh2.done), the same for it, and it read
+      exactly as many cells as the first pass wrote;
   C5  the refinement is verified with no failed cell, used T = the largest upper end of the D* enclosures,
       excluded exactly the boxes of the local certificate, read the local certificate and the mesh output that
       are in this directory (SHA-256), and read at least as many survivors as the mesh wrote;
@@ -105,13 +106,23 @@ T_mesh = Q(float.fromhex(stamp['T']))
 check('C4', stamp['mode'] == 'rigorous' and float.fromhex(stamp['keep']) == 1.0 and int(stamp['balls']) == 0
       and int(stamp['N']) == N, 'mesh not run in proof mode')
 
-rf = load('mesh.refine.json')
+# optional second mesh pass (capcert_rig --cells mesh -> mesh2): it must read exactly the survivors of the first
+# pass, in proof mode, at a threshold >= T; the refinement then reads its survivors
+TWO = os.path.exists(os.path.join(DIR, 'mesh2.done'))
+if TWO:
+    s2 = dict(kv.split('=', 1) for kv in open(os.path.join(DIR, 'mesh2.done')).read().split())
+    check('C4', s2['mode'] == 'rigorous' and float.fromhex(s2['keep']) == 1.0 and int(s2['balls']) == 0 and int(s2['N']) == N,
+          'second pass not run in proof mode')
+    check('C4', os.path.basename(s2['from']) == 'mesh' and int(s2['input_cells']) == int(stamp['survivors']),
+          f"second pass read {s2.get('input_cells')} cells from {s2.get('from')}, the first pass wrote {stamp['survivors']}")
+    T_mesh2 = Q(float.fromhex(s2['T']))
+rf = load('mesh2.refine.json' if TWO else 'mesh.refine.json')
 T = max(hexq(i['D_enclosure_hex'][1]) if 'D_enclosure_hex' in i else Q(i['D_enclosure'][1]) for i in imgs)
-check('C4', T_mesh >= T, 'mesh threshold below the refinement threshold')
+check('C4', T_mesh >= T and (not TWO or T_mesh2 >= T), 'mesh threshold below the refinement threshold')
 check('C5', rf['verified'] and rf['failed'] == 0, 'refinement left cells')
 if VERIFIED_ONLY:
     check('C5', hexq(rf['T_hex']) > T, 'refinement threshold is not above the largest upper end of the D* enclosures')
-    check('C4', T_mesh >= hexq(rf['T_hex']), 'mesh threshold below the refinement threshold')
+    check('C4', T_mesh >= hexq(rf['T_hex']) and (not TWO or T_mesh2 >= hexq(rf['T_hex'])), 'mesh threshold below the refinement threshold')
     T = hexq(rf['T_hex'])
 else:
     check('C5', hexq(rf['T_hex']) == T, 'refinement threshold is not the largest upper end of the D* enclosures')
@@ -121,9 +132,10 @@ check('C5', boxes == local_boxes, 'exclusion boxes differ from the local boxes')
 # inputs are recorded by path relative to the repository at run time; match them by file name, so that the
 # directory can be moved (e.g. from results/verify_N5 to certificates/verify_N5)
 ins = {os.path.basename(p): h for p, h in rf['stamp']['inputs'].items()}
-for fn, what in ((f'localcert_{name}.json', 'local certificate'), ('mesh.done', 'mesh stamp')):
+last = s2 if TWO else stamp
+for fn, what in ((f'localcert_{name}.json', 'local certificate'), ('mesh2.done' if TWO else 'mesh.done', 'mesh stamp')):
     check('C5', ins.get(fn) == sha(os.path.join(DIR, fn)), f'refinement read a different {what}')
-check('C5', rf['input_cells'] >= int(stamp['survivors']), 'refinement read fewer survivors than the mesh wrote')
+check('C5', rf['input_cells'] >= int(last['survivors']), 'refinement read fewer survivors than the mesh wrote')
 if '--hash-survivors' in sys.argv:
     for fn, h in ins.items():
         if '.surv.' in fn: check('C5', os.path.exists(os.path.join(DIR, fn)) and sha(os.path.join(DIR, fn)) == h, f'{fn}: hash')

@@ -16,6 +16,10 @@ THREADS=${THREADS:-4}
 MESH_OPTS=${MESH_OPTS---first-order --fo-emax 0.1}
 PY=${PY:-$HOME/sphcap-env/bin/python}; [ -x "$PY" ] || PY=python3
 declare -A NAME=([5]=N5_best [6]=N6_best [7]=N7_best) RBOX=([5]=3e-4 [6]=1e-4 [7]=1e-4) EPS=([5]=0.04 [6]=0.02 [7]=0.0625)
+# second mesh pass (capcert_rig --cells) on the survivors of the first, down to a smaller cell size, before the
+# Python refinement: needed for N = 7, where the first pass leaves ~10^8-10^9 survivors far from the minimizer
+declare -A EPS2=([7]=0.0078125)
+[ -n "${MESH2_EPS:-}" ] && EPS2[$N]=$MESH2_EPS     # e.g. MESH2_EPS=0.01 bash verify.sh 5 to test the two-pass chain
 # N = 5, 6: certified (Steps 4-6, T = largest upper end of the D* enclosures, D* irrational by Step 5).
 # N = 7: verified (Step 4 only; T = the next double above that upper end, so D >= T > D* outside the boxes
 #        without the exact polynomial; congruence of the images is not checked).
@@ -44,10 +48,18 @@ log "Step 2: mesh capcert_rig N=$N T=$T MIN_EPS=${EPS[$N]} ($THREADS threads) $M
 ./capcert_rig "$N" "$T" "${EPS[$N]}" "$OUT/mesh" --threads "$THREADS" $MESH_OPTS > "$OUT/mesh.out" 2> "$OUT/mesh.err"
 cat "$OUT/mesh.out" | tee -a "$OUT/verify.log"
 [ -f "$OUT/mesh.done" ] || { log "mesh did not complete"; exit 1; }
+MESH=mesh
+if [ -n "${EPS2[$N]:-}" ]; then
+  MESH=mesh2
+  log "Step 2b: second mesh pass on the survivors, MIN_EPS=${EPS2[$N]}"
+  ./capcert_rig "$N" "$T" "${EPS2[$N]}" "$OUT/mesh2" --threads "$THREADS" --cells "$OUT/mesh" $MESH_OPTS > "$OUT/mesh2.out" 2> "$OUT/mesh2.err"
+  cat "$OUT/mesh2.out" | tee -a "$OUT/verify.log"
+  [ -f "$OUT/mesh2.done" ] || { log "second mesh pass did not complete"; exit 1; }
+fi
 
 log "Step 3: refinement"
-$PY -m proof.refine "$N" "$OUT/mesh" "$OUT/localcert_$nm.json" --workers "$THREADS" --min-width 1e-7 --T "$T" \
+$PY -m proof.refine "$N" "$OUT/$MESH" "$OUT/localcert_$nm.json" --workers "$THREADS" --min-width 1e-7 --T "$T" \
     > "$OUT/refine.log" 2>&1 || true
 tail -2 "$OUT/refine.log" | tee -a "$OUT/verify.log"
-$PY -c "import json;d=json.load(open('$OUT/mesh.refine.json'));assert d['verified'] and d['failed']==0" \
+$PY -c "import json;d=json.load(open('$OUT/$MESH.refine.json'));assert d['verified'] and d['failed']==0" \
     && log "pipeline A, N=$N: all steps verified (level: $LEVEL)" || { log "pipeline A, N=$N: NOT VERIFIED"; exit 1; }

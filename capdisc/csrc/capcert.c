@@ -263,6 +263,102 @@ static int load_balls(const char *fn) {
     fclose(f); NBALLS = nb; return 0;
 }
 
+#ifdef RIGOROUS
+/* Second pass (--cells PREFIX): every cell of PREFIX.surv.0, .1, ... (records q, h, lb as written by a first pass)
+   is processed like a root cell, in chunks of CHUNK cells; survivors go to OUT.surv.<thread>.  Progress is kept per
+   chunk in OUT.progress (header + "chunk processed certified sym ball survivors min_lb" lines), and the completion
+   stamp OUT.done records the input prefix and the number of cells read, which must equal the survivor count of the
+   first pass (checked by the chain checker). */
+#define CHUNK (1L << 20)
+static int run_cells(const char *prefix, const char *out, long maxc, int nthr) {
+    long rec = (long)((2 * NQ + 1) * sizeof(double));
+    int nfiles = 0; long total = 0; long fsize[4096];
+    for (int t = 0; t < 4096; t++) {
+        char sfn[4200]; struct stat stt; snprintf(sfn, sizeof sfn, "%s.surv.%d", prefix, t);
+        if (stat(sfn, &stt) != 0) break;
+        if (stt.st_size % rec) { fprintf(stderr, "%s: partial record\n", sfn); return 1; }
+        fsize[t] = stt.st_size / rec; total += fsize[t]; nfiles = t + 1;
+    }
+    long nchunks = (total + CHUNK - 1) / CHUNK;
+    char pfn[4200], hdr[1024]; snprintf(pfn, sizeof pfn, "%s.progress", out);
+    snprintf(hdr, sizeof hdr, "#capcert-cells N=%d T=%a MIN_EPS=%a from=%s files=%d cells=%ld chunk=%ld mode=rigorous fo=%d fo_emax=%a smear=%d maxc=%ld\n",
+             N, TGT, MIN_EPS, prefix, nfiles, total, CHUNK, FO, FO_EMAX, SMEAR, maxc);
+    char *done = calloc(nchunks + 1, 1); Stats tot = {0, 0, 0, 0, 0, INFINITY, 0};
+    FILE *pf = fopen(pfn, "r"); int have_header = 0;
+    if (pf) {
+        char line[1024] = "";
+        if (!fgets(line, sizeof line, pf) || strcmp(line, hdr)) { fprintf(stderr, "refusing to resume: %s has other settings\n", pfn); return 2; }
+        have_header = 1; long idx, p, cc, s, b, v; double ml;
+        while (fscanf(pf, "%ld %ld %ld %ld %ld %ld %lf", &idx, &p, &cc, &s, &b, &v, &ml) == 7)
+            if (idx >= 0 && idx < nchunks && !done[idx]) { done[idx] = 1; tot.processed += p; tot.certified += cc; tot.sym += s;
+                tot.ball += b; tot.surv += v; if (ml < tot.min_surv_lb) tot.min_surv_lb = ml; }
+        fclose(pf);
+    }
+    for (int t = 0; t < 4096; t++) {   /* survivor files of an interrupted run may end in a partial record */
+        char sfn[4200]; struct stat stt; snprintf(sfn, sizeof sfn, "%s.surv.%d", out, t);
+        if (stat(sfn, &stt) == 0 && stt.st_size % rec && truncate(sfn, stt.st_size - stt.st_size % rec)) { perror(sfn); return 2; }
+    }
+    pf = fopen(pfn, "a"); if (!pf) { perror(pfn); return 2; }
+    if (!have_header) { fputs(hdr, pf); fflush(pf); }
+    fprintf(stderr, "capcert (RIGOROUS) second pass N=%d T=%.17g MIN_EPS=%g threads=%d: %ld cells from %d files of %s, %ld chunks\n",
+            N, TGT, MIN_EPS, nthr, total, nfiles, prefix, nchunks);
+    Cell *F = xmalloc(CHUNK * sizeof(Cell)); FILE **sf = calloc(nthr, sizeof(FILE *));
+    for (int t = 0; t < nthr; t++) { char sfn[4200]; snprintf(sfn, sizeof sfn, "%s.surv.%d", out, t); sf[t] = fopen(sfn, "ab"); if (!sf[t]) IO_ERROR = 1; }
+    time_t t0 = time(NULL), tlast = t0; long finished = 0; for (long c = 0; c < nchunks; c++) finished += done[c];
+    int fi = 0; long fpos = 0; FILE *in = NULL;           /* sequential reader over the input files */
+    for (long c = 0; c < nchunks && !IO_ERROR; c++) {
+        long n = 0;
+        while (n < CHUNK && fi < nfiles) {
+            if (!in) { char sfn[4200]; snprintf(sfn, sizeof sfn, "%s.surv.%d", prefix, fi); in = fopen(sfn, "rb"); fpos = 0; if (!in) { perror(sfn); return 2; } }
+            if (fpos == fsize[fi]) { fclose(in); in = NULL; fi++; continue; }
+            double lb; Cell *x = &F[n];
+            if (fread(x->q, sizeof(double), NQ, in) != (size_t)NQ || fread(x->h, sizeof(double), NQ, in) != (size_t)NQ
+                || fread(&lb, sizeof(double), 1, in) != 1) { fprintf(stderr, "read error\n"); return 2; }
+            fpos++; n++;
+        }
+        if (done[c]) continue;
+        Stats cs = {0, 0, 0, 0, 0, INFINITY, 0};
+#pragma omp parallel
+        {
+#ifdef _OPENMP
+            int tid = omp_get_thread_num();
+#else
+            int tid = 0;
+#endif
+            Stats st = {0, 0, 0, 0, 0, INFINITY, 0};
+#pragma omp for schedule(dynamic, 64)
+            for (long r = 0; r < n; r++) { Cell x = F[r]; init_cache(&x); dfs(&x, &st, sf[tid], maxc); }
+            if (fflush(sf[tid])) IO_ERROR = 1;
+#pragma omp critical
+            { cs.processed += st.processed; cs.certified += st.certified; cs.sym += st.sym; cs.surv += st.surv; cs.fo += st.fo;
+              if (st.min_surv_lb < cs.min_surv_lb) cs.min_surv_lb = st.min_surv_lb; }
+        }
+        if (IO_ERROR) break;
+        fprintf(pf, "%ld %ld %ld %ld %ld %ld %.17g\n", c, cs.processed, cs.certified, cs.sym, cs.ball, cs.surv, cs.min_surv_lb); fflush(pf);
+        tot.processed += cs.processed; tot.certified += cs.certified; tot.sym += cs.sym; tot.surv += cs.surv; tot.fo += cs.fo;
+        if (cs.min_surv_lb < tot.min_surv_lb) tot.min_surv_lb = cs.min_surv_lb;
+        finished++;
+        time_t now = time(NULL);
+        if (now - tlast >= 60 || finished == nchunks) { tlast = now;
+            fprintf(stderr, "[%6lds] chunks %ld/%ld  cells %ld  bounded %ld  sym %ld  survivors %ld  min_surv_lb %.12g\n",
+                    (long)(now - t0), finished, nchunks, tot.processed, tot.certified, tot.sym, tot.surv, tot.min_surv_lb); }
+    }
+    for (int t = 0; t < nthr; t++) if (sf[t] && fclose(sf[t])) IO_ERROR = 1;
+    fclose(pf);
+    if (IO_ERROR) { printf("INCOMPLETE (I/O error)\n"); return 2; }
+    printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld bounded=%ld (first-order %ld) sym=%ld ball=0 survivors=%ld min_surv_lb=%.17g time=%lds\n",
+           N, TGT, MIN_EPS, tot.processed, tot.certified, tot.fo, tot.sym, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
+    printf("MODE rigorous (interval arithmetic, outward rounding)\n");
+    if (finished != nchunks) { printf("INCOMPLETE: %ld of %ld chunks finished\n", finished, nchunks); return 2; }
+    char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
+    FILE *df = fopen(dfn, "w");
+    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%ld mode=rigorous keep=0x1p+0 balls=0 survivors=%ld cells=%ld fo=%d smear=%d from=%s input_cells=%ld\n",
+                       N, TGT, MIN_EPS, nchunks, tot.surv, tot.processed, FO, SMEAR, prefix, total) < 0 || fclose(df)) { perror(dfn); return 2; }
+    if (tot.surv == 0) printf("INTERVAL-VERIFIED: D >= T on every input cell\n");
+    return 0;
+}
+#endif
+
 int main(int argc, char **argv) {
     if (argc < 5) {
         fprintf(stderr, "usage: %s N T MIN_EPS OUT [--threads K] [--frontier F] [--balls FILE] [--max-cells-per-root M]\n", argv[0]);
@@ -281,7 +377,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[a], "--roots")) roots = argv[++a];   /* testing only: run these root cells; never complete */
         else if (!strcmp(argv[a], "--fo-emax")) FO_EMAX = atof(argv[++a]);
         else if (!strcmp(argv[a], "--smear")) SMEAR = 1;
-        else if (!strcmp(argv[a], "--cells")) cells_in = argv[++a];  /* second pass: start from these cells (q,h,lb records) */
+        else if (!strcmp(argv[a], "--cells")) cells_in = argv[++a];  /* second pass: start from the cells PREFIX.surv.* */
 #ifdef RIGOROUS
         else if (!strcmp(argv[a], "--smear-mix")) SMEAR_MIX = atof(argv[++a]);
 #endif
@@ -317,6 +413,11 @@ int main(int argc, char **argv) {
     int nthr = 1;
 #endif
     if (!frontier) frontier = 2000L * nthr;
+#ifdef RIGOROUS
+    if (cells_in) { init_trig(); return run_cells(cells_in, out, maxc, nthr); }
+#else
+    if (cells_in) { fprintf(stderr, "--cells needs the rigorous build\n"); return 1; }
+#endif
 
     /* deterministic initial frontier: breadth-first splits */
     Cell root;
@@ -332,24 +433,7 @@ int main(int argc, char **argv) {
     }
 #endif
     size_t nf = 1, capf = 1024; Cell *F = xmalloc(capf * sizeof(Cell)); F[0] = root;
-    if (cells_in) {   /* second pass: the frontier is the list of cells in the file (e.g. survivors of a first pass) */
-#ifndef RIGOROUS
-        fprintf(stderr, "--cells needs the rigorous build\n"); return 1;
-#else
-        FILE *cf = fopen(cells_in, "rb"); if (!cf) { perror(cells_in); return 1; }
-        nf = 0; double lb;
-        Cell c;
-        while (fread(c.q, sizeof(double), NQ, cf) == (size_t)NQ && fread(c.h, sizeof(double), NQ, cf) == (size_t)NQ
-               && fread(&lb, sizeof(double), 1, cf) == 1) {
-            if (nf == capf) { capf *= 2; F = realloc(F, capf * sizeof(Cell)); if (!F) { fprintf(stderr, "out of memory\n"); return 3; } }
-            init_cache(&c); F[nf++] = c;
-        }
-        if (ferror(cf) || !feof(cf)) { fprintf(stderr, "%s: read error or partial record\n", cells_in); return 1; }
-        fclose(cf);
-        frontier = 0;
-#endif
-    }
-    while (!cells_in && (long)nf < frontier) {
+    while ((long)nf < frontier) {
         Cell *G = xmalloc(2 * nf * sizeof(Cell));
         for (size_t i = 0; i < nf; i++)
 #ifdef RIGOROUS
@@ -368,9 +452,8 @@ int main(int argc, char **argv) {
 #else
     const char *mode = "float";
 #endif
-    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld fo=%d fo_emax=%a smear=%d%s%s\n",
-             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc, FO, FO_EMAX, SMEAR, cells_in ? " cells=" : "",
-             cells_in ? cells_in : "");
+    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld fo=%d fo_emax=%a smear=%d\n",
+             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc, FO, FO_EMAX, SMEAR);
     char *done = calloc(nf, 1);
     if (!done) { fprintf(stderr, "out of memory\n"); return 3; }
     Stats tot = {0, 0, 0, 0, 0, INFINITY, 0};
@@ -482,8 +565,7 @@ int main(int argc, char **argv) {
     char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
     FILE *df = fopen(dfn, "w");
     if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld fo=%d smear=%d%s%s\n",
-                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, SMEAR,
-                       cells_in ? " from=" : "", cells_in ? cells_in : "") < 0 || fclose(df)) {
+                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, SMEAR, "", "") < 0 || fclose(df)) {
         perror(dfn); return 2;
     }
     /* labels follow VERIFICATION.md: a single-kernel run is "interval-verified"; "cross-verified" needs a second kernel */
