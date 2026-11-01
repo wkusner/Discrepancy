@@ -164,7 +164,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 4 (local verification)",
-  "commit": "ab96162faeac7988b3974a3656a47de35d659fed",
+  "commit": "768cefc0fa4a7b5c840a7bcac8e68a7f09bc34ff",
   "tree_dirty": false,
   "versions": {
    "python": "3.13.16",
@@ -177,14 +177,14 @@
   },
   "prec": 53,
   "argv": [
-   "/home/claude/discrepancy/capdisc/proof/local.py",
+   "proof/local.py",
    "N5_best",
    "3e-4",
    "--out",
    "results/verify_N5"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-10-31T21:38:48Z",
+  "date_utc": "2026-11-01T01:31:06Z",
   "seconds": 0.8,
   "inputs": {
    "proof/hints/N5_best.json": "a31bee8eeef48ec2eb3429139c27f7ec4b9dd142495c8e2aa709df09212942e7"

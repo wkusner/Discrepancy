@@ -22,7 +22,7 @@
  "sym": 23586,
  "failed": 0,
  "fails": [],
- "time": 593.218962430954,
+ "time": 581.2963163852692,
  "verified": true,
  "kernel": "arb (python-flint)",
  "label": "Arb-verified",
@@ -66,7 +66,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 3 (refinement)",
-  "commit": "cb0b5097df1d155e9902fe2082dc16a5bbbd0e85",
+  "commit": "768cefc0fa4a7b5c840a7bcac8e68a7f09bc34ff",
   "tree_dirty": false,
   "versions": {
    "python": "3.13.16",
@@ -79,23 +79,25 @@
   },
   "prec": 53,
   "argv": [
-   "/home/claude/discrepancy/capdisc/proof/refine.py",
+   "proof/refine.py",
    "5",
    "results/verify_N5/mesh",
    "results/verify_N5/localcert_N5_best.json",
    "--workers",
    "2",
    "--min-width",
-   "1e-7"
+   "1e-7",
+   "--T",
+   "0.32332565099805344"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-10-31T21:50:30Z",
-  "seconds": 593.5,
+  "date_utc": "2026-11-01T01:42:28Z",
+  "seconds": 581.5,
   "inputs": {
-   "results/verify_N5/localcert_N5_best.json": "b42821791787bdf7879d228113ed42de0d211d8eb82acfcd3e341637d53884e3",
+   "results/verify_N5/localcert_N5_best.json": "b8db3565641837788b7dcdd4f63f27f5eb7cf0bedeee222516ef75d448b8c0e5",
    "results/verify_N5/mesh.done": "abec778402145bec784bd0dedcb4ae98fe4467f6b9a0aa6f66ae9189c7d986c2",
-   "results/verify_N5/mesh.surv.0": "d92c8d9e6f02ac02916f3662e287613d3b5831533ad19318ebb77c9a98aab132",
-   "results/verify_N5/mesh.surv.1": "2b45bc8fff20aa3427106bf87e5fa99b1073417ae5dbb1a840862dee0cdc87f2"
+   "results/verify_N5/mesh.surv.0": "0a7c74039c7069a87a2ee5ea89f3ca6fcb0c32f4fa4b89e0088dd4357715f0e1",
+   "results/verify_N5/mesh.surv.1": "cd421e4e61ab7c822ed4b4e4c59d5d36a5ddc4a2734f8ef4a97c68a18ce76c94"
   }
  }
 }

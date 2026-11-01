@@ -1,17 +1,17 @@
 N=5: 14,085 cells from capcert, T=0.32332565099805344, 3 exclusion box(es) of half-width 0.0003
-[     26s] 1,000/14,085 input cells; {'cells': 11422, 'bounded': 4125, 'boxed': 0, 'sym': 2086, 'failed': 0}
-[     45s] 2,000/14,085 input cells; {'cells': 19500, 'bounded': 7713, 'boxed': 0, 'sym': 3037, 'failed': 0}
-[     94s] 3,000/14,085 input cells; {'cells': 37654, 'bounded': 16728, 'boxed': 0, 'sym': 3599, 'failed': 0}
-[    198s] 4,000/14,085 input cells; {'cells': 76332, 'bounded': 34599, 'boxed': 1, 'sym': 5566, 'failed': 0}
-[    217s] 5,000/14,085 input cells; {'cells': 87340, 'bounded': 38474, 'boxed': 1, 'sym': 7695, 'failed': 0}
-[    251s] 6,000/14,085 input cells; {'cells': 102810, 'bounded': 44088, 'boxed': 2, 'sym': 10315, 'failed': 0}
-[    287s] 7,000/14,085 input cells; {'cells': 117720, 'bounded': 50377, 'boxed': 6, 'sym': 11977, 'failed': 0}
-[    314s] 8,000/14,085 input cells; {'cells': 130028, 'bounded': 55088, 'boxed': 6, 'sym': 13920, 'failed': 0}
-[    389s] 9,000/14,085 input cells; {'cells': 159238, 'bounded': 67677, 'boxed': 7, 'sym': 16435, 'failed': 0}
-[    408s] 10,000/14,085 input cells; {'cells': 167396, 'bounded': 71356, 'boxed': 7, 'sym': 17335, 'failed': 0}
-[    485s] 11,000/14,085 input cells; {'cells': 195324, 'bounded': 84341, 'boxed': 7, 'sym': 18814, 'failed': 0}
-[    528s] 12,000/14,085 input cells; {'cells': 214912, 'bounded': 93339, 'boxed': 8, 'sym': 20109, 'failed': 0}
-[    552s] 13,000/14,085 input cells; {'cells': 225216, 'bounded': 97610, 'boxed': 8, 'sym': 21490, 'failed': 0}
-[    592s] 14,000/14,085 input cells; {'cells': 242064, 'bounded': 104500, 'boxed': 10, 'sym': 23522, 'failed': 0}
-[    593s] 14,085/14,085 input cells; {'cells': 242707, 'bounded': 104800, 'boxed': 10, 'sym': 23586, 'failed': 0}
+[     25s] 1,000/14,085 input cells; {'cells': 11510, 'bounded': 4169, 'boxed': 0, 'sym': 2086, 'failed': 0}
+[     44s] 2,000/14,085 input cells; {'cells': 19500, 'bounded': 7713, 'boxed': 0, 'sym': 3037, 'failed': 0}
+[     93s] 3,000/14,085 input cells; {'cells': 37654, 'bounded': 16728, 'boxed': 0, 'sym': 3599, 'failed': 0}
+[    193s] 4,000/14,085 input cells; {'cells': 78058, 'bounded': 35420, 'boxed': 1, 'sym': 5608, 'failed': 0}
+[    213s] 5,000/14,085 input cells; {'cells': 87340, 'bounded': 38474, 'boxed': 1, 'sym': 7695, 'failed': 0}
+[    245s] 6,000/14,085 input cells; {'cells': 102810, 'bounded': 44088, 'boxed': 2, 'sym': 10315, 'failed': 0}
+[    280s] 7,000/14,085 input cells; {'cells': 117608, 'bounded': 50315, 'boxed': 5, 'sym': 11984, 'failed': 0}
+[    320s] 8,000/14,085 input cells; {'cells': 134872, 'bounded': 57486, 'boxed': 5, 'sym': 13945, 'failed': 0}
+[    378s] 9,000/14,085 input cells; {'cells': 158858, 'bounded': 67833, 'boxed': 6, 'sym': 16090, 'failed': 0}
+[    396s] 10,000/14,085 input cells; {'cells': 166518, 'bounded': 71287, 'boxed': 6, 'sym': 16966, 'failed': 0}
+[    475s] 11,000/14,085 input cells; {'cells': 194260, 'bounded': 84173, 'boxed': 6, 'sym': 18451, 'failed': 0}
+[    522s] 12,000/14,085 input cells; {'cells': 216422, 'bounded': 94315, 'boxed': 7, 'sym': 19889, 'failed': 0}
+[    539s] 13,000/14,085 input cells; {'cells': 224262, 'bounded': 97381, 'boxed': 7, 'sym': 21243, 'failed': 0}
+[    580s] 14,000/14,085 input cells; {'cells': 242064, 'bounded': 104500, 'boxed': 10, 'sym': 23522, 'failed': 0}
+[    581s] 14,085/14,085 input cells; {'cells': 242707, 'bounded': 104800, 'boxed': 10, 'sym': 23586, 'failed': 0}
 ARB-VERIFIED: no cell left

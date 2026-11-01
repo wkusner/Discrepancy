@@ -125,7 +125,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 5 (symmetry and exact value)",
-  "commit": "ab96162faeac7988b3974a3656a47de35d659fed",
+  "commit": "768cefc0fa4a7b5c840a7bcac8e68a7f09bc34ff",
   "tree_dirty": false,
   "versions": {
    "python": "3.13.16",
@@ -138,17 +138,17 @@
   },
   "prec": 128,
   "argv": [
-   "/home/claude/discrepancy/capdisc/proof/symmetric.py",
+   "proof/symmetric.py",
    "N5_best",
    "2",
    "--dir",
    "results/verify_N5"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-10-31T21:38:50Z",
+  "date_utc": "2026-11-01T01:31:09Z",
   "seconds": 0.5,
   "inputs": {
-   "results/verify_N5/localcert_N5_best.json": "b42821791787bdf7879d228113ed42de0d211d8eb82acfcd3e341637d53884e3"
+   "results/verify_N5/localcert_N5_best.json": "b8db3565641837788b7dcdd4f63f27f5eb7cf0bedeee222516ef75d448b8c0e5"
   }
  }
 }
