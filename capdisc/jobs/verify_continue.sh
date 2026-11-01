@@ -20,6 +20,7 @@ nm=${NAME[$N]}; OUT=results/verify_N$N
 MESH_OPTS=${MESH_OPTS---first-order --fo-emax 0.1}
 log() { echo "$(date '+%F %T')  $*" | tee -a "$OUT/verify.log"; }
 until [ -f "$OUT/mesh.done" ]; do sleep 10; done
+sleep 2; bash build.sh > "$OUT/build_continue.log" 2>&1   # the first pass has exited; rebuild before anything else starts
 for i in $(seq 1 30); do pkill -f "[p]roof.refine $N " && break; sleep 10; done || true
 sleep 5; pkill -9 -f "[p]roof.refine $N " || true
 log "continuing with jobs/verify_continue.sh at commit $(git rev-parse --short HEAD); first pass: $(cat $OUT/mesh.done)"
@@ -30,7 +31,7 @@ T=$($PY -c "import json,math;d=json.load(open('$OUT/localcert_$nm.json'));print(
 $PY -c "s=dict(kv.split('=',1) for kv in open('$OUT/mesh.done').read().split()); assert float.fromhex(s['T'])==$T, 'threshold changed'"
 rm -f "$OUT"/mesh.refine.json
 log "Step 2b: second mesh pass on the survivors, MIN_EPS=${EPS2[$N]}"
-bash build.sh | tail -1 | tee -a "$OUT/verify.log"     # after the first pass has exited
+tail -1 "$OUT/build_continue.log" | tee -a "$OUT/verify.log"
 ./capcert_rig "$N" "$T" "${EPS2[$N]}" "$OUT/mesh2" --threads "$THREADS" --cells "$OUT/mesh" $MESH_OPTS > "$OUT/mesh2.out" 2> "$OUT/mesh2.err"
 cat "$OUT/mesh2.out" | tee -a "$OUT/verify.log"
 [ -f "$OUT/mesh2.done" ] || { log "second mesh pass did not complete"; exit 1; }

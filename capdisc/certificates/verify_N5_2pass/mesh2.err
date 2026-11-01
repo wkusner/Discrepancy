@@ -1,0 +1,2 @@
+capcert (RIGOROUS) second pass N=5 T=0.32332565099805344 MIN_EPS=0.01 threads=2: 14085 cells from 2 files of results/verify_N5/mesh, 1 chunks
+[    32s] chunks 1/1  cells 202711  bounded 87289  sym 18483  survivors 2626  min_surv_lb 0.322807453402

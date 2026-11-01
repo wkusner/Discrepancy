@@ -1,0 +1,105 @@
+{
+ "N": 5,
+ "T": 0.32332565099805344,
+ "T_hex": "0x1.4b15e123fa6b2p-2",
+ "capcert_stamp": {
+  "N": "5",
+  "T": "0x1.4b15e123fa6b2p-2",
+  "MIN_EPS": "0x1.47ae147ae147bp-7",
+  "nf": "1",
+  "mode": "rigorous",
+  "keep": "0x1p+0",
+  "balls": "0",
+  "survivors": "2626",
+  "cells": "202711",
+  "fo": "1",
+  "smear": "0",
+  "from": "results/verify_N5/mesh",
+  "input_cells": "14085"
+ },
+ "input_cells": 2626,
+ "cells": 19660,
+ "bounded": 9682,
+ "boxed": 10,
+ "sym": 1451,
+ "failed": 0,
+ "fails": [],
+ "time": 125.4837327003479,
+ "verified": true,
+ "kernel": "arb (python-flint)",
+ "label": "Arb-verified",
+ "exclusion_boxes": [
+  {
+   "center": [
+    "0x1.83c5cc46e03bdp+0",
+    "0x1.9980e172a913fp+0",
+    "0x1.0e225fbb5761dp+1",
+    "0x1.9980e172a9142p+0",
+    "-0x1.0e225fbb5761cp+1",
+    "0x1.83c5cc46e03bbp+1",
+    "0x1.721e192c0d250p-56"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  },
+  {
+   "center": [
+    "0x1.83c5cc46e03bdp+0",
+    "0x1.83c5cc46e03b9p+0",
+    "0x1.921fb54442d18p+1",
+    "0x1.0e391747431c4p+1",
+    "-0x1.921fb54442d19p+0",
+    "0x1.0e391747431c4p+1",
+    "0x1.921fb54442d19p+0"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  },
+  {
+   "center": [
+    "0x1.83c5cc46e03bcp+0",
+    "0x1.83c5cc46e03b9p+0",
+    "0x1.921fb54442d18p+1",
+    "0x1.0e391747431c4p+1",
+    "0x1.921fb54442d1ap+0",
+    "0x1.0e391747431c4p+1",
+    "-0x1.921fb54442d18p+0"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  }
+ ],
+ "stamp": {
+  "step": "PROOF.md Step 3 (refinement)",
+  "commit": "e97ada7912d271c399a86392a9f19725784bccc1",
+  "tree_dirty": false,
+  "versions": {
+   "python": "3.13.16",
+   "python-flint": "0.9.0",
+   "FLINT": "3.6.0",
+   "numpy": "2.5.3",
+   "scipy": "1.18.1",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0"
+  },
+  "prec": 53,
+  "argv": [
+   "proof/refine.py",
+   "5",
+   "results/verify_N5/mesh2",
+   "results/verify_N5/localcert_N5_best.json",
+   "--workers",
+   "2",
+   "--min-width",
+   "1e-7",
+   "--T",
+   "0.32332565099805344"
+  ],
+  "machine": "Linux x86_64, 2 cpus",
+  "date_utc": "2026-11-01T19:51:56Z",
+  "seconds": 125.7,
+  "inputs": {
+   "results/verify_N5/localcert_N5_best.json": "19dca5d1d37f46f100a4d1b0c42289f6e2c552d4241bd378a68422d9354c3ee5",
+   "results/verify_N5/mesh2.done": "1ef6b66949277ab73e03c0498401036a11adc7861da20bfbeec5134f3f66b9a1",
+   "results/verify_N5/mesh2.surv.0": "731e145a44d1ad5a961e210f7bea655b8beee562e24110d2f8bee65abc3fe688",
+   "results/verify_N5/mesh2.surv.1": "869864bf655b60f0fe7ae0492db3b7880d352956dabfe8d24eddd7a3a32db3ba"
+  }
+ }
+}

@@ -79,3 +79,27 @@ def test_verified_level_passes_with_T_above_the_enclosure(tmp_path):
 
 def test_verified_level_fails_with_T_at_the_enclosure(tmp_path):
     assert synthetic_n7(tmp_path, lambda hi: hi) == 1
+
+
+# ---------------------------------------------------------------- two mesh passes (verify.sh Step 2b)
+REF2 = os.path.join(ROOT, 'certificates', 'verify_N5_2pass')     # MESH2_EPS=0.01 bash verify.sh 5
+
+
+@pytest.fixture
+def chain2(tmp_path):
+    d = str(tmp_path / 'chain2'); shutil.copytree(REF2, d); return d
+
+
+def test_two_pass_chain_passes(chain2):
+    assert run(chain2) == 0
+
+
+def test_two_pass_chain_fails_if_the_second_pass_read_fewer_cells(chain2):
+    p = os.path.join(chain2, 'mesh2.done'); s = open(p).read()
+    open(p, 'w').write(s.replace('input_cells=14085', 'input_cells=14084'))
+    assert run(chain2) == 1
+
+
+def test_two_pass_chain_fails_without_the_second_refinement(chain2):
+    os.remove(os.path.join(chain2, 'mesh2.refine.json'))
+    assert run(chain2) == 1

@@ -1,0 +1,1 @@
+N=5 T=0x1.4b15e123fa6b2p-2 MIN_EPS=0x1.47ae147ae147bp-7 nf=1 mode=rigorous keep=0x1p+0 balls=0 survivors=2626 cells=202711 fo=1 smear=0 from=results/verify_N5/mesh input_cells=14085

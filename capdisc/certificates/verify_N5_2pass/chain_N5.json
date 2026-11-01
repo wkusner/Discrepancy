@@ -1,0 +1,28 @@
+{
+ "N": 5,
+ "name": "N5_best",
+ "level": "certified",
+ "directory": "results/verify_N5",
+ "checks": {
+  "C1": true,
+  "C2": true,
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": true,
+  "C7": true,
+  "C8": true
+ },
+ "notes": [],
+ "verdict": "chain complete",
+ "T": "2912258562708313/9007199254740992",
+ "D_star_upper": "202078531873782876605498105276264781019/625000000000000000000000000000000000000",
+ "files": {
+  "congruence_N5_best.json": "9ed111f10ef92d69ac2958837c1858de926aa508e1ee6d9a668e4f805e68eed2",
+  "localcert_N5_best.json": "19dca5d1d37f46f100a4d1b0c42289f6e2c552d4241bd378a68422d9354c3ee5",
+  "mesh2.refine.json": "f65298f7f3cd3f54d83e686f5782049b6977b503477000c6fd788a8288eef6d4",
+  "symcert_N5_best_img0.json": "334db5df6777e7bc77cf0e9531f56af175935cbcd8a26f1e6c6c30fa6af04147",
+  "symcert_N5_best_img1.json": "19c53070c938ce8e6d98658000c54d1c684a9c5fe0d86a9607e2ebc7f2f595b8",
+  "symcert_N5_best_img2.json": "8a06f004ca97b25a2b04408a80e117fa495b16e82731bff96e3f12cb9d24ee70"
+ }
+}

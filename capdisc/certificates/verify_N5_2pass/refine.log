@@ -1,0 +1,5 @@
+N=5: 2,626 cells from capcert, T=0.32332565099805344, 3 exclusion box(es) of half-width 0.0003
+[     51s] 1,000/2,626 input cells; {'cells': 7982, 'bounded': 3847, 'boxed': 1, 'sym': 643, 'failed': 0}
+[    100s] 2,000/2,626 input cells; {'cells': 15668, 'bounded': 7563, 'boxed': 8, 'sym': 1263, 'failed': 0}
+[    125s] 2,626/2,626 input cells; {'cells': 19660, 'bounded': 9682, 'boxed': 10, 'sym': 1451, 'failed': 0}
+ARB-VERIFIED: no cell left
