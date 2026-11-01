@@ -269,7 +269,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     N = atoi(argv[1]); TGT = atof(argv[2]); MIN_EPS = atof(argv[3]); const char *out = argv[4];
-    int threads = 0; long frontier = 0, maxc = 0; const char *balls = NULL, *roots = NULL;
+    int threads = 0; long frontier = 0, maxc = 0; const char *balls = NULL, *roots = NULL, *cells_in = NULL;
     for (int a = 5; a < argc; a++) {
         if (!strcmp(argv[a], "--threads")) threads = atoi(argv[++a]);
         else if (!strcmp(argv[a], "--frontier")) frontier = atol(argv[++a]);
@@ -281,6 +281,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[a], "--roots")) roots = argv[++a];   /* testing only: run these root cells; never complete */
         else if (!strcmp(argv[a], "--fo-emax")) FO_EMAX = atof(argv[++a]);
         else if (!strcmp(argv[a], "--smear")) SMEAR = 1;
+        else if (!strcmp(argv[a], "--cells")) cells_in = argv[++a];  /* second pass: start from these cells (q,h,lb records) */
 #ifdef RIGOROUS
         else if (!strcmp(argv[a], "--smear-mix")) SMEAR_MIX = atof(argv[++a]);
 #endif
@@ -331,7 +332,24 @@ int main(int argc, char **argv) {
     }
 #endif
     size_t nf = 1, capf = 1024; Cell *F = xmalloc(capf * sizeof(Cell)); F[0] = root;
-    while ((long)nf < frontier) {
+    if (cells_in) {   /* second pass: the frontier is the list of cells in the file (e.g. survivors of a first pass) */
+#ifndef RIGOROUS
+        fprintf(stderr, "--cells needs the rigorous build\n"); return 1;
+#else
+        FILE *cf = fopen(cells_in, "rb"); if (!cf) { perror(cells_in); return 1; }
+        nf = 0; double lb;
+        Cell c;
+        while (fread(c.q, sizeof(double), NQ, cf) == (size_t)NQ && fread(c.h, sizeof(double), NQ, cf) == (size_t)NQ
+               && fread(&lb, sizeof(double), 1, cf) == 1) {
+            if (nf == capf) { capf *= 2; F = realloc(F, capf * sizeof(Cell)); if (!F) { fprintf(stderr, "out of memory\n"); return 3; } }
+            init_cache(&c); F[nf++] = c;
+        }
+        if (ferror(cf) || !feof(cf)) { fprintf(stderr, "%s: read error or partial record\n", cells_in); return 1; }
+        fclose(cf);
+        frontier = 0;
+#endif
+    }
+    while (!cells_in && (long)nf < frontier) {
         Cell *G = xmalloc(2 * nf * sizeof(Cell));
         for (size_t i = 0; i < nf; i++)
 #ifdef RIGOROUS
@@ -350,8 +368,9 @@ int main(int argc, char **argv) {
 #else
     const char *mode = "float";
 #endif
-    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld fo=%d fo_emax=%a smear=%d\n",
-             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc, FO, FO_EMAX, SMEAR);
+    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld fo=%d fo_emax=%a smear=%d%s%s\n",
+             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc, FO, FO_EMAX, SMEAR, cells_in ? " cells=" : "",
+             cells_in ? cells_in : "");
     char *done = calloc(nf, 1);
     if (!done) { fprintf(stderr, "out of memory\n"); return 3; }
     Stats tot = {0, 0, 0, 0, 0, INFINITY, 0};
@@ -462,8 +481,9 @@ int main(int argc, char **argv) {
     /* completion stamp, read by jobs/refine.py */
     char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
     FILE *df = fopen(dfn, "w");
-    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld fo=%d smear=%d\n",
-                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, SMEAR) < 0 || fclose(df)) {
+    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld fo=%d smear=%d%s%s\n",
+                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, SMEAR,
+                       cells_in ? " from=" : "", cells_in ? cells_in : "") < 0 || fclose(df)) {
         perror(dfn); return 2;
     }
     /* labels follow VERIFICATION.md: a single-kernel run is "interval-verified"; "cross-verified" needs a second kernel */
