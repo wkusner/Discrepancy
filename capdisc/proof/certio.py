@@ -1,7 +1,9 @@
 """proof.certio -- writing certificates (TRUSTED CORE, bookkeeping only; PROOF.md Section 6, items 4-5).
 
 Every certificate written by the proof scripts carries a `stamp`: the claim (the Step of PROOF.md), the
-commit, the library versions, the working precision, the command line, the machine type (no host names),
+commit, the library versions, the working precision, the command line (paths relative to the repository; other
+absolute paths shortened to their last component, so no home directory or user name is recorded), the machine
+type (no host names),
 the date, the run time, and the SHA-256 of every input file. Certificates are written atomically
 (temporary file, then rename), so an interrupted run leaves no partial certificate.
 
@@ -49,12 +51,18 @@ def versions():
     return out
 
 
+def _public_arg(a):
+    if not os.path.isabs(a): return a
+    r = os.path.relpath(a, REPO)
+    return r if not r.startswith('..') else '.../' + os.path.basename(a.rstrip('/'))
+
+
 def stamp(step, inputs=(), t0=None, prec=None):
     """step: e.g. 'PROOF.md Step 4 (local verification)'; inputs: files read."""
     commit = _git('rev-parse', 'HEAD')
     dirty = _git('status', '--porcelain', '--', 'capdisc/proof', 'capdisc/csrc', 'capdisc/certificates')
     return dict(step=step, commit=commit, tree_dirty=bool(dirty), versions=versions(), prec=prec,
-                argv=sys.argv, machine=f"{platform.system()} {platform.machine()}, {os.cpu_count()} cpus",
+                argv=[_public_arg(a) for a in sys.argv], machine=f"{platform.system()} {platform.machine()}, {os.cpu_count()} cpus",
                 date_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
                 seconds=None if t0 is None else round(time.time() - t0, 1),
                 inputs={os.path.relpath(p, REPO): sha256(p) for p in inputs})
