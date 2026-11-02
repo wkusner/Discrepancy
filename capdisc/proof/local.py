@@ -6,9 +6,13 @@ their counts, and redundant worst caps):
     (q*, D*) in a box Z of radius 1e-12; this encloses D*.
  2. On a larger box B (half-width r) around q*:
       - the counts of all worst caps are constant on B (interval sign tests), so D >= phi_b on B;
-      - for every orthant s of directions v = Y - q* there are weights mu >= 0 with
-        s_j (sum_b mu_b G^s_bj) > 0 for all j, where G^s_bj is the end of the interval gradient of phi_b
-        over B that minimizes G.v on that orthant.  Then max_b phi_b(Y) > D* for Y in B, Y != q*.
+      - the directions v = Y - q* are covered by simplicial cones (first the 2^(2N-3) orthants; an orthant
+        whose test fails is bisected, longest edge first, into smaller cones), and for each cone with
+        generators v_1..v_n there are weights mu >= 0 with sum_b mu_b min_{g_b in G_b} g_b . v_i > 0 for all
+        i, where G_b is the interval gradient of phi_b over B.  Then max_b phi_b(Y) > D* for Y in B, Y != q*:
+        phi_b(Y) - D* = g_b(xi_b) . v with g_b(xi_b) in G_b, and v is a nonnegative combination of the v_i.
+        The generators are integer vectors (a midpoint generator is the sum of two), so the subcones cover
+        their parent exactly; the weights are a floating-point choice, the inequalities are decided in Arb.
  3. Every other cap of the capture list is below D* on Z, so D(q*) = D*.
 usage: python -m proof.local NAME [r] [--out DIR]      writes DIR/localcert_<NAME>.json (default results/)
 """
@@ -22,6 +26,7 @@ from .cellbound import cap_data
 from . import certio
 
 flint.ctx.prec = 53          # double-precision balls (the default, set explicitly)
+MAX_CONES = 4000              # cones per orthant before the test gives up
 ROOT = certio.REPO
 args = [a for a in sys.argv[1:] if not a.startswith('--')]
 OUT = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else os.path.join(ROOT, 'results')
@@ -114,25 +119,53 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
     # gradient enclosures over B: exact lower and upper ends of the Arb balls (and doubles for the LP)
     loA = [[gk.lower() for gk in dd.g] for dd in datB]; hiA = [[gk.upper() for gk in dd.g] for dd in datB]
     lo = np.array([[float(x) for x in row] for row in loA]); hi = np.array([[float(x) for x in row] for row in hiA])
-    nfail = 0
-    for s in itertools.product((1, -1), repeat=nq):
-        s = np.array(s)
-        Gs = np.where(s > 0, lo, hi)                 # minimizes g.v on the orthant
-        # find mu >= 0, sum mu = 1, maximizing min_j s_j (mu^T Gs)_j
-        A = -(Gs * s).T                                   # constraints: -s_j (mu^T Gs)_j + z <= 0
-        res = linprog(np.append(np.zeros(len(caps_all)), -1.0),
-                      A_ub=np.hstack([A, np.ones((nq, 1))]), b_ub=np.zeros(nq),
-                      A_eq=np.append(np.ones(len(caps_all)), 0.0)[None], b_eq=[1.0],
-                      bounds=[(0, None)] * len(caps_all) + [(None, None)], method='highs')
-        if res.status != 0 or -res.fun <= 0: nfail += 1; continue
-        mu = np.maximum(res.x[:-1], 0.0)                   # the argument needs mu >= 0
-        if mu.sum() <= 0: nfail += 1; continue
-        # rigorous check in ball arithmetic, with the exact ends of the gradient enclosures
-        for j in range(nq):
+    nlo = len(caps_all)
+
+    def cone_ok(gens):
+        """weights mu >= 0 (sum 1) with sum_b mu_b min_{g in G_b} g.v > 0 for every generator v (integer vector)"""
+        # L[b, i] = min over the gradient box of g_b . v_i: lower end where v_ij > 0, upper end where v_ij < 0
+        L = np.array([[sum((lo[bb, j] if v[j] > 0 else hi[bb, j]) * v[j] for j in range(nq) if v[j]) for v in gens]
+                      for bb in range(nlo)])
+        res = linprog(np.append(np.zeros(nlo), -1.0), A_ub=np.hstack([-L.T, np.ones((len(gens), 1))]),
+                      b_ub=np.zeros(len(gens)), A_eq=np.append(np.ones(nlo), 0.0)[None], b_eq=[1.0],
+                      bounds=[(0, None)] * nlo + [(None, None)], method='highs')
+        if res.status != 0 or -res.fun <= 0: return False
+        mu = np.maximum(res.x[:-1], 0.0)
+        if mu.sum() <= 0: return False
+        for v in gens:                    # rigorous: exact ends of the Arb gradient enclosures, exact integers v
             acc = arb(0)
-            for b in range(len(caps_all)):
-                acc = acc + arb(float(mu[b])) * (loA[b][j] if s[j] > 0 else hiA[b][j])
-            if not (acc * int(s[j]) > 0): nfail += 1; break
+            for bb in range(nlo):
+                if mu[bb] == 0: continue
+                t = arb(0)
+                for j in range(nq):
+                    if v[j]: t = t + (loA[bb][j] if v[j] > 0 else hiA[bb][j]) * v[j]
+                acc = acc + arb(float(mu[bb])) * t
+            if not (acc > 0): return False
+        return True
+
+    def split(gens):
+        """bisect the longest edge (largest angle between two generators): v_i, v_k -> v_i + v_k"""
+        U = [np.array(v, float) / np.linalg.norm(np.array(v, float)) for v in gens]
+        i, k = min(((i, k) for i in range(len(gens)) for k in range(i + 1, len(gens))), key=lambda p: U[p[0]] @ U[p[1]])
+        mid = [a + b for a, b in zip(gens[i], gens[k])]
+        g1 = list(gens); g1[i] = mid
+        g2 = list(gens); g2[k] = mid
+        return g1, g2
+
+    nfail = 0; ncones = 0; nsplit_orthants = 0
+    for s in itertools.product((1, -1), repeat=nq):
+        stack = [[[int(s[j]) if jj == j else 0 for jj in range(nq)] for j in range(nq)]]   # generators s_j e_j
+        budget = MAX_CONES; root = True
+        while stack:
+            gens = stack.pop(); ncones += 1; budget -= 1
+            ok = cone_ok(gens)
+            if root and not ok: nsplit_orthants += 1
+            root = False
+            if ok: continue
+            if budget <= 0: nfail += 1; break
+            stack.extend(split(gens))
+    report['cones_tested'] = ncones
+    report['orthants_subdivided'] = nsplit_orthants
     report['orthants_failed'] = nfail
     report['box_radius'] = r_big
     report['verified'] = (nfail == 0) and report['others_below']
@@ -149,12 +182,12 @@ for h in hints['images']:
     out = certify_image(q0, caps, counts, r_big, extra, extra_counts)
     out['image'] = h['image']; out['caps'] = h['caps']; out['counts'] = counts
     out['extra_caps'] = h['extra_caps']; out['extra_counts'] = extra_counts
-    print(f"  image {h['image']}: " + ", ".join(f"{key}={out.get(key)}" for key in ('krawczyk', 'D_enclosure', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'verified')))
+    print(f"  image {h['image']}: " + ", ".join(f"{key}={out.get(key)}" for key in ('krawczyk', 'D_enclosure', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'orthants_subdivided', 'cones_tested', 'verified')))
     results.append(out)
 os.makedirs(OUT, exist_ok=True)
 certio.write_json(os.path.join(OUT, f'localcert_{name}.json'),
     dict(name=name, N=N, box_radius=r_big, gauge='capcert coordinates (x0 pole, x1 in xz-plane x>=0)',
-         verified=all(r.get('verified') for r in results), kernel='arb (python-flint)', method='Krawczyk test + orthant test',
+         verified=all(r.get('verified') for r in results), kernel='arb (python-flint)', method='Krawczyk test + cone test (orthants, subdivided where needed)',
          label='Krawczyk-verified (Arb)', images=results,
          stamp=certio.stamp('PROOF.md Step 4 (local verification)', inputs=[hints_file], t0=t0, prec=flint.ctx.prec)))
 print("ALL KRAWCZYK-VERIFIED (Arb)" if all(r.get('verified') for r in results) else "NOT ALL VERIFIED")
