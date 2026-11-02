@@ -164,6 +164,9 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
             if ok: continue
             if budget <= 0: nfail += 1; break
             stack.extend(split(gens))
+        if not root and MAX_CONES - budget > 1:
+            print(f"    orthant {''.join('+' if x > 0 else '-' for x in s)}: {MAX_CONES - budget} cones"
+                  + (" FAILED" if budget <= 0 else ""), file=sys.stderr, flush=True)
     report['cones_tested'] = ncones
     report['orthants_subdivided'] = nsplit_orthants
     report['orthants_failed'] = nfail
