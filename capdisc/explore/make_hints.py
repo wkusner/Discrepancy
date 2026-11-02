@@ -6,7 +6,8 @@ Krawczyk or frozen-count test fail), it cannot make a false statement pass.
 
 usage: python explore/make_hints.py N5_best|N6_best        writes proof/hints/<NAME>.json
 """
-import sys, os, json
+import sys, os, json, itertools
+from scipy.optimize import linprog
 import numpy as np
 import scipy.linalg as sl
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, '..'); sys.path.insert(0, ROOT)
@@ -41,10 +42,28 @@ for k, (Yi, qi) in enumerate(Cf.domain_images(X)):
     dq = (q0 - qi + np.pi) % (2 * np.pi) - np.pi
     assert np.allclose(dq, 0, atol=1e-9), (q0, qi)
     q0 = np.array(qi, float)
-    if len(caps) != 2 * N - 2:           # redundant worst caps: keep an independent square subset
-        J = np.array([np.append(Cf.cap_data(q0, np.full(nq, 1e-13), N, [cs])[0][1], -1.0) for cs in caps])
-        _, _, piv = sl.qr(J.T, pivoting=True)
-        keep = sorted(piv[:2 * N - 2])
+    if len(caps) != 2 * N - 2:           # redundant worst caps: keep a square subset that is balanced on its own
+        # The sharpness test of proof.local uses only the square system, so the kept caps must have a balance
+        # sum lambda_b grad phi_b = 0 with every lambda_b > 0: drop caps that can have weight 0 together (a vertex
+        # of the weight polytope), choosing the drop set that maximizes the smallest remaining weight, among those
+        # whose kept system has full rank.
+        grads = np.array([np.array(Cf.cap_data(q0, np.full(nq, 1e-13), N, [cs])[0][1], float) for cs in caps])
+        J = np.hstack([grads, -np.ones((len(caps), 1))]); m = len(caps); ndrop = m - (2 * N - 2)
+        best = None
+        for drop in itertools.combinations(range(m), ndrop):
+            keep = [i for i in range(m) if i not in drop]
+            if np.linalg.matrix_rank(J[keep]) < 2 * N - 2: continue
+            # max t s.t. lambda >= t on kept, lambda = 0 on dropped, sum lambda = 1, lambda^T grads = 0
+            A_eq = np.vstack([grads.T, np.ones(m)] + [np.eye(m)[i] for i in drop]); b_eq = np.r_[np.zeros(nq), 1, np.zeros(ndrop)]
+            A_ub = np.hstack([-np.eye(m)[keep], np.ones((len(keep), 1))])
+            res = linprog(np.r_[np.zeros(m), -1.0], A_ub=A_ub, b_ub=np.zeros(len(keep)),
+                          A_eq=np.hstack([A_eq, np.zeros((len(A_eq), 1))]), b_eq=b_eq,
+                          bounds=[(0, None)] * m + [(None, None)], method='highs')
+            if res.status == 0 and (best is None or -res.fun > best[0]): best = (-res.fun, keep)
+        if best is None or best[0] <= 1e-9:      # fall back to an independent subset (the test will then report)
+            _, _, piv = sl.qr(J.T, pivoting=True); keep = sorted(piv[:2 * N - 2])
+        else:
+            keep = best[1]; print(f"  square system: smallest weight {best[0]:.4f} with the dropped caps at weight 0")
         extra = [caps[i] for i in range(len(caps)) if i not in keep]
         extra_counts = [counts[i] for i in range(len(caps)) if i not in keep]
         caps = [caps[i] for i in keep]; counts = [counts[i] for i in keep]
