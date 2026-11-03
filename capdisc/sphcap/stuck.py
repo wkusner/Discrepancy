@@ -220,7 +220,9 @@ def follow_exits(X, D, max_exits=8):
         if ex is None: break
         s, v, E = ex
         moved = False
-        for eps in (1e-4, 1e-3):
+        # small steps first: the first-order model holds only until another cap becomes worst, which for the N = 16
+        # exits of the atlas happens below a step of 1e-5 (a larger step goes up although the exit is genuine)
+        for eps in (1e-6, 1e-5, 1e-4, 1e-3):
             Y = B.retract(X, E, eps * v)
             if B.discrepancy(Y) < D:
                 Yd, Dd = B.slp_descent(Y)
