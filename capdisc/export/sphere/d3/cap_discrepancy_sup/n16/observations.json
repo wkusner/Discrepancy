@@ -3302,8 +3302,9 @@
      "rate": 0.0209795369,
      "switched_points": 2,
      "leads_to": {
-      "value": 0.14270843294609847,
-      "class": "exit"
+      "value": 0.14263216057360317,
+      "class": "sharp minimum",
+      "same_as": "search_N16#0"
      }
     }
    }
@@ -10958,8 +10959,9 @@
      "rate": 0.0045842155,
      "switched_points": 2,
      "leads_to": {
-      "value": 0.14377942483851192,
-      "class": "exit"
+      "value": 0.14374206423681712,
+      "class": "sharp minimum",
+      "same_as": "search_N16#3"
      }
     }
    }
