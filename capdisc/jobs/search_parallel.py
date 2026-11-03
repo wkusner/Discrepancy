@@ -3,7 +3,8 @@
 Rounds of independent search tasks (multiprocessing); after each round the classes
 are merged and the best ones seed basin hopping in the next round.
 
-usage:  python jobs/search_parallel.py N [--workers 16] [--rounds 10] [--runs-per-task 25]
+usage:  python jobs/search_parallel.py N [--workers 16] [--rounds 10] [--runs-per-task 25] [--seed 0]
+        (--seed selects an independent family of random streams; the server runs used 0)
 writes: results/search_N{N}.pkl   (list of (D, X, hits, sources), best first)
         results/search_N{N}.json  (summary of the top classes)
 """
@@ -41,6 +42,7 @@ def main():
     ap.add_argument('--workers', type=int, default=16)
     ap.add_argument('--rounds', type=int, default=10)
     ap.add_argument('--runs-per-task', type=int, default=25)
+    ap.add_argument('--seed', type=int, default=0)
     a = ap.parse_args()
     os.makedirs('results', exist_ok=True)
     out = f'results/search_N{a.N}'
@@ -52,7 +54,7 @@ def main():
         for r in range(a.rounds):
             best = sorted(store.values(), key=lambda v: v[0])[:6]
             init = [v[1] for v in best]
-            jobs = [(a.N, a.runs_per_task, 1000003 * r + 7919 * w + a.N, init) for w in range(a.workers)]
+            jobs = [(a.N, a.runs_per_task, 10**9 * a.seed + 1000003 * r + 7919 * w + a.N, init) for w in range(a.workers)]
             for items in pool.imap_unordered(task, jobs):
                 merge(store, items)
             cl = sorted(store.values(), key=lambda v: v[0])

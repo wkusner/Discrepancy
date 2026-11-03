@@ -10,8 +10,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=${PY:-$HOME/sphcap-env/bin/python}; [ -x "$PY" ] || PY=python3
 WORKERS=${WORKERS:-8}
+SEED=${SEED:-0}
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1   # one BLAS thread per worker (numpy default: all cores)
 for N in ${NS:-13 14 15 16 17 18 19 20}; do
-  nice -n 10 $PY jobs/search_parallel.py $N --workers $WORKERS --rounds 10 --runs-per-task 12 | grep -v '^{'
+  nice -n 10 $PY jobs/search_parallel.py $N --workers $WORKERS --rounds 10 --runs-per-task 12 --seed $SEED | grep -v '^{'
 done
 echo "atlas search done"
