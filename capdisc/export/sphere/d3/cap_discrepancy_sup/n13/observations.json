@@ -852,6 +852,12 @@
     "pointer": 0,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -1688,6 +1694,12 @@
     "pointer": 1,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -2523,6 +2535,12 @@
     "pointer": 2,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -3345,6 +3363,12 @@
     "pointer": 3,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -4172,6 +4196,12 @@
     "pointer": 4,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -4998,6 +5028,12 @@
     "pointer": 5,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -5833,6 +5869,12 @@
     "pointer": 6,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -6303,6 +6345,13 @@
     "pointer": 7,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 5
    }
   },
   {
@@ -6773,6 +6822,13 @@
     "pointer": 8,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 5
    }
   },
   {
@@ -7243,6 +7299,13 @@
     "pointer": 9,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 5
    }
   },
   {
@@ -7713,6 +7776,13 @@
     "pointer": 10,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 5
    }
   },
   {
@@ -8183,6 +8253,13 @@
     "pointer": 11,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 5
    }
   },
   {
@@ -9016,6 +9093,12 @@
     "pointer": 12,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -9845,6 +9928,12 @@
     "pointer": 13,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -10669,6 +10758,12 @@
     "pointer": 14,
     "script": "jobs/atlas_export.py",
     "commit": "f6165ba+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   }
  ],
