@@ -30,7 +30,7 @@ Levels follow the atlas: 0 numerical (all of the above unless stated), 2 interva
 and a level-3 Gram matrix by reference (certificates/gramcert_*.json); their active hypergraph is level 2
 (counts frozen on the box of the local verification, all other caps below D*).
 
-usage: python jobs/atlas_export.py [EXTRA.json ...]   (extra inputs: outputs of search_parallel.py or
+usage: python jobs/atlas_export.py [--only] [EXTRA.json ...]   (--only: export just the extra files' N)   (extra inputs: outputs of search_parallel.py or
        atlas.py, lists or {"classes": [...]} of records with "points")
 writes export/sphere/d3/cap_discrepancy_sup/n<N>/observations.json
 """
@@ -254,8 +254,9 @@ def upgrades(name):
 def main():
     data = json.load(open(os.path.join(ROOT, 'sphcap/data/critical_configurations.json')))['classes']
     src_cc = dict(file='sphcap/data/critical_configurations.json', script='jobs/atlas_export.py', commit=commit())
-    items = [(c['points'], c['name'], dict(src_cc, pointer=c['name'])) for c in data]
-    for f in sys.argv[1:]:
+    only = '--only' in sys.argv          # export only the given files (leave the other N untouched)
+    items = [] if only else [(c['points'], c['name'], dict(src_cc, pointer=c['name'])) for c in data]
+    for f in [a for a in sys.argv[1:] if a != '--only']:
         d = json.load(open(f)); rows = d['classes'] if isinstance(d, dict) else d
         for k, r in enumerate(rows):
             if 'points' in r:
