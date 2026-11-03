@@ -1315,6 +1315,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -2622,6 +2629,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -3929,6 +3943,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -5236,6 +5257,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -6543,6 +6571,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -7850,6 +7885,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -9157,6 +9199,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -10464,6 +10513,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -11771,6 +11827,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -13078,6 +13141,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -14385,6 +14455,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -15692,6 +15769,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -16999,6 +17083,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -18306,6 +18397,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   },
   {
@@ -19613,6 +19711,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
    }
   }
  ],
