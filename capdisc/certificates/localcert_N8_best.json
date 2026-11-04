@@ -1,9 +1,10 @@
 {
  "name": "N8_best",
  "N": 8,
+ "level": "verified",
  "box_radius": 0.0001,
  "gauge": "capcert coordinates (x0 pole, x1 in xz-plane x>=0)",
- "verified": true,
+ "verified": false,
  "kernel": "arb (python-flint)",
  "method": "Krawczyk test + orthant test",
  "label": "Krawczyk-verified (Arb)",
@@ -47,10 +48,21 @@
      0.23079914618011171
     ]
    ],
+   "D_qstar_enclosure": [
+    0.23079914617973615,
+    0.23079914618017228
+   ],
+   "D_qstar_enclosure_hex": [
+    "0x1.d8ad39064b243p-3",
+    "0x1.d8ad39064efa4p-3"
+   ],
    "counts_frozen_on_box": true,
    "orthants_failed": 0,
    "box_radius": 0.0001,
-   "verified": true,
+   "verified": false,
+   "not_verified_because": [
+    "2 extra caps: at the level \"verified\" nothing shows they are <= D* at q*"
+   ],
    "image": 0,
    "caps": [
     "Cap(1, 2)+",
@@ -132,10 +144,21 @@
      0.230799146180158
     ]
    ],
+   "D_qstar_enclosure": [
+    0.23079914617973651,
+    0.230799146180158
+   ],
+   "D_qstar_enclosure_hex": [
+    "0x1.d8ad39064b250p-3",
+    "0x1.d8ad39064eda2p-3"
+   ],
    "counts_frozen_on_box": true,
    "orthants_failed": 0,
    "box_radius": 0.0001,
-   "verified": true,
+   "verified": false,
+   "not_verified_because": [
+    "2 extra caps: at the level \"verified\" nothing shows they are <= D* at q*"
+   ],
    "image": 1,
    "caps": [
     "Cap(0, 6)+",
@@ -181,10 +204,16 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 4 (local verification)",
-  "commit": "7b857b4ce9e8c9fe1f5445d0f3258c7658dd2d97",
+  "commit": "051990c494668986e1da079da07bd38875449128",
   "tree_dirty": false,
+  "tree_checked": [
+   "proof",
+   "csrc",
+   "verify.sh",
+   "build.sh"
+  ],
   "versions": {
-   "python": "3.13.16",
+   "python": "3.13.18",
    "python-flint": "0.9.0",
    "FLINT": "3.6.0",
    "numpy": "2.5.3",
@@ -198,11 +227,13 @@
    "N8_best",
    "1e-4",
    "--out",
-   ".../lc"
+   "certificates",
+   "--level",
+   "verified"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-11-02T17:32:36Z",
-  "seconds": 39.1,
+  "date_utc": "2026-11-04T19:19:13Z",
+  "seconds": 33.9,
   "inputs": {
    "proof/hints/N8_best.json": "de820dffbf2049f2938b55de1805af7209216fd0211760d17da0b5bc64142ab8"
   }

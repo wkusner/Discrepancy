@@ -11,6 +11,18 @@ reserved for level 4, a certificate accepted by a named checker; nothing here is
 Files written before 2026-10-29 may still contain the old key `certified`; readers accept it as
 a synonym of `verified`.
 
+**Levels of a certificate chain** (`verify.sh`, `check/check_chain.py`; PROOF.md Sections 3 and 3a). These name how
+much of the proof a chain contains, not an atlas level:
+
+| chain level | steps | used for |
+|---|---|---|
+| **full** | Steps 1–6 (local, symmetric and congruence verification, mesh, refinement); T = the largest upper end of the D* enclosures | N = 5, 6 |
+| **verified** | Steps 1–4 only (local verification, mesh, refinement); T = the next double above that upper end; no image may have redundant worst caps | N = 7 |
+
+Until 2026-11-04 the level "full" was called "certified"; the checker accepts that name when it reads it, and
+`certificates/verify_N5*/chain_N5.json` were regenerated with "full". Atlas level 4 is labelled "certified (checker name)";
+nothing is at level 4 now, and these chain levels do not by themselves place a value there.
+
 ## Vocabulary
 
 | label | meaning | example |
@@ -68,9 +80,14 @@ audited independently; the audit's findings (outward box B, D* < T and N·D* in 
 checked in B, exact symmetry group and orbits of all worst caps checked in B, exact Krawczyk box
 hand-off, stale-file and failure handling) are fixed.
 
-Pipeline A has been re-run for N = 5 with the trusted core `proof/` (`verify.sh 5`; every inequality decided in
-Arb), and its certificate chain passes `check/check_chain.py` (C1-C8): `certificates/verify_N5/`. The N = 6 re-run
-is in progress on the department server.
+Pipeline A has been re-run for N = 5 with the trusted core `proof/` after the code audit of 2026-11-04 (`verify.sh 5`;
+every inequality decided in Arb; survivor files bound to the stamps by SHA-256, mesh provenance recorded), and its
+certificate chains pass `check/check_chain.py` (C1–C8, level full): `certificates/verify_N5/` (one mesh pass) and
+`certificates/verify_N5_2pass/` (two passes). The N = 6 re-run is to be done on the server.
+
+N = 7, 8 (local verification, level "verified"): the N = 7 local certificate is Krawczyk-verified (Arb) with no
+redundant worst caps; the global N = 7 run is in progress. The N = 8 local certificate is **not** verified at that
+level (two redundant worst caps per image; PROOF.md Section 3a says what it does establish).
 
 The theorem for N = 5, 6 is **proved**, with interval-verified, Arb-verified and Krawczyk-verified
 steps, and every step is cross-verified for N = 5 and N = 6: pipeline B proves the theorem on its own

@@ -1,6 +1,7 @@
 {
  "name": "N7_best",
  "N": 7,
+ "level": "verified",
  "box_radius": 0.0001,
  "gauge": "capcert coordinates (x0 pole, x1 in xz-plane x>=0)",
  "verified": true,
@@ -35,6 +36,14 @@
    ],
    "max_other_caps_on_K": 0.25879570440975286,
    "others_below": true,
+   "D_qstar_enclosure": [
+    0.26085880727033056,
+    0.2608588072703328
+   ],
+   "D_qstar_enclosure_hex": [
+    "0x1.0b1e923866073p-2",
+    "0x1.0b1e92386609bp-2"
+   ],
    "counts_frozen_on_box": true,
    "orthants_failed": 0,
    "box_radius": 0.0001,
@@ -98,6 +107,14 @@
    ],
    "max_other_caps_on_K": 0.2587957044096365,
    "others_below": true,
+   "D_qstar_enclosure": [
+    0.26085880727033095,
+    0.2608588072703327
+   ],
+   "D_qstar_enclosure_hex": [
+    "0x1.0b1e92386607ap-2",
+    "0x1.0b1e92386609ap-2"
+   ],
    "counts_frozen_on_box": true,
    "orthants_failed": 0,
    "box_radius": 0.0001,
@@ -137,10 +154,16 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 4 (local verification)",
-  "commit": "768cefc0fa4a7b5c840a7bcac8e68a7f09bc34ff",
+  "commit": "051990c494668986e1da079da07bd38875449128",
   "tree_dirty": false,
+  "tree_checked": [
+   "proof",
+   "csrc",
+   "verify.sh",
+   "build.sh"
+  ],
   "versions": {
-   "python": "3.13.16",
+   "python": "3.13.18",
    "python-flint": "0.9.0",
    "FLINT": "3.6.0",
    "numpy": "2.5.3",
@@ -154,11 +177,13 @@
    "N7_best",
    "1e-4",
    "--out",
-   ".../n7lc2"
+   "certificates",
+   "--level",
+   "verified"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-11-01T01:42:46Z",
-  "seconds": 7.1,
+  "date_utc": "2026-11-04T19:19:21Z",
+  "seconds": 8.2,
   "inputs": {
    "proof/hints/N7_best.json": "432f41afec4d4ed91b3da793d5c493ff0e21bfeef97d4cf6a99e137622b98232"
   }

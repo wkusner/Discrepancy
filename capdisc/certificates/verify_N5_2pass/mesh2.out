@@ -1,0 +1,2 @@
+RESULT N=5 T=0.32332565099805344 MIN_EPS=0.01 cells=202711 bounded=87289 (first-order 84891) sym=18483 ball=0 survivors=2626 min_surv_lb=0.3228074534017471 time=18s
+MODE rigorous (interval arithmetic, outward rounding)

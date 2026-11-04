@@ -1,0 +1,131 @@
+{
+ "N": 5,
+ "T": 0.32332565099805344,
+ "T_hex": "0x1.4b15e123fa6b2p-2",
+ "capcert_stamp": {
+  "N": "5",
+  "T": "0x1.4b15e123fa6b2p-2",
+  "MIN_EPS": "0x1.47ae147ae147bp-7",
+  "nf": "1",
+  "mode": "rigorous",
+  "keep": "0x1p+0",
+  "balls": "0",
+  "survivors": "2626",
+  "cells": "202711",
+  "fo": "1",
+  "fo_emax": "0x1.999999999999ap-4",
+  "smear": "0",
+  "maxc": "0",
+  "resumed": "0",
+  "prefix": "mesh2",
+  "from": "mesh",
+  "same_dir": "1",
+  "from_stamp": "b9bb4cea9a6ddc93e245ebfcced9c82e9e2a819e851dc1b4ff430902cfbdb873",
+  "input_cells": "14085",
+  "input_files": "2",
+  "in.0": "d92c8d9e6f02ac02916f3662e287613d3b5831533ad19318ebb77c9a98aab132",
+  "in.1": "2b45bc8fff20aa3427106bf87e5fa99b1073417ae5dbb1a840862dee0cdc87f2",
+  "files": "2",
+  "records": "2626",
+  "surv.0": "747456c08cf9e16d762a99e64277f47e0b0cdec4e4625c5e463eff9db3a7cc8c",
+  "surv.1": "b206ddaa4f494c06f6c995e5aa5d1a102465518905a849f5a7a9a9a0c041c844",
+  "commit": "051990c494668986e1da079da07bd38875449128",
+  "tree_dirty": "0",
+  "src": "capcert.c,fo.h,ia.h,rig.h,sha256.h",
+  "src_sha256": "b6d656ca81c7a607bf6d332bca3bb0fdd36347b0e65d44b49ae50c029a33b485",
+  "cc": "13.3.0",
+  "flags": "-O3%20-march=native%20-Wall%20-Wno-unused-function%20-fopenmp%20-DRIGOROUS%20-ffp-contract=off%20-fno-fast-math",
+  "build": "rigorous"
+ },
+ "input_cells": 2626,
+ "cells": 19660,
+ "bounded": 9682,
+ "boxed": 10,
+ "sym": 1451,
+ "failed": 0,
+ "fails": [],
+ "time": 71.6425998210907,
+ "verified": true,
+ "kernel": "arb (python-flint)",
+ "label": "Arb-verified",
+ "exclusion_boxes": [
+  {
+   "center": [
+    "0x1.83c5cc46e03bdp+0",
+    "0x1.9980e172a913fp+0",
+    "0x1.0e225fbb5761dp+1",
+    "0x1.9980e172a9142p+0",
+    "-0x1.0e225fbb5761cp+1",
+    "0x1.83c5cc46e03bbp+1",
+    "0x1.721e192c0d250p-56"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  },
+  {
+   "center": [
+    "0x1.83c5cc46e03bdp+0",
+    "0x1.83c5cc46e03b9p+0",
+    "0x1.921fb54442d18p+1",
+    "0x1.0e391747431c4p+1",
+    "-0x1.921fb54442d19p+0",
+    "0x1.0e391747431c4p+1",
+    "0x1.921fb54442d19p+0"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  },
+  {
+   "center": [
+    "0x1.83c5cc46e03bcp+0",
+    "0x1.83c5cc46e03b9p+0",
+    "0x1.921fb54442d18p+1",
+    "0x1.0e391747431c4p+1",
+    "0x1.921fb54442d1ap+0",
+    "0x1.0e391747431c4p+1",
+    "-0x1.921fb54442d18p+0"
+   ],
+   "radius": "0x1.3a92a30553261p-12"
+  }
+ ],
+ "stamp": {
+  "step": "PROOF.md Step 3 (refinement)",
+  "commit": "051990c494668986e1da079da07bd38875449128",
+  "tree_dirty": false,
+  "tree_checked": [
+   "proof",
+   "csrc",
+   "verify.sh",
+   "build.sh"
+  ],
+  "versions": {
+   "python": "3.13.18",
+   "python-flint": "0.9.0",
+   "FLINT": "3.6.0",
+   "numpy": "2.5.3",
+   "scipy": "1.18.1",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0"
+  },
+  "prec": 53,
+  "argv": [
+   "proof/refine.py",
+   "5",
+   "results/verify_N5/mesh2",
+   "results/verify_N5/localcert_N5_best.json",
+   "--workers",
+   "2",
+   "--min-width",
+   "1e-7",
+   "--T",
+   "0.32332565099805344"
+  ],
+  "machine": "Linux x86_64, 2 cpus",
+  "date_utc": "2026-11-04T19:22:24Z",
+  "seconds": 71.9,
+  "inputs": {
+   "results/verify_N5/localcert_N5_best.json": "b4842199fe65c139cb95d07ca4cd43bbff9dabbd96cc63053826b9707329c6ef",
+   "results/verify_N5/mesh2.done": "dd5dbd5939fb81358dd4711afb040d036eac880e723ab732b8051cbc4b451f90",
+   "results/verify_N5/mesh2.surv.0": "747456c08cf9e16d762a99e64277f47e0b0cdec4e4625c5e463eff9db3a7cc8c",
+   "results/verify_N5/mesh2.surv.1": "b206ddaa4f494c06f6c995e5aa5d1a102465518905a849f5a7a9a9a0c041c844"
+  }
+ }
+}

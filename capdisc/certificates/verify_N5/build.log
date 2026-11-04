@@ -1,0 +1,6 @@
+building capcert and capcert_rig with OpenMP
+capcert commit=051990c494668986e1da079da07bd38875449128 tree_dirty=0 src=capcert.c,fo.h,ia.h,rig.h,sha256.h src_sha256=b6d656ca81c7a607bf6d332bca3bb0fdd36347b0e65d44b49ae50c029a33b485 cc=13.3.0 flags=-O3%20-march=native%20-Wall%20-Wno-unused-function%20-fopenmp%20-DRIGOROUS%20-ffp-contract=off%20-fno-fast-math build=rigorous
+self-test (expect two FLOAT-CHECKED lines and one INTERVAL-VERIFIED line):
+FLOAT-CHECKED: D >= T on the whole fundamental domain (floating point with margins; not rigorous)
+FLOAT-CHECKED: D >= T on the whole fundamental domain (floating point with margins; not rigorous)
+INTERVAL-VERIFIED: D >= T on the whole fundamental domain

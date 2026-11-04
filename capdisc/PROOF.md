@@ -6,11 +6,11 @@ paper). It is meant to be read next to the code. Every step names the lemma it u
 checks it, the arithmetic it trusts, and the certificate file it writes. The words *verified*,
 *cross-verified* etc. are used as defined in [VERIFICATION.md](VERIFICATION.md).
 
-> **Status (draft, 2026-10-31).** Pipeline A now runs from the trusted core `proof/` (branch
-> `audit-refactor`), driven by `verify.sh N` and checked by `check/check_chain.py`. The trusted base is in
-> [TRUST.md](TRUST.md). Section 6 lists what is fixed and what is still open; the certificates in
-> `certificates/` are those of the reference runs at commit `d8831ce` until the new reference runs are stored
-> in `certificates/verify_N{5,6}/`.
+> **Status (draft, 2026-11-04).** Pipeline A runs from the trusted core `proof/`, driven by `verify.sh N` and
+> checked by `check/check_chain.py`. The trusted base is in [TRUST.md](TRUST.md). Section 6 lists what is fixed
+> (including the code audit of 2026-11-04) and what is still open. The N = 5 reference chains of pipeline A are in
+> `certificates/verify_N5/` (one mesh pass) and `certificates/verify_N5_2pass/` (two passes); the other files in
+> `certificates/` are those of the reference runs at commit `d8831ce` and of pipeline B.
 
 ## 0. The claim
 
@@ -87,8 +87,14 @@ win; on larger cells the bound costs time and closes almost nothing.
 *What the code does.* `capcert_rig N T MIN_EPS OUT` bisects F and proves D ≥ T on every cell except
 the *survivors*, which it writes to `OUT.surv.*` once they are smaller than MIN_EPS.
 
-*Certificate.* `mesh.out` and the completion stamp `mesh.done` (N, T as a hex float, mode, keep fraction,
-exclusion balls, survivor count), in the output directory of `verify.sh`; formerly
+*Certificate.* `mesh.out` and the completion stamp `mesh.done`, in the output directory of `verify.sh`: N, T as a
+hex float, MIN_EPS, mode, keep fraction, exclusion balls, survivor count, the SHA-256 of every survivor file
+`mesh.surv.<t>` (read back after the files are closed), and the provenance of the binary: the commit, whether
+`csrc/` or `build.sh` differed from it, the SHA-256 of the C sources, the compiler version and the flags (compiled
+in by `build.sh`; `capcert_rig --version` prints them). A second pass (`--cells mesh`, Step 2b of `verify.sh`) writes
+`mesh2.done` with the same fields plus the SHA-256 of `mesh.done` (`from_stamp`) and of every input file it read
+(`in.<t>`, hashed while reading); it refuses inputs whose hashes differ from those in `mesh.done`. Stamps are
+written atomically. The rigorous build refuses `--keep-prob`, `--max-cells-per-root` and `--balls`. Formerly
 `certificates/proof_N{5,6}.json`. Pipeline B: `capcert_arb`, records in `certificates/pipelineB_N{5,6}.json`.
 
 ### Step 3. Refinement: D ≥ T on every survivor, outside the boxes
@@ -103,8 +109,9 @@ right-hand side is evaluated rigorously.
 is ≥ T (`proof/cellbound.py::cell_lower_bound`; every quantity in the bound is an Arb ball). Otherwise it bisects, down to a minimum width;
 a cell that still fails is reported, and the proof fails.
 
-*Certificate.* `mesh.refine.json`: `failed = 0`, `T_hex`, `exclusion_boxes`, and the SHA-256 of the local
-certificate, the mesh stamp and every survivor file it read. Reference runs at `d8831ce`
+*Certificate.* `mesh.refine.json` (`mesh2.refine.json` after two passes): `failed = 0`, `T_hex`,
+`exclusion_boxes`, and the SHA-256 of the local certificate, the mesh stamp and every survivor file it read. With a
+stamp that lists survivor hashes, the refinement reads exactly those files and checks their hashes first. Reference runs at `d8831ce`
 (`certificates/proof_N{5,6}.json`): for N = 5, 590,986
 survivors refined into 846,246 cells, 10 of them inside boxes. For N = 6: 6,509,863 survivors into
 6,531,051 cells, 8 inside boxes. Pipeline B: `jobs/xcheck_refine.py` (mpmath.iv),
@@ -126,15 +133,21 @@ image would leave cells that the refinement cannot close, and a wrong cap or cou
 3. *Orthant test.* On each of the 2^{2N−3} orthants of B_k there are weights μ ≥ 0 that make the
    μ-combination of the interval gradients strictly positive in the direction of the orthant. Hence
    D > D*_k on B_k \ {q*_k}.
-4. *Other caps.* Every cap of the capture list outside A is below D*_k on Z, so D(q*_k) = D*_k.
+4. *Other caps.* Every cap of the capture list outside A, except the redundant worst caps listed in the hints
+   (`extra_caps`), is below D*_k on Z. The redundant caps are enclosed on Z, so the certificate also gives an
+   enclosure of D(q*_k) (`D_qstar_enclosure`, the maximum over A and the redundant caps). Without redundant caps
+   it is the D*_k enclosure and D(q*_k) = D*_k. With them, D(q*_k) = D*_k needs Step 5, which shows that every
+   redundant cap lies in the orbit of a cap of A with the same count, hence has value D*_k at q*_k. So at the level
+   "verified" (Section 3a), which has no Step 5, an image with redundant caps is **not** verified.
 
-*What the code does.* `python -m proof.local NAME r` (Arb; the orthant test uses the exact ends of the
-gradient balls, and "other caps below D*" is decided in Arb). Pipeline B: `jobs/xcheck_local.py` (mpmath.iv,
+*What the code does.* `python -m proof.local NAME r --level full|verified` (Arb; the orthant test uses the exact
+ends of the gradient balls, and "other caps below D*" is decided in Arb; the default level is "verified"). Pipeline B: `jobs/xcheck_local.py` (mpmath.iv,
 independently written).
 
-*Certificate.* `localcert_<NAME>.json`: per image `krawczyk`, `D_enclosure` (doubles rounded outward;
-also `D_enclosure_hex` and the Arb ball `D_ball`),
-`counts_frozen_on_box`, `orthants_failed = 0`, `others_below`. Pipeline B:
+*Certificate.* `localcert_<NAME>.json`: `level`; per image `krawczyk`, `D_enclosure` (doubles rounded outward;
+also `D_enclosure_hex` and the Arb ball `D_ball`), `D_qstar_enclosure` (and `_hex`),
+`counts_frozen_on_box`, `orthants_failed = 0`, `others_below`, `redundant_caps_on_K`, and `not_verified_because` if
+an image is not verified. Pipeline B:
 `certificates/xcheck_local_N{5,6}_best.json`.
 
 *Hand-off to Step 3.* T is the largest upper end of the D*_k enclosures (`verify.sh`), and the
@@ -199,6 +212,54 @@ Let X be any configuration of N points (N = 5 or 6) and q a representative of X 
 Hence min D = D_N, attained exactly by the configurations congruent to Y(s*). The symmetry group
 and the Gram matrix are those of Y(s*) (Steps 5 and 7). ∎
 
+This is the level **full** of `verify.sh` and of the chain checker (Steps 1–6; until 2026-11-04 it was called
+"certified", a word now reserved for atlas level 4; readers accept the old name).
+
+## 3a. The level "verified" (N ≥ 7): what the chain establishes
+
+For N ≥ 7, `verify.sh` runs Steps 4, 2 (and 2b) and 3 only: there is no exact polynomial, no symmetric step and
+no congruence step. T is the **next double above** the largest upper end of the local D*_k enclosures, so
+T > D*_k strictly without knowing that D*_k is irrational. `proof.local` runs with `--level verified`, and an
+image with redundant worst caps (`extra_caps`) is not verified (Step 4, item 4); the chain checker refuses such
+an image too (C1).
+
+**Claim at the level "verified".** Let F be the fundamental domain and B_1, …, B_m the local boxes. If the chain
+checker accepts the chain (C1, C4–C8), then
+
+1. D ≥ T on F outside B_1 ∪ … ∪ B_m (mesh and refinement, Steps 2, 2b, 3);
+2. T > D*_k for every image k (C5: T is above every upper end; C6);
+3. on each B_k, D ≥ D*_k, with equality only at q*_k, and D(q*_k) = D*_k (Step 4 with no redundant caps: frozen
+   counts, orthant test, every other cap below D*_k at q*_k).
+
+Hence min D over all N-point configurations lies in [min_k lo_k, min_k hi_k], where [lo_k, hi_k] is the D*_k
+enclosure, and every minimizer is one of the q*_k (up to rotations, reflections and relabelings). **Not claimed:**
+that the images q*_k are congruent, that the minimizer is unique up to symmetry, the symmetry group, or any exact
+value.
+
+**N = 8 (not a chain).** `certificates/localcert_N8_best.json` (commit `051990c`) has two redundant worst caps per
+image and is therefore **not verified** at this level. What it does establish, per image k: the square system of
+14 caps has a unique zero (q*_k, D*_k) in the Krawczyk box, with D*_0 ∈ [0.23079914617973496,
+0.23079914617973746] and D*_1 ∈ [0.23079914617973507, 0.23079914617973746]; on B_k (half-width 10⁻⁴) the counts of
+the square system are frozen and the orthant test passes, so D > D*_k on B_k except at q*_k; every cap outside the
+square system and the redundant caps is below D*_k at q*_k; and the redundant caps give D(q*_0) ∈
+[0.23079914617973615, 0.23079914618017228], D(q*_1) ∈ [0.23079914617973651, 0.230799146180158] (the enclosures of
+the redundant caps straddle D*_k). So inf over B_k of D lies in [lower end of D*_k, upper end of D(q*_k)], an
+interval about 4·10⁻¹³ wide. Open: whether D(q*_k) = D*_k (if D(q*_k) > D*_k, points near q*_k may have smaller D,
+so q*_k need not be the minimizer in B_k), and everything global. The statement "D₈* ∈ [0.23079914617973496,
+0.23079914617973746]" is therefore not established by this certificate. Closing this needs Step 5 for the C₂ family of N = 8
+(Krawczyk on the symmetry-reduced square system and the orbit cover with counts), which is later work.
+
+**The N = 7 run started at `768cefc`.** The global N = 7 run on the server was built and started at commit
+`768cefc` (2026-10-31) and finishes with that code. Its stamps predate the fixes of 2026-11-04: `mesh.done` (and a
+`mesh2.done`, if any) carry no survivor hashes and no provenance, and the `tree_dirty` of its Python stamps is
+always false (finding 1). The chain checker accepts such a stamp only together with a sidecar `mesh.surv.sha256`
+(resp. `mesh2.surv.sha256`) whose first line is `# stamp mesh.done sha256 <hex>  hashed <time>` with `<hex>` the
+SHA-256 of that stamp, followed by `sha256sum` lines for exactly the survivor files in the directory; the result
+records the route ("sidecar") and the time of hashing, the absence of mesh provenance, and that the tree state of
+the old stamps is not evidence. A second pass from before 2026-11-04 is bound to its input only by the directory
+name and the record count; the result says so. The N = 7 local certificate has no redundant caps, so finding 2
+does not affect it.
+
 ## 4. What is proved by hand, not by code
 
 The code checks inequalities; the lemmas that make those inequalities sufficient are proved in
@@ -243,11 +304,33 @@ scipy's LP solver, every floating-point result, msolve (a check only).
 * **Tests** (old item 9): `tests/test_proof_core.py` (cell bound against the exact discrepancy, bisection
   covering, outward rounding, domain test, and mutation tests that must make Step 4 fail).
 
+*Fixed after the code audit of 2026-11-04* (`claude/audit-2026-11-04.md`; branch `audit-fixes`):
+
+* **C8 was vacuous** (finding 1): the git pathspecs of `proof/certio.py` and the checker are now relative to
+  `capdisc/` (`proof`, `csrc`, `verify.sh`, `build.sh`), untracked files included, and every git call fails loudly.
+  Stamps record `tree_checked`; C8 compares the commits of all stamps, including the commit the mesh binary was built
+  from, and records them, the checker's own commit, and whether the checker's proof code is the certificates'.
+  `verify.sh` aborts when the proof code differs from the commit and rebuilds `capcert_rig`.
+* **Redundant worst caps at the level "verified"** (finding 2): refused by `proof.local --level verified` and by C1;
+  every local certificate reports the enclosure of D(q*). The claim of that level is Section 3a.
+* **Survivor files and stamps** (findings 3, 4): the stamps hold the SHA-256 of every survivor file and, for a second
+  pass, of its input stamp and files; they record the provenance of the binary; the checker verifies the chain
+  mesh.done → mesh.surv.* → mesh2.done → mesh2.surv.* → refinement by hash on every run.
+* **Smaller items** (findings 5–9): `--keep-prob` and `--max-cells-per-root` refused in the rigorous build and
+  `KEEP_PROB` written in the second-pass stamp; C4 accepts more records than survivors (a resumed first pass), since
+  the files are bound by hash; `csrc/fo.h` initialises its weights and skips caps with non-finite enclosures; the
+  level "certified" is now "full"; missing stamps fail cleanly, N is cross-checked, input keys outside the repository
+  are shortened, and the checker writes its result next to the directory it checks (`--out` to choose).
+* **Tests**: `tests/test_git_provenance.py`, `tests/test_capcert_stamps.py`, `tests/test_chain_checker.py` (reference,
+  legacy and synthetic chains, mutations), degenerate cells in `tests/test_capcert_fo.py` with a robust oracle
+  (`tests/oracle.py`), the binary that `build.sh` produces.
+
 *Still open:*
 
 1. **N = 6 reference run of pipeline A** with the new core, on the server (`verify.sh 6`). The N = 5 reference
-   run is stored in `certificates/verify_N5/` (survivor files omitted; their SHA-256 are in `mesh.refine.json`)
-   and passes the chain checker.
+   runs are stored in `certificates/verify_N5/` and `certificates/verify_N5_2pass/` (survivor files included; the
+   stamps hold their SHA-256) and pass the chain checker. The former reference runs (768cefc; f520db8 + e97ada7)
+   are kept as legacy test fixtures in `tests/data/`.
 2. **Pipeline B** now checks congruence too (`jobs/xcheck_congruence.py`, mpmath.iv; same σ as the Arb version),
    but it is not yet driven by a `verify.sh`-style script, stamped, or checked by the chain checker.
 3. **The mesh source** `csrc/capcert.c` still contains the floating-point exploration mode behind
@@ -259,10 +342,12 @@ scipy's LP solver, every floating-point result, msolve (a check only).
 ```
 bash build.sh                                 # capcert_rig (interval mesh), with self-tests
 python -m pytest tests/test_proof_core.py -q  # tests of the trusted core (a few seconds)
-THREADS=16 bash verify.sh 5                   # pipeline A, Steps 4, 5, 6, 2, 3 -> results/verify_N5/
-python3 check/check_chain.py 5 results/verify_N5          # chain checker, C1-C8
+THREADS=16 bash verify.sh 5                   # pipeline A, Steps 4, 5, 6, 2, 3 and the chain check -> results/verify_N5/
+python3 check/check_chain.py 5 certificates/verify_N5 --out /tmp/chain_N5.json   # chain checker, C1-C8
 python jobs/gram_verify.py N5_best            # Step 7 (and N6_best)
 THREADS=32 NS="5 6" bash run_xcheck.sh        # pipeline B: Steps 2-5 and 7, then a verdict
 ```
 
-N = 5 takes about 2 hours on 2 threads; N = 6 about 75 minutes on 32 threads.
+N = 5 takes about 12 minutes on 2 threads (5 minutes with `MESH2_EPS=0.01`, two passes); N = 6 about 75 minutes on
+32 threads. `verify.sh` refuses to run on a modified tree; `VERIFY_ALLOW_DIRTY=1` makes a test run whose chain the
+checker rejects.
