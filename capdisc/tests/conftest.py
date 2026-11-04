@@ -12,10 +12,11 @@ marked here, by name, so that the test files stay unchanged; move the mark into 
 """
 import pytest
 
-# tests/<file>.py::<test name>, measured above ~1.5 s each on a laptop-class CPU
+# <file>.py::<test name>; each takes 3 s or more (a full run is about 25 s), the next slowest about 1 s
 SLOW_TESTS = {
+    'test_stuck_exits.py::test_short_exit_is_followed',
+    'test_sphcap.py::test_optimizer_recovers_known_n4_minimum',
     'test_balance.py::test_slp_reaches_n5_best',
-    'test_balance.py::test_n5_symmetric_ansatz_and_elimination',
 }
 
 
