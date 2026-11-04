@@ -25,6 +25,13 @@ def task(args):
     return [(k.D, k.X, k.hits, k.sources) for k in cl[:40]]
 
 
+def write_atomic(path, dump, mode):
+    """write to path.tmp, then rename: a crash or power loss mid-write leaves the previous file intact"""
+    with open(path + '.tmp', mode) as f:
+        dump(f); f.flush(); os.fsync(f.fileno())
+    os.replace(path + '.tmp', path)
+
+
 def merge(store, items):
     for D, X, hits, src in items:
         key = (round(D, 8), S.invariant(X, 4))
@@ -58,7 +65,7 @@ def main():
             for items in pool.imap_unordered(task, jobs):
                 merge(store, items)
             cl = sorted(store.values(), key=lambda v: v[0])
-            pickle.dump([tuple(v) for v in cl], open(out + '.pkl', 'wb'))
+            write_atomic(out + '.pkl', lambda f: pickle.dump([tuple(v) for v in cl], f), 'wb')
             print(f"[{time.time()-t0:7.0f}s] N={a.N} round {r+1}/{a.rounds}: {len(cl)} classes; "
                   f"best {cl[0][0]:.12f} (hits {cl[0][2]}); next {[round(v[0], 10) for v in cl[1:4]]}", flush=True)
     rows = []
@@ -70,7 +77,7 @@ def main():
                          aut=S.gram_automorphisms(X), sources=src,
                          points=np.asarray(X).tolist(),
                          worst_caps=[dict(I=list(map(int, b.I)), kind=b.kind, n_closed=int(b.n_cl), n_open=int(b.n_op), t=float(b.t)) for b in rep.active]))
-    json.dump(rows, open(out + '.json', 'w'), indent=1)
+    write_atomic(out + '.json', lambda f: json.dump(rows, f, indent=1), 'w')
     for r in rows:
         print(json.dumps(r))
 
