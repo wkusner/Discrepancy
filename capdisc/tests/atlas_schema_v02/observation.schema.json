@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:critical-atlas:schema:observation:0.2",
+  "title": "Observation: one find or one result, exactly as it came (one line of log/observations/*.jsonl)",
+  "description": "Append-only. Never edited, never deleted. Entities are rebuilt from observations and events. kind 'find': a census record from a search or a census file; 'refine': a higher-level description of a quantity of an existing entity; 'import': data imported from a repository file (exact data, interval enclosures, joins).",
+  "type": "object",
+  "required": ["record", "schema_version", "obs_id", "seq", "kind", "container", "N", "raw", "source", "tolerances", "ingested_by"],
+  "properties": {
+    "record": {"const": "observation"},
+    "schema_version": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/schema_version"},
+    "obs_id": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/obs_id"},
+    "seq": {"type": "integer", "minimum": 1, "description": "Position in the log of this (container, d, N); replay order."},
+    "kind": {"enum": ["find", "refine", "import"]},
+    "container": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/container"},
+    "N": {"type": "integer", "minimum": 1},
+    "raw": {"type": "object", "description": "The record as found, every field kept (for a census record: the fields of kisscrit.search.record plus hits, src, prov, surg)."},
+    "target": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/key", "description": "For kind refine: the entity the result describes."},
+    "source": {
+      "type": "object",
+      "required": ["file_name", "file_sha256", "record_index", "format", "commit"],
+      "properties": {
+        "file_name": {"type": "string", "pattern": "^[^/]+$|^(results|data|scripts)/[^ ]+$", "description": "Repository-relative path, or a bare file name for run output; never a host or home path."},
+        "file_sha256": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/sha256"},
+        "record_index": {"type": ["integer", "string"]},
+        "format": {"enum": ["census", "merged-census", "refine-input", "refine-queue", "n12-types", "exact-configs", "interval-enclosures", "joins", "other"]},
+        "commit": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/commit"}
+      },
+      "additionalProperties": false
+    },
+    "prov": {
+      "description": "The search provenance written by scripts/explore/explore_worker.py (absent for census files).",
+      "type": "object",
+      "properties": {
+        "commit": {"type": "string"},
+        "seed": {"type": "integer"},
+        "worker": {"type": "integer"},
+        "batch": {"type": "integer"},
+        "run_id": {"type": "string"},
+        "first_found_utc": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/utc"}
+      },
+      "additionalProperties": false
+    },
+    "tolerances": {"$ref": "urn:critical-atlas:schema:entity:0.2#/$defs/tolerances"},
+    "ingested_by": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/generated_by"},
+    "utc": {"$ref": "urn:critical-atlas:schema:common:0.2#/$defs/utc"}
+  },
+  "additionalProperties": false
+}

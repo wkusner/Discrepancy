@@ -26,8 +26,9 @@ The work has four layers, each with its own data:
 4. **Papers**: kept in a separate repository (not part of this one).
 
 Status: N ≤ 4 proved by hand; N = 5, 6 proved (computer-assisted: interval-, Arb- and
-Krawczyk-verified; second-kernel cross-checks in progress); N = 7, 8 numerical candidates;
-N = 9–12 search values only.
+Krawczyk-verified; second-kernel cross-checks in progress); N = 7, 8: the best configuration is locally verified
+(Krawczyk, level-2 enclosure of the local minimum), with no global claim for N ≥ 7; N = 9–25 search values only
+(numerical, level 0; N = 21–25 from a first search pass that has not converged).
 
 ## Conventions (used by every file)
 
@@ -118,21 +119,41 @@ N = 9–12 search values only.
   (exact rationals), `verified`, `label` ("cross-verified (exact: sympy + FLINT; intervals: Arb + mpmath.iv)"),
   `atlas_level` (3), `statement`.
 
-### `export/sphere/d3/cap_discrepancy_sup/n<N>/observations.json`: observations for critconfig-atlas
-Written by `jobs/atlas_export.py` (extra inputs: search or atlas outputs with `points`). Top level
-`{functional, N, observations:[…], shared_hashes}`. `functional` = `{id: "cap_discrepancy_sup",
-definition, sense: "minimize", container: "sphere", d: 3, critical_point, gauge}`. Per observation:
-* `kind` ("find"), `functional`, `container`, `d`, `N`, `name`, `X` (N×3), `source` (file, pointer, script, commit).
-* `value`: list of descriptions `{id, level, status, value, note, evidence}`; level 0 double; for
-  N5_best and N6_best also level 2 (`{interval: [lo, hi]}`) and level 3
-  (`{minpoly (ascending, strings), isolating_interval (rationals), closed_form, decimal}`).
-* `active` — the **active hypergraph**: vertices are the points, hyperedges the worst caps, each written as
-  the over-full closed cap, `{boundary, interior, count, branches, weight_range, in_support}`
+### `export/sphere/d3/cap_discrepancy_sup/n<N>/`: the atlas export (numerical unless a level says otherwise)
+Produced by one command, `python jobs/atlas_pipeline.py N [N ...]` (N = 5..25 today), from
+`sphcap/data/critical_configurations.json` (N = 5..8), `sphcap/data/atlas/atlas_N5_levels.json` (N = 5),
+`sphcap/data/search/search_N<N>.json` (N ≥ 9) and the certificates of N = 5..8. Re-running it with the same inputs
+rewrites the same bytes. Files per N:
+
+| file | what |
+|---|---|
+| `observations.jsonl` | the **observation log** in the form of atlas spec v0.2 (`observation.schema.json`; validated in `tests/test_atlas_pipeline.py`): one line per record found, `{record, schema_version, obs_id, seq, kind, container, N, raw, source, tolerances, ingested_by, prov}`; `raw` is the input record exactly as found (coordinates included), `obs_id` = `o-` + 16 hex of SHA-256 of the canonical JSON of `{file_sha256, record_index, raw}`. **Append-only**: a re-run adds only records it has not seen; when a later search pass replaces `search_N<N>.json`, its records are appended and the earlier ones stay. |
+| `passes.jsonl` | one line per search pass (one version of `search_N<N>.json`): `pass, file, file_sha256, file_commit, seed, rounds, workers, runs_per_task, runs, resumes_previous, improving_in_last_round, best_by_round, source` (where the provenance comes from). No machine names. |
+| `observations.json` | the export, rebuilt from the log in log order (fields below). |
+| `stuck.jsonl` | cache of the stuck-point classes, keyed by the SHA-256 of the stored coordinates and the classifier version (makes `jobs/atlas_stuck.py` resumable). |
+| `manifest.json` | inputs with SHA-256 and the commit that last changed each, the code commit and SHA-256 of every script, the classifier version, library versions, SHA-256 of the outputs. No time stamps. |
+
+`observations.json`: top level `{functional, N, observations:[…], shared_hashes, search_passes, convergence, label}`.
+`functional` = `{id: "cap_discrepancy_sup", definition, sense: "minimize", container: "sphere", d: 3, critical_point,
+gauge}`. `convergence` (search N only) = `{best, value, hits_total, found_once, improving_in_last_round, found_in_pass,
+passes, converged_note}`. Per observation:
+* `kind` ("find"), `functional`, `container`, `d`, `N`, `name`, `X` (N×3), `source` (file, file SHA-256, pointer, script,
+  commit that last changed the input file), `obs_id`, `seq` (position in the log).
+  Names: `N5_best` (curated classes), `search_N21#3` (record 3 of the first search pass), `search_N21.pass2#3` (a later pass).
+* `value`: list of descriptions `{id, level, status, value, note, evidence}`; level 0 double; for N5_best and N6_best
+  also level 2 (`{interval: [lo, hi]}`, cross-verified) and level 3 (`{minpoly (ascending, strings),
+  isolating_interval (rationals), closed_form, decimal}`); for N7_best and N8_best also level 2: the enclosure of the
+  value of the **local** minimum from `certificates/localcert_N{7,8}_best.json` (verified (Krawczyk, Arb); no global
+  claim). The level-0 value is D at the stored double configuration, which may exceed the local minimum by rounding.
+* `active`: the **active hypergraph**: vertices are the points, hyperedges the worst caps, each written as
+  the over-full closed cap, `{boundary, interior, count, branches, weight_range, in_support, cap}`
   (`boundary`: points on the circle; `interior`: points strictly inside; an under-full open cap is
   replaced by its complement; coincident caps are one hyperedge with several `branches`, the 2- or
-  3-point sets that define it, named `up:i-j-k` / `low:i-j-k`). `code`: canonical code of the whole
+  3-point sets that define it, named `up:i-j-k` / `low:i-j-k`). `cap` = `{center (unit vector), height,
+  angular_radius (radians), angular_radius_deg, level 0}`: the cap is {y : ⟨y, center⟩ ≥ height}; to draw it, the boundary
+  circle has center `height·center` and radius `sqrt(1 − height²)`. `code`: canonical code of the whole
   hypergraph. Level 0, or 2 for the proved minimizers.
-* `weights` — the **weight space** W = {λ ≥ 0, Σλ = 1, Σ λ_b ∇f_b = 0} over the branches (KKT multipliers):
+* `weights`: the **weight space** W = {λ ≥ 0, Σλ = 1, Σ λ_b ∇f_b = 0} over the branches (KKT multipliers):
   `dim`, `support`, `ranges` ([min, max] of each λ_b on W), `maxmin` (the max-min point), `maxmin_value`,
   `signed_dim` (dimension of the signed solutions).
 * `key_basis` = `{method, code, graph_hash}`: canonical code of the support hypergraph (hyperedges in the
@@ -141,8 +162,27 @@ definition, sense: "minimize", container: "sphere", d: 3, critical_point, gauge}
 * `first_order` = `{rank, dim_quotient (2N−3), kernel_dim, sharp, multipliers_unique}`; `second_order`
   (only when kernel_dim > 0): eigenvalues of the Lagrangian Hessian on the kernel modulo rotations, and the
   numbers of descending, ascending and null directions (finite differences, level 0).
+* `gram_numerical`: the Gram matrix ⟨x_i, x_j⟩ of X as an N×N array of doubles (level 0), for every observation.
 * `gram` (proved minimizers only): level 3, reference to `sphcap/data/gram_exact.json` with SHA-256 and the
   evidence file `certificates/gramcert_*.json`.
+* `search`: `{pass, hits, sources, seed, rounds, workers, runs_per_task, runs, hits_in_pass, same_configuration_as,
+  convergence}`. `hits` is as in the search file; it is cumulative when the pass resumed the previous one
+  (`jobs/search_parallel.py` adds the hits of `results/search_N<N>.pkl`), and `hits_in_pass` is then the difference
+  to the previous pass (null when unknown). `same_configuration_as` names the first observation of the same
+  configuration (same value to 1e-8 and the same sorted pairwise inner products to 1e-6: a numerical match). The best
+  configuration gets `convergence`, a note, when it was found once or its pass was still improving in its last round.
+  `pass` is null for the curated files.
+* `stuck_point` (`jobs/atlas_stuck.py`, `sphcap/stuck.py`): `{level 0, status, script, class, flat_dim, exit}`, class
+  sharp / strict / non-strict minimum, saddle, exit, not stationary (numerical labels); an exit records where the
+  restarted descent leads (`leads_to`: value, class, `same_as`).
+
+Adding a search pass: copy the new `results/search_N<N>.json` over `sphcap/data/search/search_N<N>.json` and run
+`python jobs/atlas_pipeline.py N --pass-info '{"seed": 1, "rounds": 15, "workers": 4, "runs_per_task": 12,
+"resumes_previous": true}' [--search-log the stdout of search_parallel.py]`, then commit the export. The earlier
+pass stays in the log; `jobs/atlas_export.py` alone refuses to rewrite an export that has a log.
+The stuck-point classification is the slow step (about 5 min per non-sharp observation at N = 25 on one core); it
+runs in parallel over the observations (`--workers K`, one BLAS thread each) and resumes from `stuck.jsonl` after an
+interruption.
 
 ### `msolve/*.ms`: polynomial systems (text, msolve input format)
 Line 1 has the variables, line 2 the characteristic (0), then comma-separated polynomials.
@@ -150,9 +190,13 @@ Line 1 has the variables, line 2 the characteristic (0), then comma-separated po
 P5 and P6. `N7_C2.ms` is being solved on w227.
 
 ### `sphcap/data/search/`
-`search_N{9,10,11,12}.json`: the best classes of the N = 9–12 searches (w227, 2026-10-29; `jobs/search_parallel.py`,
-12 rounds), one record per class: `{D, hits, active, rank, dimq, min_lambda, sharp, aut, sources, points, worst_caps}`.
-Floating point (double precision). Input of `jobs/atlas_export.py` for `export/.../n9`–`n12`.
+`search_N{9..25}.json`: the best classes (top 15) of the searches with `jobs/search_parallel.py`, one record per class:
+`{D, hits, active, rank, dimq, min_lambda, sharp, aut, sources, points, worst_caps}`. Floating point (double
+precision). The files do not record their search pass; the provenance of the files in the repository (seed, rounds,
+workers, runs per task, by SHA-256) is in `jobs/atlas_pipeline.py` (`KNOWN_PASSES`) and is copied into the export's
+`passes.jsonl`: N = 9–12 12 rounds (2026-10-29), N = 13–20 10 rounds × 8 workers × 12 runs (seed 0), N = 21, 22
+10 × 2 × 12, N = 23–25 10 × 4 × 12 (seed not recorded). A later pass overwrites the file; the export keeps the
+earlier records in its log. Input of `jobs/atlas_pipeline.py`.
 
 ### Code (for reference, not data)
 `sphcap/` (Python package), `csrc/` (C mesh program: `capcert.c`, interval-verified mode `ia.h`,
