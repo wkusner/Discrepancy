@@ -1,0 +1,75 @@
+{
+ "N": 5,
+ "command": "python jobs/atlas_pipeline.py 5",
+ "functional": "cap_discrepancy_sup",
+ "generated_by": {
+  "classifier_version": "ac44d3513e175f54",
+  "code_modified": false,
+  "commit": "436a0dc",
+  "last_code_commit": "436a0dc",
+  "script": "jobs/atlas_pipeline.py",
+  "scripts": {
+   "jobs/atlas_export.py": "7307e14c958e8bb3fc09225ade08442f235199b001ed78d0f0c5fdbcb26b2959",
+   "jobs/atlas_pipeline.py": "bc276efac8831fdb0c1171e8700fef4baf50664bee5fe05a29be869ef31d5c7d",
+   "jobs/atlas_stuck.py": "1b06123cfb7924cff1a73d590e7b9d984e48bce0b068082d1fd4fd6c855e6f32",
+   "sphcap/__init__.py": "b743a501cdca261f22070408889f50db0f5f6b51eef761a33f95b0ef804c4227",
+   "sphcap/balance.py": "03eec9b45eaeeb03ab41c9488bd816cd660410d919389bf5c6e9f9f2100e3ead",
+   "sphcap/stuck.py": "0a3ceb9a16622d4f339916c17f712427ee7c086d847da98e2d0721f9be094d7d"
+  },
+  "versions": {
+   "jsonschema": "4.26.0",
+   "numpy": "2.5.3",
+   "python": "3.13.18",
+   "scipy": "1.18.1"
+  }
+ },
+ "inputs": [
+  {
+   "commit": "c85345a",
+   "file": "sphcap/data/critical_configurations.json",
+   "format": "critical-configurations",
+   "records": 3,
+   "sha256": "0097f707b1174bcf13b83062077d9eee2f0f9bc66d5b4e458ce1f14084676bfb"
+  },
+  {
+   "commit": "0d4ed47",
+   "file": "sphcap/data/atlas/atlas_N5_levels.json",
+   "format": "atlas-levels",
+   "records": 3,
+   "sha256": "b598bcef4319a60b9c8f8cc0d0e1c9910f41e5efbff2c07ffa5f77ea2f2fa7d0"
+  },
+  {
+   "commit": "94a6cfa",
+   "file": "certificates/gramcert_N5_best.json",
+   "sha256": "bd8630a841cdcf4711d52e57939c10a9fd8a57d78a48b22ae5e940fbdbb8aa07"
+  },
+  {
+   "commit": "1c495c4",
+   "file": "certificates/localcert_N5_best.json",
+   "sha256": "ded32ed82198967035f1e39967ab24ba946516d00bc813a85a1b180048a1ffe2"
+  },
+  {
+   "commit": "9c1b883",
+   "file": "certificates/xcheck_local_N5_best.json",
+   "sha256": "19970113ce3656662902d1fd624a74075a0caaae02a0b3c5473432bf69f5b95e"
+  },
+  {
+   "commit": "9c1b883",
+   "file": "certificates/xcheck_roots.json",
+   "sha256": "bdb3daf6bcf67d661dc8a1492045b54d4eea36ae1d992f0305d0eac16e629700"
+  },
+  {
+   "commit": "a134fdf",
+   "file": "sphcap/data/gram_exact.json",
+   "sha256": "740a1f738febead9e92289df5184377636275b0d318b9f266cb44e5bca2fb16c"
+  }
+ ],
+ "observations": 6,
+ "outputs": {
+  "observations.json": "f2f503626f4c9a1ad95bea1b103813b2104a68f2be801b6085944fca9c1ddaf6",
+  "observations.jsonl": "78abb31220cc1c2826aef986aaf9ed9f6076f7f60a28c94575cb1050a705004a",
+  "stuck.jsonl": "acd96ac461fc1861adb3668342691156d632fdba1f88cf6c093a2d5c924dbc45"
+ },
+ "schema_version": "0.2.0",
+ "search_passes": 0
+}

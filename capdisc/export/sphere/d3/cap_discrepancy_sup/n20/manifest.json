@@ -1,0 +1,44 @@
+{
+ "N": 20,
+ "command": "python jobs/atlas_pipeline.py 20",
+ "functional": "cap_discrepancy_sup",
+ "generated_by": {
+  "classifier_version": "ac44d3513e175f54",
+  "code_modified": false,
+  "commit": "436a0dc",
+  "last_code_commit": "436a0dc",
+  "script": "jobs/atlas_pipeline.py",
+  "scripts": {
+   "jobs/atlas_export.py": "7307e14c958e8bb3fc09225ade08442f235199b001ed78d0f0c5fdbcb26b2959",
+   "jobs/atlas_pipeline.py": "bc276efac8831fdb0c1171e8700fef4baf50664bee5fe05a29be869ef31d5c7d",
+   "jobs/atlas_stuck.py": "1b06123cfb7924cff1a73d590e7b9d984e48bce0b068082d1fd4fd6c855e6f32",
+   "sphcap/__init__.py": "b743a501cdca261f22070408889f50db0f5f6b51eef761a33f95b0ef804c4227",
+   "sphcap/balance.py": "03eec9b45eaeeb03ab41c9488bd816cd660410d919389bf5c6e9f9f2100e3ead",
+   "sphcap/stuck.py": "0a3ceb9a16622d4f339916c17f712427ee7c086d847da98e2d0721f9be094d7d"
+  },
+  "versions": {
+   "jsonschema": "4.26.0",
+   "numpy": "2.5.3",
+   "python": "3.13.18",
+   "scipy": "1.18.1"
+  }
+ },
+ "inputs": [
+  {
+   "commit": "590fe7d",
+   "file": "sphcap/data/search/search_N20.json",
+   "format": "search",
+   "records": 15,
+   "sha256": "41827fa1a6a25682405f8799108bee9952b76b029de6d6bc02d0f2093ac572f7"
+  }
+ ],
+ "observations": 15,
+ "outputs": {
+  "observations.json": "9ffddfd5e89e18f4c6008100e54d2696cf1e4033db6f7d88295441a89f80dd20",
+  "observations.jsonl": "0b6ed426cfc14c6f0b3162141b92a8c30d05c48e6c2c509d2414b64adc10b665",
+  "passes.jsonl": "cb09b526a44302f238e67bfe1734b2b42317d6ec35d0edd17042e0d64dd6126f",
+  "stuck.jsonl": "e3af8cd5aac455019cccd9b0b0940ba76c474052b9a9f45f97c3d1e61bcbe747"
+ },
+ "schema_version": "0.2.0",
+ "search_passes": 1
+}

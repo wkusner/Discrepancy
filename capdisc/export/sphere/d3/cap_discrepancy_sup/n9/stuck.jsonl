@@ -1,0 +1,15 @@
+{"key":"07580412a52d2a2a","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"3a52bacc75c29ccb","version":"ac44d3513e175f54","block":{"class":"strict minimum","flat_dim":1,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"4385e6513e227208","version":"ac44d3513e175f54","block":{"class":"sharp minimum (zero weights on some worst caps)","flat_dim":0,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"72ea1d34a467cc40","version":"ac44d3513e175f54","block":{"class":"strict minimum","flat_dim":1,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"941a15febaa6fcd1","version":"ac44d3513e175f54","block":{"class":"sharp minimum (zero weights on some worst caps)","flat_dim":0,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"b818140ebed60ea1","version":"ac44d3513e175f54","block":{"class":"sharp minimum (zero weights on some worst caps)","flat_dim":0,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"bcf000d84f0bb051","version":"ac44d3513e175f54","block":{"class":"strict minimum","flat_dim":1,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"c98834143cca58fe","version":"ac44d3513e175f54","block":{"class":"strict minimum","flat_dim":1,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"d6fabdcc5524d86e","version":"ac44d3513e175f54","block":{"class":"strict minimum","flat_dim":1,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"e585a5fcc8618e7d","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"e6e0c7f32fe72237","version":"ac44d3513e175f54","block":{"class":"strict minimum","flat_dim":1,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"e6e66390687d45ae","version":"ac44d3513e175f54","block":{"class":"strict minimum","flat_dim":1,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"f098e7980fdfa8e5","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"f502280bc1b9f942","version":"ac44d3513e175f54","block":{"class":"sharp minimum (zero weights on some worst caps)","flat_dim":0,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"ffa06cdd4f24a5e7","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}

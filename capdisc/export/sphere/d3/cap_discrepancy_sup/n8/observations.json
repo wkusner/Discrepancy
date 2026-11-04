@@ -67,6 +67,24 @@
      "level": 0,
      "status": "numerical",
      "note": "double precision"
+    },
+    {
+     "id": "v2",
+     "level": 2,
+     "status": "interval-verified",
+     "value": {
+      "interval": [
+       "0.23079914617973496",
+       "0.23079914617973746"
+      ]
+     },
+     "note": "verified (Krawczyk, Arb): enclosure of the value of the local minimum near this configuration (boxes of half-width 0.0001 around each of 2 images); a local statement, no global claim",
+     "evidence": [
+      {
+       "file": "certificates/localcert_N8_best.json",
+       "file_sha256": "a5c39a394882285a5624d3dbe861ddaf58f947625bbc902bf44ff509ebe6eb00"
+      }
+     ]
     }
    ],
    "active": {
@@ -87,6 +105,19 @@
       "branches": [
        "up:1-6"
       ],
+      "cap": {
+       "center": [
+        -0.23023843481109418,
+        0.6160083727041396,
+        0.7533418532738876
+       ],
+       "height": 0.4615982923593679,
+       "angular_radius": 1.09100024406411,
+       "angular_radius_deg": 62.50970943261625,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.051802934997,
        0.174466219936
@@ -106,6 +137,19 @@
       "branches": [
        "up:2-5"
       ],
+      "cap": {
+       "center": [
+        0.23193446526153078,
+        -0.6127005838072536,
+        -0.755515981582189
+       ],
+       "height": 0.4615982923594055,
+       "angular_radius": 1.0910002440640678,
+       "angular_radius_deg": 62.50970943261383,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.051802934997,
        0.174466219936
@@ -126,6 +170,19 @@
       "branches": [
        "up:0-1-2"
       ],
+      "cap": {
+       "center": [
+        -0.7673753537501619,
+        0.19386508211451708,
+        0.611188511339624
+       ],
+       "height": 0.21159829235953473,
+       "angular_radius": 1.3575863343012067,
+       "angular_radius_deg": 77.78396728009561,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.007117192636,
        0.020287861883
@@ -143,6 +200,19 @@
       "branches": [
        "low:0-1-5"
       ],
+      "cap": {
+       "center": [
+        0.529519384109654,
+        0.8272995863801624,
+        -0.1875756280206592
+       ],
+       "height": 0.7115982923594715,
+       "angular_radius": 0.7790258612064657,
+       "angular_radius_deg": 44.634893978674725,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.011366444744,
        0.150774588806
@@ -163,6 +233,19 @@
       "branches": [
        "up:0-2-7"
       ],
+      "cap": {
+       "center": [
+        -0.23017356327337898,
+        -0.28576435328204175,
+        0.9302466689880337
+       ],
+       "height": 0.211598292359526,
+       "angular_radius": 1.3575863343012158,
+       "angular_radius_deg": 77.78396728009614,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.053135509687
@@ -183,6 +266,19 @@
       "branches": [
        "low:0-4-5"
       ],
+      "cap": {
+       "center": [
+        -0.2972972516889324,
+        0.7966584015265219,
+        -0.5262601404395117
+       ],
+       "height": 0.2115982923594708,
+       "angular_radius": 1.3575863343012722,
+       "angular_radius_deg": 77.78396728009936,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.084661818222
@@ -202,6 +298,19 @@
       "branches": [
        "low:0-5-6"
       ],
+      "cap": {
+       "center": [
+        0.8884447596096927,
+        -0.12323124488523388,
+        0.44213116764836957
+       ],
+       "height": 0.46159829235942407,
+       "angular_radius": 1.0910002440640467,
+       "angular_radius_deg": 62.509709432612624,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.045102991883,
        0.161611346596
@@ -221,6 +330,19 @@
       "branches": [
        "low:1-2-3"
       ],
+      "cap": {
+       "center": [
+        -0.86321092324882,
+        0.1724451040542732,
+        -0.4744782271839567
+       ],
+       "height": 0.46159829235948047,
+       "angular_radius": 1.0910002440639832,
+       "angular_radius_deg": 62.509709432608986,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.045102991883,
        0.161611346596
@@ -238,6 +360,19 @@
       "branches": [
        "low:1-3-5"
       ],
+      "cap": {
+       "center": [
+        0.2098869676700902,
+        0.614773649922967,
+        -0.760263651743688
+       ],
+       "height": 0.7115982923595344,
+       "angular_radius": 0.7790258612063761,
+       "angular_radius_deg": 44.634893978669595,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.011366444744,
        0.150774588806
@@ -258,6 +393,19 @@
       "branches": [
        "low:1-3-7"
       ],
+      "cap": {
+       "center": [
+        0.8963524697388423,
+        0.3716863049237577,
+        -0.2416641072339889
+       ],
+       "height": 0.21159829235946348,
+       "angular_radius": 1.3575863343012797,
+       "angular_radius_deg": 77.78396728009979,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.084661818222
@@ -279,6 +427,19 @@
       "branches": [
        "low:1-4-7"
       ],
+      "cap": {
+       "center": [
+        -0.2935063455270293,
+        -0.32592928487760364,
+        -0.8986791009000611
+       ],
+       "height": -0.038401707640512296,
+       "angular_radius": 1.6092074791474325,
+       "angular_radius_deg": 92.2007969160343,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.01104317092,
        0.026604370833
@@ -296,6 +457,19 @@
       "branches": [
        "low:2-4-6"
       ],
+      "cap": {
+       "center": [
+        -0.6386152956231353,
+        -0.5331152663017277,
+        0.5549401923020294
+       ],
+       "height": 0.7115982923595621,
+       "angular_radius": 0.7790258612063367,
+       "angular_radius_deg": 44.634893978667336,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.202025548859
@@ -313,6 +487,19 @@
       "branches": [
        "low:2-6-7"
       ],
+      "cap": {
+       "center": [
+        -0.1027350503470357,
+        -0.9127493656079265,
+        0.3953910785697115
+       ],
+       "height": 0.711598292359552,
+       "angular_radius": 0.7790258612063511,
+       "angular_radius_deg": 44.63489397866817,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.202025548859
@@ -333,6 +520,19 @@
       "branches": [
        "low:3-4-6"
       ],
+      "cap": {
+       "center": [
+        -0.38406247710141783,
+        -0.9121876963119246,
+        -0.14286224266707723
+       ],
+       "height": 0.211598292359451,
+       "angular_radius": 1.3575863343012924,
+       "angular_radius_deg": 77.78396728010051,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.053135509687
@@ -353,6 +553,19 @@
       "branches": [
        "up:3-5-6"
       ],
+      "cap": {
+       "center": [
+        0.4035589995332465,
+        -0.9034205600768688,
+        -0.14481514259952868
+       ],
+       "height": 0.21159829235948577,
+       "angular_radius": 1.3575863343012569,
+       "angular_radius_deg": 77.78396728009848,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.007117192636,
        0.020287861883
@@ -374,6 +587,19 @@
       "branches": [
        "low:4-5-7"
       ],
+      "cap": {
+       "center": [
+        0.36263641148950315,
+        0.4607544966280922,
+        0.8100618043698945
+       ],
+       "height": -0.03840170764051018,
+       "angular_radius": 1.6092074791474302,
+       "angular_radius_deg": 92.20079691603418,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.01104317092,
        0.026604370833
@@ -511,9 +737,105 @@
    },
    "source": {
     "file": "sphcap/data/critical_configurations.json",
+    "file_sha256": "0097f707b1174bcf13b83062077d9eee2f0f9bc66d5b4e458ce1f14084676bfb",
+    "pointer": "N8_best",
     "script": "jobs/atlas_export.py",
-    "commit": "0d4ed47",
-    "pointer": "N8_best"
+    "commit": "c85345a",
+    "pipeline": "jobs/atlas_pipeline.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0000000000000002,
+      0.516697657700304,
+      -0.8940129913109625,
+      -0.6037689253334692,
+      -0.0745930553977362,
+      0.1581306736361759,
+      0.22095421786662953,
+      -0.3149228109705954
+     ],
+     [
+      0.516697657700304,
+      1.0,
+      -0.5724445741056715,
+      0.15813067363640793,
+      0.24704159536200804,
+      0.14931237323556454,
+      -0.5738540329818312,
+      -0.91043313362491
+     ],
+     [
+      -0.8940129913109625,
+      -0.5724445741056715,
+      1.0000000000000002,
+      0.22095421786648003,
+      0.42683846953705257,
+      -0.5738540329817616,
+      0.1432927437399741,
+      0.23481350078285387
+     ],
+     [
+      -0.6037689253334692,
+      0.15813067363640793,
+      0.22095421786648003,
+      0.9999999999999999,
+      -0.31492281097071423,
+      0.516697657700503,
+      -0.894012991311031,
+      -0.0745930553978731
+     ],
+     [
+      -0.0745930553977362,
+      0.24704159536200804,
+      0.42683846953705257,
+      -0.31492281097071423,
+      1.0000000000000002,
+      -0.9104331336249033,
+      0.23481350078293708,
+      -0.6170855345445541
+     ],
+     [
+      0.1581306736361759,
+      0.14931237323556454,
+      -0.5738540329817616,
+      0.516697657700503,
+      -0.9104331336249033,
+      1.0,
+      -0.572444574105777,
+      0.24704159536199086
+     ],
+     [
+      0.22095421786662953,
+      -0.5738540329818312,
+      0.1432927437399741,
+      -0.894012991311031,
+      0.23481350078293708,
+      -0.572444574105777,
+      1.0000000000000002,
+      0.4268384695370723
+     ],
+     [
+      -0.3149228109705954,
+      -0.91043313362491,
+      0.23481350078285387,
+      -0.0745930553978731,
+      -0.6170855345445541,
+      0.24704159536199086,
+      0.4268384695370723,
+      1.0
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "obs_id": "o-f67feba6df73ebcd",
+   "seq": 1,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null
    },
    "stuck_point": {
     "level": 0,
@@ -599,6 +921,19 @@
       "branches": [
        "up:1-2"
       ],
+      "cap": {
+       "center": [
+        -0.9948632044136138,
+        0.08678224249505857,
+        -0.05211570676297869
+       ],
+       "height": 0.46173956350391976,
+       "angular_radius": 1.090840984972845,
+       "angular_radius_deg": 62.50058455883768,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.047045020805,
        0.175808518394
@@ -618,6 +953,19 @@
       "branches": [
        "up:1-6"
       ],
+      "cap": {
+       "center": [
+        -0.09785859488405244,
+        -0.692762341643734,
+        0.7144956496771757
+       ],
+       "height": 0.46173956350374085,
+       "angular_radius": 1.090840984973047,
+       "angular_radius_deg": 62.50058455884925,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.047045020805,
        0.175808518394
@@ -637,6 +985,19 @@
       "branches": [
        "up:2-5"
       ],
+      "cap": {
+       "center": [
+        0.0978585948840711,
+        0.6927623416439077,
+        -0.7144956496770046
+       ],
+       "height": 0.46173956350374296,
+       "angular_radius": 1.0908409849730445,
+       "angular_radius_deg": 62.500584558849106,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.047045020805,
        0.175808518394
@@ -656,6 +1017,19 @@
       "branches": [
        "up:5-6"
       ],
+      "cap": {
+       "center": [
+        0.9948632044136207,
+        -0.08678224249488066,
+        0.052115706763145794
+       ],
+       "height": 0.4617395635039254,
+       "angular_radius": 1.0908409849728389,
+       "angular_radius_deg": 62.500584558837325,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.047045020805,
        0.175808518394
@@ -673,6 +1047,19 @@
       "branches": [
        "low:0-1-5"
       ],
+      "cap": {
+       "center": [
+        0.24115174747352414,
+        0.4843818493434924,
+        0.8409637677789953
+       ],
+       "height": 0.7117395635040175,
+       "angular_radius": 0.7788247677866394,
+       "angular_radius_deg": 44.623372174430834,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.186480063156
@@ -694,6 +1081,19 @@
       "branches": [
        "up:0-2-3"
       ],
+      "cap": {
+       "center": [
+        0.8592999475816497,
+        0.26944033072461593,
+        -0.43474763744635037
+       ],
+       "height": -0.03826043649608797,
+       "angular_radius": 1.609066104105582,
+       "angular_radius_deg": 92.1926967228078,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.004164455882,
        0.009765708287
@@ -714,6 +1114,19 @@
       "branches": [
        "up:0-2-7"
       ],
+      "cap": {
+       "center": [
+        0.16430422210430523,
+        -0.9792708605214083,
+        -0.118459716074113
+       ],
+       "height": 0.21173956350389544,
+       "angular_radius": 1.357441787942486,
+       "angular_radius_deg": 77.77568538379693,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.076736233476
@@ -735,6 +1148,19 @@
       "branches": [
        "up:0-3-6"
       ],
+      "cap": {
+       "center": [
+        -0.8638672118462606,
+        -0.3956797666687495,
+        0.31172257304521933
+       ],
+       "height": -0.038260436496088165,
+       "angular_radius": 1.6090661041055823,
+       "angular_radius_deg": 92.19269672280781,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.004164455882,
        0.009765708287
@@ -755,6 +1181,19 @@
       "branches": [
        "low:0-4-5"
       ],
+      "cap": {
+       "center": [
+        -0.5782353574839686,
+        0.44034536964866333,
+        0.6868331870144082
+       ],
+       "height": 0.21173956350393427,
+       "angular_radius": 1.3574417879424465,
+       "angular_radius_deg": 77.77568538379467,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.076736233476
@@ -772,6 +1211,19 @@
       "branches": [
        "low:1-3-5"
       ],
+      "cap": {
+       "center": [
+        -0.19246867359927122,
+        0.8612209951274726,
+        0.47037666527431293
+       ],
+       "height": 0.7117395635040147,
+       "angular_radius": 0.7788247677866433,
+       "angular_radius_deg": 44.623372174431054,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.186480063156
@@ -792,6 +1244,19 @@
       "branches": [
        "low:1-3-7"
       ],
+      "cap": {
+       "center": [
+        0.6186150241124191,
+        0.6757508410049857,
+        0.4008444247129373
+       ],
+       "height": 0.21173956350392723,
+       "angular_radius": 1.3574417879424536,
+       "angular_radius_deg": 77.77568538379508,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.076736233476
@@ -813,6 +1278,19 @@
       "branches": [
        "low:1-4-7"
       ],
+      "cap": {
+       "center": [
+        -0.49695072650211647,
+        0.6739107027040779,
+        -0.5467031554782856
+       ],
+       "height": -0.03826043649609958,
+       "angular_radius": 1.6090661041055936,
+       "angular_radius_deg": 92.19269672280846,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.004164455881,
        0.009765708287
@@ -830,6 +1308,19 @@
       "branches": [
        "low:2-4-6"
       ],
+      "cap": {
+       "center": [
+        -0.2884575078546899,
+        -0.8192696471271103,
+        -0.49556988554439196
+       ],
+       "height": 0.7117395635039402,
+       "angular_radius": 0.7788247677867495,
+       "angular_radius_deg": 44.62337217443714,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.186480063156
@@ -847,6 +1338,19 @@
       "branches": [
        "low:2-6-7"
       ],
+      "cap": {
+       "center": [
+        0.23977443398042692,
+        -0.5263331973439177,
+        -0.8157705475089759
+       ],
+       "height": 0.7117395635039458,
+       "angular_radius": 0.7788247677867414,
+       "angular_radius_deg": 44.623372174436675,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.186480063156
@@ -867,6 +1371,19 @@
       "branches": [
        "low:3-4-6"
       ],
+      "cap": {
+       "center": [
+        -0.20468388873275756,
+        -0.13682535013221211,
+        -0.9692178956532084
+       ],
+       "height": 0.21173956350390027,
+       "angular_radius": 1.3574417879424812,
+       "angular_radius_deg": 77.77568538379666,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.0,
        0.076736233476
@@ -888,6 +1405,19 @@
       "branches": [
        "low:4-5-7"
       ],
+      "cap": {
+       "center": [
+        0.5015179907667312,
+        -0.5476712667599197,
+        0.6697282198794418
+       ],
+       "height": -0.03826043649610511,
+       "angular_radius": 1.6090661041055991,
+       "angular_radius_deg": 92.19269672280878,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.004164455881,
        0.009765708287
@@ -1025,9 +1555,105 @@
    },
    "source": {
     "file": "sphcap/data/critical_configurations.json",
+    "file_sha256": "0097f707b1174bcf13b83062077d9eee2f0f9bc66d5b4e458ce1f14084676bfb",
+    "pointer": "N8_second",
     "script": "jobs/atlas_export.py",
-    "commit": "0d4ed47",
-    "pointer": "N8_second"
+    "commit": "c85345a",
+    "pipeline": "jobs/atlas_pipeline.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0000000000000002,
+      0.42366343713527793,
+      -0.9092515679733091,
+      -0.6233523341404352,
+      -0.1883238329302084,
+      0.2336683230492948,
+      0.25191980778883727,
+      -0.18832383292943533
+     ],
+     [
+      0.42366343713527793,
+      1.0,
+      -0.5735931509904194,
+      0.23366832304928783,
+      0.25191980778859474,
+      0.14718630198133267,
+      -0.5735931509907499,
+      -0.9092515679732674
+     ],
+     [
+      -0.9092515679733091,
+      -0.5735931509904194,
+      1.0,
+      0.25191980778884765,
+      0.4236634371357958,
+      -0.5735931509907459,
+      0.1471863019809912,
+      0.23366832304878998
+     ],
+     [
+      -0.6233523341404352,
+      0.23366832304928783,
+      0.25191980778884765,
+      1.0000000000000002,
+      -0.18832383292941057,
+      0.4236634371352643,
+      -0.9092515679733049,
+      -0.18832383293020508
+     ],
+     [
+      -0.1883238329302084,
+      0.25191980778859474,
+      0.4236634371357958,
+      -0.18832383292941057,
+      1.0,
+      -0.9092515679732611,
+      0.23366832304876223,
+      -0.6233523341403057
+     ],
+     [
+      0.2336683230492948,
+      0.14718630198133267,
+      -0.5735931509907459,
+      0.4236634371352643,
+      -0.9092515679732611,
+      1.0000000000000002,
+      -0.573593150990409,
+      0.2519198077885832
+     ],
+     [
+      0.25191980778883727,
+      -0.5735931509907499,
+      0.1471863019809912,
+      -0.9092515679733049,
+      0.23366832304876223,
+      -0.573593150990409,
+      1.0000000000000002,
+      0.42366343713580695
+     ],
+     [
+      -0.18832383292943533,
+      -0.9092515679732674,
+      0.23366832304878998,
+      -0.18832383293020508,
+      -0.6233523341403057,
+      0.2519198077885832,
+      0.42366343713580695,
+      1.0000000000000002
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "obs_id": "o-c9d1ed10b05610f6",
+   "seq": 2,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null
    },
    "stuck_point": {
     "level": 0,
@@ -1113,6 +1739,19 @@
       "branches": [
        "up:1-2"
       ],
+      "cap": {
+       "center": [
+        -0.970218820021576,
+        0.22874469827457256,
+        -0.07969507065820024
+       ],
+       "height": 0.4617778911642354,
+       "angular_radius": 1.0907977748040456,
+       "angular_radius_deg": 62.49810879853342,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.125211428454,
        0.125211428454
@@ -1132,6 +1771,19 @@
       "branches": [
        "up:1-6"
       ],
+      "cap": {
+       "center": [
+        -0.0718075127107496,
+        0.034402384985922865,
+        0.9968250383219593
+       ],
+       "height": 0.4617778911642055,
+       "angular_radius": 1.0907977748040794,
+       "angular_radius_deg": 62.498108798535355,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.166647963547,
        0.166647963547
@@ -1151,6 +1803,19 @@
       "branches": [
        "up:2-5"
       ],
+      "cap": {
+       "center": [
+        0.07401424670139028,
+        -0.03379774170092616,
+        -0.9966843050540845
+       ],
+       "height": 0.4617778911642598,
+       "angular_radius": 1.090797774804018,
+       "angular_radius_deg": 62.498108798531845,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.060071356604,
        0.060071356604
@@ -1171,6 +1836,19 @@
       "branches": [
        "up:0-1-2"
       ],
+      "cap": {
+       "center": [
+        -0.6077597367882378,
+        -0.319615990870867,
+        0.7269619802429325
+       ],
+       "height": 0.21177789116414536,
+       "angular_radius": 1.3574025709175326,
+       "angular_radius_deg": 77.77343841378203,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.008338251296,
        0.008338251296
@@ -1188,6 +1866,19 @@
       "branches": [
        "low:0-1-5"
       ],
+      "cap": {
+       "center": [
+        0.4332400323737617,
+        0.8673303568624137,
+        0.24503290883818032
+       ],
+       "height": 0.7117778911639674,
+       "angular_radius": 0.7787702029390798,
+       "angular_radius_deg": 44.620245838955896,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.014166178933,
        0.014166178933
@@ -1209,6 +1900,19 @@
       "branches": [
        "up:0-3-6"
       ],
+      "cap": {
+       "center": [
+        -0.9071809273728851,
+        0.03959973485447599,
+        0.4188730428307931
+       ],
+       "height": -0.03822210883588527,
+       "angular_radius": 1.6090277483895135,
+       "angular_radius_deg": 92.19049910215686,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.001738803393,
        0.001738803393
@@ -1229,6 +1933,19 @@
       "branches": [
        "low:0-4-5"
       ],
+      "cap": {
+       "center": [
+        -0.4478942865610455,
+        0.8890620574589088,
+        0.09465392782607644
+       ],
+       "height": 0.21177789116412246,
+       "angular_radius": 1.3574025709175561,
+       "angular_radius_deg": 77.77343841378338,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.004332644764,
        0.004332644764
@@ -1248,6 +1965,19 @@
       "branches": [
        "low:0-5-6"
       ],
+      "cap": {
+       "center": [
+        0.9721006049154501,
+        -0.19327275791823728,
+        0.13291371249684625
+       ],
+       "height": 0.46177789116421214,
+       "angular_radius": 1.0907977748040718,
+       "angular_radius_deg": 62.49810879853492,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.091719609541,
        0.091719609541
@@ -1265,6 +1995,19 @@
       "branches": [
        "low:1-3-5"
       ],
+      "cap": {
+       "center": [
+        0.0005105163623300623,
+        0.9615262910691017,
+        -0.2747124514031736
+       ],
+       "height": 0.7117778911640141,
+       "angular_radius": 0.7787702029390133,
+       "angular_radius_deg": 44.62024583895208,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.159252575689,
        0.159252575689
@@ -1285,6 +2028,19 @@
       "branches": [
        "low:1-3-7"
       ],
+      "cap": {
+       "center": [
+        0.7752228881987673,
+        0.6075643997503694,
+        -0.17290163032410896
+       ],
+       "height": 0.21177789116407444,
+       "angular_radius": 1.3574025709176052,
+       "angular_radius_deg": 77.7734384137862,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.077847563902,
        0.077847563902
@@ -1306,6 +2062,19 @@
       "branches": [
        "low:1-4-7"
       ],
+      "cap": {
+       "center": [
+        -0.48452428332246983,
+        0.19121375802275356,
+        -0.8536237564721725
+       ],
+       "height": -0.03822210883588748,
+       "angular_radius": 1.6090277483895157,
+       "angular_radius_deg": 92.19049910215699,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.013968668455,
        0.013968668455
@@ -1323,6 +2092,19 @@
       "branches": [
        "low:2-6-7"
       ],
+      "cap": {
+       "center": [
+        0.0347567028265341,
+        -0.9780255462115115,
+        -0.20556751340205096
+       ],
+       "height": 0.7117778911640066,
+       "angular_radius": 0.778770202939024,
+       "angular_radius_deg": 44.62024583895269,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.197217288252,
        0.197217288252
@@ -1343,6 +2125,19 @@
       "branches": [
        "low:3-4-6"
       ],
+      "cap": {
+       "center": [
+        -0.37017587125584034,
+        -0.7234614051235353,
+        -0.5827292850343625
+       ],
+       "height": 0.21177789116407045,
+       "angular_radius": 1.3574025709176092,
+       "angular_radius_deg": 77.77343841378642,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.067655309606,
        0.067655309606
@@ -1364,6 +2159,19 @@
       "branches": [
        "low:4-5-7"
       ],
+      "cap": {
+       "center": [
+        0.524937832380596,
+        -0.020459745809593772,
+        0.8508946297497524
+       ],
+       "height": -0.0382221088358881,
+       "angular_radius": 1.6090277483895163,
+       "angular_radius_deg": 92.19049910215703,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
       "weight_range": [
        0.011832357564,
        0.011832357564
@@ -1489,9 +2297,105 @@
    },
    "source": {
     "file": "sphcap/data/critical_configurations.json",
+    "file_sha256": "0097f707b1174bcf13b83062077d9eee2f0f9bc66d5b4e458ce1f14084676bfb",
+    "pointer": "N8_third",
     "script": "jobs/atlas_export.py",
-    "commit": "0d4ed47",
-    "pointer": "N8_third"
+    "commit": "c85345a",
+    "pipeline": "jobs/atlas_pipeline.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0000000000000002,
+      0.5212371216596171,
+      -0.894521952457119,
+      -0.60247268539968,
+      -0.07193396662265682,
+      0.1584146166728928,
+      0.21607397124324995,
+      -0.31904320116922413
+     ],
+     [
+      0.5212371216596171,
+      1.0,
+      -0.5735223584638234,
+      0.20211888401247555,
+      0.24984183055354395,
+      0.14695068439755027,
+      -0.5735223584638786,
+      -0.9098723379786016
+     ],
+     [
+      -0.894521952457119,
+      -0.5735223584638234,
+      1.0000000000000002,
+      0.23948854880757173,
+      0.42479157629576186,
+      -0.5735223584637782,
+      0.1454209643463181,
+      0.23493364273593806
+     ],
+     [
+      -0.60247268539968,
+      0.20211888401247555,
+      0.23948854880757173,
+      1.0000000000000002,
+      -0.24198982700496993,
+      0.4629069234778065,
+      -0.904957868479412,
+      -0.14054619591050327
+     ],
+     [
+      -0.07193396662265682,
+      0.24984183055354395,
+      0.42479157629576186,
+      -0.24198982700496993,
+      1.0,
+      -0.9102947449940244,
+      0.2338605025047501,
+      -0.6205086351657395
+     ],
+     [
+      0.1584146166728928,
+      0.14695068439755027,
+      -0.5735223584637782,
+      0.4629069234778065,
+      -0.9102947449940244,
+      1.0,
+      -0.571802332180712,
+      0.2508438979886927
+     ],
+     [
+      0.21607397124324995,
+      -0.5735223584638786,
+      0.1454209643463181,
+      -0.904957868479412,
+      0.2338605025047501,
+      -0.571802332180712,
+      1.0000000000000002,
+      0.42501515351629043
+     ],
+     [
+      -0.31904320116922413,
+      -0.9098723379786016,
+      0.23493364273593806,
+      -0.14054619591050327,
+      -0.6205086351657395,
+      0.2508438979886927,
+      0.42501515351629043,
+      1.0000000000000002
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "obs_id": "o-a06bdeeee4a7c72b",
+   "seq": 3,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null
    },
    "stuck_point": {
     "level": 0,
@@ -1501,5 +2405,8 @@
    }
   }
  ],
- "shared_hashes": {}
+ "shared_hashes": {},
+ "search_passes": [],
+ "convergence": null,
+ "label": "Every value is numerical (level 0, double precision) unless its level says otherwise; stuck-point classes are numerical labels. Nothing here is a proof input."
 }
