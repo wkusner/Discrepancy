@@ -8,8 +8,8 @@
  *     phi_C(c + v) >= a_C + m_C . v,   a_C = phi_C(c) - sum_k r_k h_k,   |v_k| <= h_k.
  * For any weights lambda_C >= 0 (not all 0):   D(Y) >= (sum lambda_C a_C - sum_k |sum lambda_C m_Ck| h_k) / sum lambda_C.
  * The weights are a CHOICE (exponentiated-gradient ascent in floating point); the bound is evaluated in intervals.
- * A cap whose level is not well defined somewhere on the cell (|S| or |n| may vanish) is skipped: any subset of
- * caps gives a valid bound.
+ * A cap whose level is not well defined somewhere on the cell (|S| or |n| may vanish), or whose enclosures are not
+ * finite, is skipped: any subset of caps gives a valid bound.
  *
  * Gradients.  Pair cap: t = |S|/2, S = x_a + x_b, dt/dx_a = dt/dx_b = S/(2|S|).
  * Triple cap (side s): n = (b-a)x(c-a), det = a.(b x c) = n.a, t = s det/|n|, and
@@ -159,14 +159,18 @@ static double first_order_bound_r(const Cell *c, const CellR *R) {
             }
             /* phi(c) = n/N - (1 - t_c)/2, enclosure; a = phi(c) - sum r_j h_j (lower end) */
             I phic = isub(idiv(ipt((double)n), ipt((double)N)), ismul(0.5, isub(ipt(1.0), tc)));
-            double a = phic.lo, single;
+            double a = phic.lo, single; int finite = isfinite(a);
             for (int j = 0; j < NQ; j++) {
                 I gj = ismul(0.5, G[j]);
                 double mj = 0.5 * (gj.lo + gj.hi);
                 double rj = fmax(nup(gj.hi - mj), nup(mj - gj.lo));     /* [mj - rj, mj + rj] contains gj */
+                if (!isfinite(mj) || !isfinite(rj)) finite = 0;
                 M[nc][j] = mj; RR[nc][j] = rj;
                 a = ndn(a - nup(rj * c->h[j]));
             }
+            /* a cap whose enclosures overflowed (e.g. |n| tiny on a nearly degenerate triple) is skipped, like a cap
+               whose level is not well defined: any subset of caps gives a valid bound */
+            if (!finite || !isfinite(a)) continue;
             single = a;
             for (int j = 0; j < NQ; j++) single = ndn(single - nup(fabs(M[nc][j]) * c->h[j]));
             if (single > best) { best = single; bestc = nc; }
@@ -190,6 +194,7 @@ static double first_order_bound_r(const Cell *c, const CellR *R) {
     double lam[FO_MAXC], gsum[QMAX];
     for (int i = 0; i < m; i++) lam[i] = 1.0 / m;
     double eta = 50.0 / (hsum + 1e-300), bestg = -1e300, bestlam[FO_MAXC];
+    for (int i = 0; i < m; i++) bestlam[i] = 1.0 / m;       /* used if no iterate has a finite value */
     for (int it = 0; it < 60; it++) {
         double gv = 0;
         for (int j = 0; j < NQ; j++) { gsum[j] = 0; for (int i = 0; i < m; i++) gsum[j] += lam[i] * M[idx[i]][j]; }

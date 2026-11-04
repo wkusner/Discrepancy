@@ -32,8 +32,18 @@
  * Build:  gcc -O3 -march=native -fopenmp -o capcert capcert.c -lm
  * Usage:  capcert N T MIN_EPS OUT [--threads K] [--frontier F] [--balls FILE]
  *                 [--max-cells-per-root M] [--keep-prob P]
+ *         capcert_rig N T MIN_EPS OUT [--threads K] [--frontier F] [--first-order] [--fo-emax E] [--smear]
+ *                 [--cells PREFIX]          (second pass: start from the survivors PREFIX.surv.*)
+ *         capcert_rig --version             (provenance baked in by build.sh)
  * --keep-prob P writes only a (hash-determined) fraction P of the survivor cells
- * (atlas mode); all survivors are still counted.
+ * (atlas mode); all survivors are still counted.  The rigorous build refuses --keep-prob,
+ * --max-cells-per-root and --balls: each changes what a survivor file means.
+ *
+ * Completion stamp OUT.done (one line of key=value tokens; written to OUT.done.tmp, then renamed): the run's
+ * parameters and counts, the SHA-256 of every survivor file OUT.surv.<t> (read back after they are closed, so a
+ * resumed run is covered), and the provenance of the binary (commit, tree state, SHA-256 of the C sources, compiler
+ * version, flags; build.sh passes them as -D macros).  The second pass also records the SHA-256 of the first
+ * pass's stamp and of every input file it read.  Values that may contain blanks are %-encoded (%20, %25).
  */
 #define _GNU_SOURCE
 #include <math.h>
@@ -53,6 +63,28 @@
 #define ANG_SLACK 1e-12
 #define BND_SLACK 1e-12
 
+/* provenance, baked in by build.sh (-D...); a binary built otherwise says "unknown" and the chain checker rejects it */
+#ifndef CAPCERT_COMMIT
+#define CAPCERT_COMMIT "unknown"
+#endif
+#ifndef CAPCERT_TREE_DIRTY
+#define CAPCERT_TREE_DIRTY "unknown"
+#endif
+#ifndef CAPCERT_SRC_FILES
+#define CAPCERT_SRC_FILES "unknown"
+#endif
+#ifndef CAPCERT_SRC_SHA
+#define CAPCERT_SRC_SHA "unknown"
+#endif
+#ifndef CAPCERT_FLAGS
+#define CAPCERT_FLAGS "unknown"
+#endif
+#ifdef __VERSION__
+#define CAPCERT_CC __VERSION__
+#else
+#define CAPCERT_CC "unknown"
+#endif
+
 static int N, NQ, NT3, NP2;
 static int T3[120][3], P2[45][2];
 static double TGT, MIN_EPS;
@@ -63,6 +95,10 @@ static double KEEP_PROB = 1.0; /* fraction of survivor cells written to disk (al
 static int NBALLS = 0;
 static double (*BALL_Z)[NMAX][3] = NULL;
 static double *BALL_R = NULL;
+
+#include "sha256.h"
+#include <libgen.h>
+#include <limits.h>
 
 #ifdef RIGOROUS
 #include "ia.h"
@@ -183,9 +219,79 @@ static void split(const Cell *c, Cell *a, Cell *b) {
     b->q[j] = c->q[j] + c->h[j] / 2;
 }
 
-typedef struct { long processed, certified, sym, ball, surv; double min_surv_lb; long fo; } Stats;
+typedef struct { long processed, bounded, sym, ball, surv; double min_surv_lb; long fo; } Stats;
 static volatile int IO_ERROR = 0;
 static void *xmalloc(size_t n) { void *p = malloc(n); if (!p) { fprintf(stderr, "out of memory\n"); exit(3); } return p; }
+
+/* ---------------------------------------------------------------- completion stamps */
+/* a value with blanks or '%' %-encoded, so that the stamp stays one line of whitespace-free key=value tokens */
+static void put_enc(FILE *f, const char *s) {
+    for (; *s; s++) {
+        unsigned char ch = (unsigned char)*s;
+        if (ch <= ' ' || ch == '%' || ch >= 127) fprintf(f, "%%%02X", ch); else fputc(ch, f);
+    }
+}
+
+static void put_provenance(FILE *f) {
+    fprintf(f, " commit=%s tree_dirty=%s src=%s src_sha256=%s cc=", CAPCERT_COMMIT, CAPCERT_TREE_DIRTY, CAPCERT_SRC_FILES, CAPCERT_SRC_SHA);
+    put_enc(f, CAPCERT_CC); fputs(" flags=", f); put_enc(f, CAPCERT_FLAGS);
+#ifdef RIGOROUS
+    fputs(" build=rigorous", f);
+#else
+    fputs(" build=float", f);
+#endif
+}
+
+/* the survivor files PREFIX.surv.0 .. PREFIX.surv.<n-1>: they must be contiguous (a gap would make the readers stop
+   early) and hold whole records.  Returns n >= 0, or -1 (gap), -2 (partial record), -3 (too many files). */
+static int surv_count(const char *prefix, long rec) {
+    int last = -1, count = 0;
+    for (int t = 0; t < 4096; t++) {
+        char sfn[4200]; struct stat stt; snprintf(sfn, sizeof sfn, "%s.surv.%d", prefix, t);
+        if (stat(sfn, &stt) != 0) continue;
+        if (stt.st_size % rec) return -2;
+        last = t; count++;
+    }
+    { char sfn[4200]; struct stat stt; snprintf(sfn, sizeof sfn, "%s.surv.4096", prefix); if (stat(sfn, &stt) == 0) return -3; }
+    return count == last + 1 ? count : -1;
+}
+
+static const char *base_of(const char *p) { const char *b = strrchr(p, '/'); return b ? b + 1 : p; }
+
+/* hash every survivor file of OUT (after they are closed) and append " files=n records=R surv.<t>=<sha256> ..." */
+static int put_surv_hashes(FILE *f, const char *out, long rec) {
+    int n = surv_count(out, rec);
+    if (n < 0) { fprintf(stderr, "%s.surv.*: %s; no stamp written\n", out, n == -1 ? "gap in the file numbers" : n == -2 ? "partial record" : "too many files"); return -1; }
+    long long records = 0; char (*hx)[65] = xmalloc((n + 1) * sizeof *hx);
+    for (int t = 0; t < n; t++) {
+        char sfn[4200]; long long nb; snprintf(sfn, sizeof sfn, "%s.surv.%d", out, t);
+        if (sha256_file(sfn, hx[t], &nb)) { perror(sfn); free(hx); return -1; }
+        records += nb / rec;
+    }
+    fprintf(f, " files=%d records=%lld", n, records);
+    for (int t = 0; t < n; t++) fprintf(f, " surv.%d=%s", t, hx[t]);
+    free(hx); return 0;
+}
+
+/* write the stamp atomically: OUT.done.tmp, then rename */
+static FILE *stamp_open(const char *out, char *tmp, size_t ntmp) { snprintf(tmp, ntmp, "%s.done.tmp", out); return fopen(tmp, "w"); }
+static int stamp_close(FILE *df, const char *out, const char *tmp) {
+    char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
+    fputc('\n', df);
+    if (fflush(df) || ferror(df) || fsync(fileno(df)) || fclose(df)) { perror(tmp); return -1; }
+    if (rename(tmp, dfn)) { perror(dfn); return -1; }
+    return 0;
+}
+
+#ifdef RIGOROUS
+/* do the directories of two prefixes resolve to the same directory? */
+static int same_dir(const char *a, const char *b) {
+    char ca[4200], cb[4200], ra[PATH_MAX], rb[PATH_MAX];
+    snprintf(ca, sizeof ca, "%s", a); snprintf(cb, sizeof cb, "%s", b);
+    if (!realpath(dirname(ca), ra) || !realpath(dirname(cb), rb)) return 0;
+    return strcmp(ra, rb) == 0;
+}
+#endif
 
 /* DFS on one root; survivors appended to fp (thread-private) */
 static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
@@ -212,7 +318,7 @@ static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
         if (NBALLS && inside_ball(X, E)) { st->ball++; continue; }
         double lb = cell_bound(X, E, TGT);
 #endif
-        if (lb >= TGT) { st->certified++; continue; }
+        if (lb >= TGT) { st->bounded++; continue; }
 #ifdef RIGOROUS
         const double *E = c.E;
 #endif
@@ -221,7 +327,7 @@ static void dfs(const Cell *root, Stats *st, FILE *fp, long max_cells) {
         int have_smear = 0;
         if (FO && emax < FO_EMAX) {
             double lb1 = first_order_bound_r(&c, &R); have_smear = 1;
-            if (lb1 >= TGT) { st->certified++; st->fo++; continue; }
+            if (lb1 >= TGT) { st->bounded++; st->fo++; continue; }
             if (lb1 > lb) lb = lb1;
         }
 #endif
@@ -266,31 +372,51 @@ static int load_balls(const char *fn) {
 #ifdef RIGOROUS
 /* Second pass (--cells PREFIX): every cell of PREFIX.surv.0, .1, ... (records q, h, lb as written by a first pass)
    is processed like a root cell, in chunks of CHUNK cells; survivors go to OUT.surv.<thread>.  Progress is kept per
-   chunk in OUT.progress (header + "chunk processed certified sym ball survivors min_lb" lines), and the completion
-   stamp OUT.done records the input prefix and the number of cells read, which must equal the survivor count of the
-   first pass (checked by the chain checker). */
+   chunk in OUT.progress (header + "chunk processed bounded sym ball survivors min_lb" lines).  The input files are
+   read in full on every run (reading precedes the skip of a finished chunk), and hashed while they are read; the
+   completion stamp OUT.done records the SHA-256 of the first pass's stamp PREFIX.done (from_stamp=), of every input
+   file (in.<t>=), the number of cells read, whether PREFIX and OUT are in the same directory, and the hashes of its
+   own survivor files.  If PREFIX.done lists survivor hashes (surv.<t>=), the inputs must match them. */
 #define CHUNK (1L << 20)
 static int run_cells(const char *prefix, const char *out, long maxc, int nthr) {
     long rec = (long)((2 * NQ + 1) * sizeof(double));
-    int nfiles = 0; long total = 0; long fsize[4096];
-    for (int t = 0; t < 4096; t++) {
+    long fsize[4096]; long total = 0;
+    if (same_dir(prefix, out) && !strcmp(base_of(prefix), base_of(out))) { fprintf(stderr, "--cells: input and output prefix are the same\n"); return 1; }
+    int nfiles = surv_count(prefix, rec);
+    if (nfiles < 0) { fprintf(stderr, "%s.surv.*: %s\n", prefix, nfiles == -1 ? "gap in the file numbers" : nfiles == -2 ? "partial record" : "too many files"); return 1; }
+    for (int t = 0; t < nfiles; t++) {
         char sfn[4200]; struct stat stt; snprintf(sfn, sizeof sfn, "%s.surv.%d", prefix, t);
-        if (stat(sfn, &stt) != 0) break;
-        if (stt.st_size % rec) { fprintf(stderr, "%s: partial record\n", sfn); return 1; }
-        fsize[t] = stt.st_size / rec; total += fsize[t]; nfiles = t + 1;
+        if (stat(sfn, &stt) != 0) { perror(sfn); return 1; }
+        fsize[t] = stt.st_size / rec; total += fsize[t];
+    }
+    /* the first pass's stamp: it must exist (the first pass completed); its hash goes into our stamp */
+    char pdone[4200], from_sha[65]; snprintf(pdone, sizeof pdone, "%s.done", prefix);
+    if (sha256_file(pdone, from_sha, NULL)) { fprintf(stderr, "%s: missing (the first pass did not complete); refusing to run\n", pdone); return 1; }
+    char (*want)[65] = calloc(nfiles + 1, sizeof *want); int have_want = 0;     /* survivor hashes listed in PREFIX.done */
+    {
+        FILE *pd = fopen(pdone, "r"); char tok[512];
+        while (pd && fscanf(pd, "%511s", tok) == 1) {
+            int t; char hx[65];
+            if (sscanf(tok, "surv.%d=%64[0-9a-f]", &t, hx) == 2) {
+                if (t < 0 || t >= nfiles) { fprintf(stderr, "%s lists surv.%d, but there are %d input files\n", pdone, t, nfiles); return 1; }
+                memcpy(want[t], hx, 65); have_want++;
+            }
+        }
+        if (pd) fclose(pd);
+        if (have_want && have_want != nfiles) { fprintf(stderr, "%s lists %d survivor files, found %d\n", pdone, have_want, nfiles); return 1; }
     }
     long nchunks = (total + CHUNK - 1) / CHUNK;
     char pfn[4200], hdr[1024]; snprintf(pfn, sizeof pfn, "%s.progress", out);
     snprintf(hdr, sizeof hdr, "#capcert-cells N=%d T=%a MIN_EPS=%a from=%s files=%d cells=%ld chunk=%ld mode=rigorous fo=%d fo_emax=%a smear=%d maxc=%ld\n",
              N, TGT, MIN_EPS, prefix, nfiles, total, CHUNK, FO, FO_EMAX, SMEAR, maxc);
     char *done = calloc(nchunks + 1, 1); Stats tot = {0, 0, 0, 0, 0, INFINITY, 0};
-    FILE *pf = fopen(pfn, "r"); int have_header = 0;
+    FILE *pf = fopen(pfn, "r"); int have_header = 0; long resumed = 0;
     if (pf) {
         char line[1024] = "";
         if (!fgets(line, sizeof line, pf) || strcmp(line, hdr)) { fprintf(stderr, "refusing to resume: %s has other settings\n", pfn); return 2; }
         have_header = 1; long idx, p, cc, s, b, v; double ml;
         while (fscanf(pf, "%ld %ld %ld %ld %ld %ld %lf", &idx, &p, &cc, &s, &b, &v, &ml) == 7)
-            if (idx >= 0 && idx < nchunks && !done[idx]) { done[idx] = 1; tot.processed += p; tot.certified += cc; tot.sym += s;
+            if (idx >= 0 && idx < nchunks && !done[idx]) { done[idx] = 1; resumed++; tot.processed += p; tot.bounded += cc; tot.sym += s;
                 tot.ball += b; tot.surv += v; if (ml < tot.min_surv_lb) tot.min_surv_lb = ml; }
         fclose(pf);
     }
@@ -304,7 +430,8 @@ static int run_cells(const char *prefix, const char *out, long maxc, int nthr) {
             N, TGT, MIN_EPS, nthr, total, nfiles, prefix, nchunks);
     Cell *F = xmalloc(CHUNK * sizeof(Cell)); FILE **sf = calloc(nthr, sizeof(FILE *));
     for (int t = 0; t < nthr; t++) { char sfn[4200]; snprintf(sfn, sizeof sfn, "%s.surv.%d", out, t); sf[t] = fopen(sfn, "ab"); if (!sf[t]) IO_ERROR = 1; }
-    time_t t0 = time(NULL), tlast = t0; long finished = 0; for (long c = 0; c < nchunks; c++) finished += done[c];
+    Sha256 *hin = xmalloc((nfiles + 1) * sizeof(Sha256)); for (int t = 0; t < nfiles; t++) sha256_init(&hin[t]);
+    time_t t0 = time(NULL), tlast = t0; long finished = 0, nread = 0; for (long c = 0; c < nchunks; c++) finished += done[c];
     int fi = 0; long fpos = 0; FILE *in = NULL;           /* sequential reader over the input files */
     for (long c = 0; c < nchunks && !IO_ERROR; c++) {
         long n = 0;
@@ -314,7 +441,9 @@ static int run_cells(const char *prefix, const char *out, long maxc, int nthr) {
             double lb; Cell *x = &F[n];
             if (fread(x->q, sizeof(double), NQ, in) != (size_t)NQ || fread(x->h, sizeof(double), NQ, in) != (size_t)NQ
                 || fread(&lb, sizeof(double), 1, in) != 1) { fprintf(stderr, "read error\n"); return 2; }
-            fpos++; n++;
+            sha256_update(&hin[fi], x->q, NQ * sizeof(double)); sha256_update(&hin[fi], x->h, NQ * sizeof(double));
+            sha256_update(&hin[fi], &lb, sizeof(double));
+            fpos++; n++; nread++;
         }
         if (done[c]) continue;
         Stats cs = {0, 0, 0, 0, 0, INFINITY, 0};
@@ -330,36 +459,56 @@ static int run_cells(const char *prefix, const char *out, long maxc, int nthr) {
             for (long r = 0; r < n; r++) { Cell x = F[r]; init_cache(&x); dfs(&x, &st, sf[tid], maxc); }
             if (fflush(sf[tid])) IO_ERROR = 1;
 #pragma omp critical
-            { cs.processed += st.processed; cs.certified += st.certified; cs.sym += st.sym; cs.surv += st.surv; cs.fo += st.fo;
+            { cs.processed += st.processed; cs.bounded += st.bounded; cs.sym += st.sym; cs.surv += st.surv; cs.fo += st.fo;
               if (st.min_surv_lb < cs.min_surv_lb) cs.min_surv_lb = st.min_surv_lb; }
         }
         if (IO_ERROR) break;
-        fprintf(pf, "%ld %ld %ld %ld %ld %ld %.17g\n", c, cs.processed, cs.certified, cs.sym, cs.ball, cs.surv, cs.min_surv_lb); fflush(pf);
-        tot.processed += cs.processed; tot.certified += cs.certified; tot.sym += cs.sym; tot.surv += cs.surv; tot.fo += cs.fo;
+        fprintf(pf, "%ld %ld %ld %ld %ld %ld %.17g\n", c, cs.processed, cs.bounded, cs.sym, cs.ball, cs.surv, cs.min_surv_lb); fflush(pf);
+        tot.processed += cs.processed; tot.bounded += cs.bounded; tot.sym += cs.sym; tot.surv += cs.surv; tot.fo += cs.fo;
         if (cs.min_surv_lb < tot.min_surv_lb) tot.min_surv_lb = cs.min_surv_lb;
         finished++;
         time_t now = time(NULL);
         if (now - tlast >= 60 || finished == nchunks) { tlast = now;
             fprintf(stderr, "[%6lds] chunks %ld/%ld  cells %ld  bounded %ld  sym %ld  survivors %ld  min_surv_lb %.12g\n",
-                    (long)(now - t0), finished, nchunks, tot.processed, tot.certified, tot.sym, tot.surv, tot.min_surv_lb); }
+                    (long)(now - t0), finished, nchunks, tot.processed, tot.bounded, tot.sym, tot.surv, tot.min_surv_lb); }
     }
+    if (in) fclose(in);
     for (int t = 0; t < nthr; t++) if (sf[t] && fclose(sf[t])) IO_ERROR = 1;
     fclose(pf);
     if (IO_ERROR) { printf("INCOMPLETE (I/O error)\n"); return 2; }
     printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld bounded=%ld (first-order %ld) sym=%ld ball=0 survivors=%ld min_surv_lb=%.17g time=%lds\n",
-           N, TGT, MIN_EPS, tot.processed, tot.certified, tot.fo, tot.sym, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
+           N, TGT, MIN_EPS, tot.processed, tot.bounded, tot.fo, tot.sym, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
     printf("MODE rigorous (interval arithmetic, outward rounding)\n");
     if (finished != nchunks) { printf("INCOMPLETE: %ld of %ld chunks finished\n", finished, nchunks); return 2; }
-    char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
-    FILE *df = fopen(dfn, "w");
-    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%ld mode=rigorous keep=0x1p+0 balls=0 survivors=%ld cells=%ld fo=%d smear=%d from=%s input_cells=%ld\n",
-                       N, TGT, MIN_EPS, nchunks, tot.surv, tot.processed, FO, SMEAR, prefix, total) < 0 || fclose(df)) { perror(dfn); return 2; }
+    /* every input record was read and hashed; the files did not change size meanwhile; the hashes match PREFIX.done */
+    if (nread != total) { fprintf(stderr, "read %ld of %ld input cells; no stamp written\n", nread, total); return 2; }
+    char (*hx)[65] = xmalloc((nfiles + 1) * sizeof *hx);
+    for (int t = 0; t < nfiles; t++) {
+        char sfn[4200]; struct stat stt; snprintf(sfn, sizeof sfn, "%s.surv.%d", prefix, t);
+        if (stat(sfn, &stt) != 0 || stt.st_size / rec != fsize[t] || stt.st_size % rec) { fprintf(stderr, "%s changed during the run; no stamp written\n", sfn); return 2; }
+        sha256_hex(&hin[t], hx[t]);
+        if (have_want && strcmp(hx[t], want[t])) { fprintf(stderr, "%s: SHA-256 %s differs from %s (%s); no stamp written\n", sfn, hx[t], pdone, want[t]); return 2; }
+    }
+    { char sha_now[65]; if (sha256_file(pdone, sha_now, NULL) || strcmp(sha_now, from_sha)) { fprintf(stderr, "%s changed during the run; no stamp written\n", pdone); return 2; } }
+    char tmp[4200]; FILE *df = stamp_open(out, tmp, sizeof tmp);
+    if (!df) { perror(tmp); return 2; }
+    fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%ld mode=rigorous keep=%a balls=%d survivors=%ld cells=%ld fo=%d fo_emax=%a smear=%d maxc=%ld resumed=%ld prefix=%s",
+            N, TGT, MIN_EPS, nchunks, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, FO_EMAX, SMEAR, maxc, resumed, base_of(out));
+    fprintf(df, " from=%s same_dir=%d from_stamp=%s input_cells=%ld input_files=%d", base_of(prefix), same_dir(prefix, out), from_sha, total, nfiles);
+    for (int t = 0; t < nfiles; t++) fprintf(df, " in.%d=%s", t, hx[t]);
+    free(hx);
+    if (put_surv_hashes(df, out, rec)) { fclose(df); remove(tmp); return 2; }
+    put_provenance(df);
+    if (stamp_close(df, out, tmp)) return 2;
     if (tot.surv == 0) printf("INTERVAL-VERIFIED: D >= T on every input cell\n");
     return 0;
 }
 #endif
 
 int main(int argc, char **argv) {
+    if (argc == 2 && !strcmp(argv[1], "--version")) {      /* provenance of this binary */
+        fputs("capcert", stdout); put_provenance(stdout); fputc('\n', stdout); return 0;
+    }
     if (argc < 5) {
         fprintf(stderr, "usage: %s N T MIN_EPS OUT [--threads K] [--frontier F] [--balls FILE] [--max-cells-per-root M]\n", argv[0]);
         return 1;
@@ -381,7 +530,13 @@ int main(int argc, char **argv) {
 #ifdef RIGOROUS
         else if (!strcmp(argv[a], "--smear-mix")) SMEAR_MIX = atof(argv[++a]);
 #endif
+        else { fprintf(stderr, "unknown option %s\n", argv[a]); return 1; }
     }
+#ifdef RIGOROUS
+    /* proof mode: every survivor is written, and a survivor is a cell smaller than MIN_EPS that the bounds did not close */
+    if (KEEP_PROB != 1.0) { fprintf(stderr, "--keep-prob is not available in the rigorous build (every survivor must be written)\n"); return 1; }
+    if (maxc) { fprintf(stderr, "--max-cells-per-root is not available in the rigorous build (it changes what a survivor is)\n"); return 1; }
+#endif
     if (N < 3 || N > NMAX) { fprintf(stderr, "N must be in 3..%d\n", NMAX); return 1; }
     NQ = 2 * N - 3; NT3 = 0; NP2 = 0;
     for (int i = 0; i < N; i++) for (int j = i + 1; j < N; j++) {
@@ -479,7 +634,7 @@ int main(int argc, char **argv) {
         long idx, p, cc, s, b, v; double ml;   /* done[i]: 1 finished, 2 skipped (--roots) */
         while (fscanf(pf, "%ld %ld %ld %ld %ld %ld %lf", &idx, &p, &cc, &s, &b, &v, &ml) == 7) {
             if (idx >= 0 && (size_t)idx < nf && !done[idx]) {
-                done[idx] = 1; tot.processed += p; tot.certified += cc; tot.sym += s; tot.ball += b; tot.surv += v;
+                done[idx] = 1; tot.processed += p; tot.bounded += cc; tot.sym += s; tot.ball += b; tot.surv += v;
                 if (ml < tot.min_surv_lb) tot.min_surv_lb = ml;
             }
         }
@@ -536,17 +691,17 @@ int main(int argc, char **argv) {
             if (IO_ERROR) continue;   /* do not record a root whose survivors may be lost */
 #pragma omp critical
             {
-                fprintf(pf, "%ld %ld %ld %ld %ld %ld %.17g\n", r, st.processed, st.certified, st.sym, st.ball, st.surv,
+                fprintf(pf, "%ld %ld %ld %ld %ld %ld %.17g\n", r, st.processed, st.bounded, st.sym, st.ball, st.surv,
                         st.min_surv_lb);
                 fflush(pf);
-                tot.processed += st.processed; tot.certified += st.certified; tot.sym += st.sym; tot.ball += st.ball;
+                tot.processed += st.processed; tot.bounded += st.bounded; tot.sym += st.sym; tot.ball += st.ball;
                 tot.surv += st.surv; tot.fo += st.fo; if (st.min_surv_lb < tot.min_surv_lb) tot.min_surv_lb = st.min_surv_lb;
                 finished++;
                 time_t now = time(NULL);
                 if (now - tlast >= 60 || finished == (long)nf) {
                     tlast = now;
                     fprintf(stderr, "[%6lds] roots %ld/%zu  cells %ld  bounded %ld  sym %ld  ball %ld  survivors %ld  min_surv_lb %.12g\n",
-                            (long)(now - t0), finished, nf, tot.processed, tot.certified, tot.sym, tot.ball, tot.surv,
+                            (long)(now - t0), finished, nf, tot.processed, tot.bounded, tot.sym, tot.ball, tot.surv,
                             tot.min_surv_lb);
                 }
             }
@@ -556,17 +711,21 @@ int main(int argc, char **argv) {
     fclose(pf);
     if (IO_ERROR) { fprintf(stderr, "I/O ERROR writing survivors: run is incomplete\n"); printf("INCOMPLETE (I/O error)\n"); return 2; }
     printf("RESULT N=%d T=%.17g MIN_EPS=%g cells=%ld bounded=%ld (first-order %ld) sym=%ld ball=%ld survivors=%ld min_surv_lb=%.17g time=%lds\n",
-           N, TGT, MIN_EPS, tot.processed, tot.certified, tot.fo, tot.sym, tot.ball, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
+           N, TGT, MIN_EPS, tot.processed, tot.bounded, tot.fo, tot.sym, tot.ball, tot.surv, tot.min_surv_lb, (long)(time(NULL) - t0));
     #ifdef RIGOROUS
     printf("MODE rigorous (interval arithmetic, outward rounding)\n");
 #endif
     if (finished != (long)nf) { printf("INCOMPLETE: %ld of %zu roots finished\n", finished, nf); return 2; }
-    /* completion stamp, read by jobs/refine.py */
-    char dfn[4200]; snprintf(dfn, sizeof dfn, "%s.done", out);
-    FILE *df = fopen(dfn, "w");
-    if (!df || fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld fo=%d smear=%d%s%s\n",
-                       N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, SMEAR, "", "") < 0 || fclose(df)) {
-        perror(dfn); return 2;
+    /* completion stamp, read by proof/refine.py, capcert_rig --cells and check/check_chain.py */
+    {
+        long rec = (long)((2 * NQ + 1) * sizeof(double)); char tmp[4200];
+        FILE *df = stamp_open(out, tmp, sizeof tmp);
+        if (!df) { perror(tmp); return 2; }
+        fprintf(df, "N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d survivors=%ld cells=%ld fo=%d fo_emax=%a smear=%d maxc=%ld resumed=%ld prefix=%s",
+                N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, tot.surv, tot.processed, FO, FO_EMAX, SMEAR, maxc, ndone, base_of(out));
+        if (put_surv_hashes(df, out, rec)) { fclose(df); remove(tmp); return 2; }
+        put_provenance(df);
+        if (stamp_close(df, out, tmp)) return 2;
     }
     /* labels follow VERIFICATION.md: a single-kernel run is "interval-verified"; "cross-verified" needs a second kernel */
 #ifdef RIGOROUS

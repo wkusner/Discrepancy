@@ -9,8 +9,20 @@ their counts, and redundant worst caps):
       - for every orthant s of directions v = Y - q* there are weights mu >= 0 with
         s_j (sum_b mu_b G^s_bj) > 0 for all j, where G^s_bj is the end of the interval gradient of phi_b
         over B that minimizes G.v on that orthant.  Then max_b phi_b(Y) > D* for Y in B, Y != q*.
- 3. Every other cap of the capture list is below D* on Z, so D(q*) = D*.
-usage: python -m proof.local NAME [r] [--out DIR]      writes DIR/localcert_<NAME>.json (default results/)
+ 3. Every other cap of the capture list, except the redundant worst caps ("extra caps" of the hints), is below D*
+    on Z.
+ 4. D(q*): the square system has value D* at q*, the other caps are below D*, and each extra cap is enclosed on Z,
+    so D(q*) lies in [max(D*_lo, max_e lo_e), max(D*_hi, max_e hi_e)] (`D_qstar_enclosure`). With no extra caps this
+    is the D* enclosure, i.e. D(q*) = D*.
+
+Levels (PROOF.md Section 3a).  At the level "verified" (default; the chain has no symmetric step) the image is
+verified only if it has NO extra caps: nothing else shows that an extra cap is <= D* at q*, and without that
+D(q*) = D* and the uniqueness of the minimizer in B are not established (audit 2026-11-04, finding 2).  At the
+level "full" (N = 5, 6: Steps 4-6) extra caps are allowed, because Step 5 (proof.symmetric) shows that each lies in
+the orbit of a square-system cap with the same count, hence has value exactly D* at q*.
+
+usage: python -m proof.local NAME [r] [--out DIR] [--level verified|full]
+       writes DIR/localcert_<NAME>.json (default results/)
 """
 import sys, os, json, itertools, time
 import numpy as np
@@ -23,10 +35,16 @@ from . import certio
 
 flint.ctx.prec = 53          # double-precision balls (the default, set explicitly)
 ROOT = certio.REPO
-args = [a for a in sys.argv[1:] if not a.startswith('--')]
-OUT = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else os.path.join(ROOT, 'results')
-if '--out' in sys.argv: args.remove(OUT)
-name = args[0]; r_big = float(args[1]) if len(args) > 1 else 1e-4
+LEVELS = ('verified', 'full')
+argv = sys.argv[1:]; opts = {}
+for key in ('--out', '--level'):
+    if key in argv:
+        i = argv.index(key); opts[key] = argv[i + 1]; del argv[i:i + 2]
+if any(a.startswith('--') for a in argv): sys.exit(f'unknown option in {argv}')
+OUT = opts.get('--out', os.path.join(ROOT, 'results'))
+LEVEL = opts.get('--level', 'verified')
+if LEVEL not in LEVELS: sys.exit(f'--level must be one of {LEVELS}')
+name = argv[0]; r_big = float(argv[1]) if len(argv) > 1 else 1e-4
 hints_file = os.path.join(ROOT, 'proof', 'hints', f'{name}.json')
 hints = json.load(open(hints_file)); N = hints['N']; nq = 2 * N - 3
 t0 = time.time()
@@ -97,9 +115,22 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
         worst_other = max(worst_other, certio.float_up(dd.phi_up.upper()))
     report['max_other_caps_on_K'] = worst_other
     report['others_below'] = below
-    if extra:   # redundant worst caps (forced by symmetry): report their enclosure on K
+    # honest enclosure of D(q*): the square system has value D* (Krawczyk), every other cap is below D*, and each
+    # redundant worst cap ("extra cap") is enclosed on K, which contains q*
+    qlo, qhi = Dstar.lower(), Dstar.upper(); extras_ok = True
+    if extra:
         datE = cap_data(m[:-1], np.full(nq, rk), N, list(extra))
-        report['redundant_caps_on_K'] = [[certio.float_down(dd.a.lower()), certio.float_up(dd.phi_up.upper())] for dd in datE]
+        report['redundant_caps_on_K'] = [None if dd is None else [certio.float_down(dd.a.lower()), certio.float_up(dd.phi_up.upper())] for dd in datE]
+        for dd in datE:
+            if dd is None: extras_ok = False; continue           # degenerate on K: no enclosure
+            lo_e, hi_e = dd.a.lower(), dd.phi_up.upper()
+            if lo_e > qlo: qlo = lo_e
+            if hi_e > qhi: qhi = hi_e
+    if extras_ok:
+        report['D_qstar_enclosure'] = [certio.float_down(qlo), certio.float_up(qhi)]
+        report['D_qstar_enclosure_hex'] = [certio.exact(x) for x in report['D_qstar_enclosure']]
+    else:
+        report['D_qstar_enclosure'] = None
     # ---------- 2. sharpness on the big box
     w = np.full(nq, r_big)
     # only the square system enters the sharpness test: for these caps phi_b(q*) = D* exactly
@@ -135,7 +166,13 @@ def certify_image(q0, caps, counts, r_big, extra=(), extra_counts=()):
             if not (acc * int(s[j]) > 0): nfail += 1; break
     report['orthants_failed'] = nfail
     report['box_radius'] = r_big
-    report['verified'] = (nfail == 0) and report['others_below']
+    why = []
+    if nfail: why.append(f'{nfail} orthants failed')
+    if not report['others_below']: why.append('a cap outside the square system and the extra caps is not below D*')
+    if extra and LEVEL == 'verified':
+        why.append(f'{len(extra)} extra caps: at the level "verified" nothing shows they are <= D* at q*')
+    report['verified'] = not why
+    if why: report['not_verified_because'] = why
     return report
 
 
@@ -147,13 +184,14 @@ for h in hints['images']:
     caps = [parse_cap(c) for c in h['caps']]; counts = h['counts']
     extra = [parse_cap(c) for c in h['extra_caps']]; extra_counts = h['extra_counts']
     out = certify_image(q0, caps, counts, r_big, extra, extra_counts)
+    out.setdefault('verified', False)
     out['image'] = h['image']; out['caps'] = h['caps']; out['counts'] = counts
     out['extra_caps'] = h['extra_caps']; out['extra_counts'] = extra_counts
-    print(f"  image {h['image']}: " + ", ".join(f"{key}={out.get(key)}" for key in ('krawczyk', 'D_enclosure', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'verified')))
+    print(f"  image {h['image']}: " + ", ".join(f"{key}={out.get(key)}" for key in ('krawczyk', 'D_enclosure', 'D_qstar_enclosure', 'others_below', 'counts_frozen_on_box', 'orthants_failed', 'verified', 'not_verified_because') if key in out))
     results.append(out)
 os.makedirs(OUT, exist_ok=True)
 certio.write_json(os.path.join(OUT, f'localcert_{name}.json'),
-    dict(name=name, N=N, box_radius=r_big, gauge='capcert coordinates (x0 pole, x1 in xz-plane x>=0)',
+    dict(name=name, N=N, level=LEVEL, box_radius=r_big, gauge='capcert coordinates (x0 pole, x1 in xz-plane x>=0)',
          verified=all(r.get('verified') for r in results), kernel='arb (python-flint)', method='Krawczyk test + orthant test',
          label='Krawczyk-verified (Arb)', images=results,
          stamp=certio.stamp('PROOF.md Step 4 (local verification)', inputs=[hints_file], t0=t0, prec=flint.ctx.prec)))

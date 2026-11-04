@@ -89,9 +89,16 @@ def main():
     assert float.fromhex(stamp['keep']) == 1.0 and int(stamp['balls']) == 0, "stamp: survivors were sampled or balls used"
     assert T_c >= T, f"stamp: capcert threshold {T_c!r} is below the refinement threshold {T!r}"
     rec = (2 * nq + 1) * 8
-    files = sorted(f for f in glob.glob(a.prefix + '.surv.*') if f.rsplit('.', 1)[1].isdigit())
+    files = sorted((f for f in glob.glob(a.prefix + '.surv.*') if f.rsplit('.', 1)[1].isdigit()), key=lambda f: int(f.rsplit('.', 1)[1]))
     for f in files:
         assert os.path.getsize(f) % rec == 0, f"{f}: partial record"
+    if 'files' in stamp:
+        # a stamp with survivor hashes (capcert since 2026-11-04): read exactly those files, and only if they match
+        # (the chain checker checks this again; checking here saves a long run on the wrong input)
+        want = [a.prefix + f'.surv.{t}' for t in range(int(stamp['files']))]
+        assert files == want, f"survivor files {[os.path.basename(f) for f in files]} differ from the stamp's {[os.path.basename(f) for f in want]}"
+        for t, f in enumerate(files):
+            assert certio.sha256(f) == stamp[f'surv.{t}'], f"{f}: SHA-256 differs from the stamp"
     arr = np.concatenate([np.fromfile(f, dtype=np.float64) for f in files]).reshape(-1, 2 * nq + 1) if files else np.zeros((0, 2 * nq + 1))
     # an interrupted root rerun on resume may have left duplicate records; never fewer than counted
     assert len(arr) >= int(stamp['survivors']), f"only {len(arr)} survivor records, capcert counted {stamp['survivors']}"

@@ -12,18 +12,13 @@ from flint import arb
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from proof import arith, cellbound, domain, certio                     # noqa: E402
-from sphcap import discrepancy as exact_discrepancy          # noqa: E402  (test oracle only: floating point)
+from tests.oracle import discrepancy_upper                   # noqa: E402  (test oracle only: floating point, robust)
 
 flint.ctx.prec = 53
 rng = np.random.default_rng(12345)
 
 
-def points_float(q, N):
-    X = [[0.0, 0.0, 1.0], [np.sin(q[0]), 0.0, np.cos(q[0])]]
-    for i in range(2, N):
-        th, ph = q[2 * i - 3], q[2 * i - 2]
-        X.append([np.sin(th) * np.cos(ph), np.sin(th) * np.sin(ph), np.cos(th)])
-    return np.array(X)
+from tests.oracle import points_float                        # noqa: E402,F401  (re-exported for other tests)
 
 
 def local_q(name):
@@ -41,7 +36,7 @@ def test_cell_bound_below_discrepancy(N, name):
         lb, _ = cellbound.cell_lower_bound(c, w, N, 1.0, caps)
         for _ in range(5):
             y = c + rng.uniform(-1, 1, nq) * w
-            D = exact_discrepancy(points_float(y, N)).value
+            D = discrepancy_upper(points_float(y, N))
             assert float(lb.lower()) <= D + 1e-12
 
 
@@ -93,7 +88,7 @@ def test_local_verification_fails_on_a_wrong_count(tmp_path):
     path = os.path.join(ROOT, 'proof/hints/MUT_N5.json')
     json.dump(bad, open(path, 'w'))
     try:
-        r = run('proof.local', 'MUT_N5', '3e-4', '--out', str(tmp_path))
+        r = run('proof.local', 'MUT_N5', '3e-4', '--out', str(tmp_path), '--level', 'full')
         assert 'NOT ALL VERIFIED' in r.stdout, r.stdout + r.stderr
     finally:
         os.remove(path)
@@ -108,7 +103,48 @@ def test_local_verification_fails_without_a_worst_cap(tmp_path):
     path = os.path.join(ROOT, 'proof/hints/MUT2_N5.json')
     json.dump(bad, open(path, 'w'))
     try:
-        r = run('proof.local', 'MUT2_N5', '3e-4', '--out', str(tmp_path))
+        r = run('proof.local', 'MUT2_N5', '3e-4', '--out', str(tmp_path), '--level', 'full')
         assert 'ALL KRAWCZYK-VERIFIED' not in r.stdout, r.stdout + r.stderr
     finally:
         os.remove(path)
+
+
+# ---------------------------------------------------------------- redundant worst caps (audit 2026-11-04, finding 2)
+def _local(name, level, out, hints=None):
+    path = None
+    if hints is not None:
+        path = os.path.join(ROOT, 'proof', 'hints', f'{name}.json'); json.dump(hints, open(path, 'w'))
+    try:
+        r = run('proof.local', name, '1e-4', '--out', str(out), '--level', level)
+        assert r.returncode == 0, r.stdout + r.stderr
+        return json.load(open(os.path.join(str(out), f'localcert_{name}.json')))
+    finally:
+        if path: os.remove(path)
+
+
+def test_extra_caps_are_refused_at_the_verified_level(tmp_path):
+    """the N = 7 hints with an arbitrary cap added to extra_caps: verified=False at the level "verified" (before the
+    fix the list was only echoed), and the honest D(q*) enclosure contains the D* enclosure"""
+    hints = json.load(open(os.path.join(ROOT, 'proof/hints/N7_best.json')))
+    bad = copy.deepcopy(hints); bad['name'] = 'MUT3_N7'; bad['images'] = bad['images'][:1]
+    img = bad['images'][0]
+    allc = [repr(c) for c in arith.all_caps(7)]
+    new = next(c for c in allc if c not in img['caps'])
+    img['extra_caps'] = [new]; img['extra_counts'] = [img['counts'][0]]
+    lc = _local('MUT3_N7', 'verified', tmp_path, bad)
+    im = lc['images'][0]
+    assert lc['level'] == 'verified' and not lc['verified'] and not im['verified']
+    assert any('extra caps' in w for w in im['not_verified_because'])
+    lo, hi = im['D_qstar_enclosure']; dlo, dhi = im['D_enclosure']
+    assert lo >= dlo and hi >= dhi
+
+
+def test_verified_level_without_extra_caps_and_full_level(tmp_path):
+    """N = 7 (no extra caps): verified at the level "verified", D(q*) enclosure = D* enclosure; N = 6 (one extra cap per
+    image): refused at "verified", accepted at "full" (Step 5 closes the extra caps there)"""
+    lc = _local('N7_best', 'verified', tmp_path / 'a')
+    assert lc['verified'] and all(i['D_qstar_enclosure'] == i['D_enclosure'] for i in lc['images'])
+    lc6 = _local('N6_best', 'verified', tmp_path / 'b')
+    assert not lc6['verified'] and all(i['extra_caps'] and not i['verified'] for i in lc6['images'])
+    lc6f = _local('N6_best', 'full', tmp_path / 'c')
+    assert lc6f['verified'] and lc6f['level'] == 'full'
