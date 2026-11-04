@@ -1,0 +1,114 @@
+name: CI
+
+# Continuous integration for capdisc/ (Python package sphcap, C programs, tests).
+# Tests are not proofs: a green run says the code builds and its test suite passes on these platforms.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+    working-directory: capdisc
+
+jobs:
+  test:
+    name: test (py${{ matrix.python }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # check/check_chain.py (tests/test_chain_checker.py) compares the commits recorded in the
+          # stored certificate chains with `git diff`, so it needs the full history.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: capdisc/pyproject.toml
+
+      - name: Install the package and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[test,precision]"
+          python -c "import sys, numpy, scipy, sympy, mpmath, flint; print(sys.version); print('numpy', numpy.__version__, 'scipy', scipy.__version__, 'python-flint', flint.__version__)"
+
+      - name: Build the C programs (build.sh) and check its self-test
+        run: |
+          bash build.sh 2>&1 | tee build.log
+          n_float=$(grep -c '^FLOAT-CHECKED' build.log || true)
+          n_int=$(grep -c '^INTERVAL-VERIFIED' build.log || true)
+          if [ "$n_float" -ne 2 ] || [ "$n_int" -ne 1 ]; then
+            echo "::error::build.sh self-test: expected 2 FLOAT-CHECKED and 1 INTERVAL-VERIFIED lines, got $n_float and $n_int"
+            exit 1
+          fi
+          test -x capcert && test -x capcert_rig
+
+      - name: Build capcert_arb (needs Arb/FLINT and OpenMP; skipped otherwise)
+        run: |
+          if [ "$RUNNER_OS" != "Linux" ]; then
+            echo "::notice title=capcert_arb skipped::capcert_arb is not built on $RUNNER_OS (csrc/capcert_arb.c needs omp.h and FLINT/Arb, built by build_arb.sh for Linux). The Arb kernel is not exercised in this job."
+            exit 0
+          fi
+          if ! sudo apt-get install -y --no-install-recommends libflint-dev libgmp-dev libmpfr-dev >apt.log 2>&1; then
+            tail -5 apt.log
+            echo "::notice title=capcert_arb skipped::Arb/FLINT development packages are not installable here. The Arb kernel is not exercised in this job."
+            exit 0
+          fi
+          bash build_arb.sh 2>&1 | tee build_arb.log
+          if grep -q 'static binary' build_arb.log; then
+            echo "::warning title=capcert_arb::compiling csrc/capcert_arb.c failed; build_arb.sh fell back to the stored static binary (see build_arb.err)"
+            cat build_arb.err || true
+          fi
+          test -x capcert_arb
+          n_arb=$(grep -c '^ARB-VERIFIED' build_arb.log || true)
+          if [ "$n_arb" -ne 2 ]; then
+            echo "::error::build_arb.sh self-test: expected 2 ARB-VERIFIED lines, got $n_arb"
+            exit 1
+          fi
+
+      - name: Tests (fast; tests marked slow are skipped)
+        run: python -m pytest -ra --durations=10
+
+  slow:
+    name: slow tests (py${{ matrix.python }}, ubuntu-latest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: capdisc/pyproject.toml
+
+      - name: Install the package and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[test,precision]"
+
+      - name: Tests marked slow
+        run: python -m pytest -ra --runslow -m slow --durations=10
