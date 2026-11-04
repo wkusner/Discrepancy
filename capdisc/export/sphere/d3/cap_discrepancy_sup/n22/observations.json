@@ -1617,6 +1617,12 @@
     "pointer": 0,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -3177,6 +3183,13 @@
     "ascending": 0,
     "null": 2,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 2
    }
   },
   {
@@ -4744,6 +4757,13 @@
     "ascending": 0,
     "null": 2,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 2
    }
   },
   {
@@ -6345,6 +6365,12 @@
     "pointer": 3,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -7953,6 +7979,12 @@
     "pointer": 4,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -9534,6 +9566,12 @@
     "pointer": 5,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -11133,6 +11171,20 @@
     "pointer": 6,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "exit",
+    "exit": {
+     "rate": 8.77338e-05,
+     "switched_points": 2,
+     "leads_to": {
+      "value": 0.11598392953527387,
+      "class": "sharp minimum"
+     }
+    }
    }
   },
   {
@@ -12712,6 +12764,13 @@
     "ascending": 0,
     "null": 1,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 2
    }
   },
   {
@@ -14257,6 +14316,13 @@
     "ascending": 0,
     "null": 2,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 2
    }
   },
   {
@@ -15735,6 +15801,13 @@
     "ascending": 0,
     "null": 4,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum (probe descends: not a local minimum)",
+    "flat_dim": 4
    }
   },
   {
@@ -17350,6 +17423,12 @@
     "pointer": 10,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -18921,6 +19000,12 @@
     "pointer": 11,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -20509,6 +20594,12 @@
     "pointer": 12,
     "script": "jobs/atlas_export.py",
     "commit": "6f8a45d+dirty"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "sharp minimum"
    }
   },
   {
@@ -22052,6 +22143,13 @@
     "ascending": 0,
     "null": 2,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 2
    }
   },
   {
@@ -23569,6 +23667,13 @@
     "ascending": 0,
     "null": 2,
     "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 2
    }
   }
  ],
