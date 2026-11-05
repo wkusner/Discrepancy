@@ -5,12 +5,12 @@
  "generated_by": {
   "classifier_version": "ac44d3513e175f54",
   "code_modified": false,
-  "commit": "23c831e",
-  "last_code_commit": "23c831e",
+  "commit": "1284d1b",
+  "last_code_commit": "1284d1b",
   "script": "jobs/atlas_pipeline.py",
   "scripts": {
    "jobs/atlas_export.py": "9471f7ef896e424c0b6d3e1c434a2cc746b6bce6c01c70c36e680eb73ff518c5",
-   "jobs/atlas_pipeline.py": "594c1e8d51be68443f622192c23cbc809feabc2ae1e1ccba58c4d2fbd9f09674",
+   "jobs/atlas_pipeline.py": "203f0958e8e7fd9aee6ba9535711cb07b276df5630983f56a9b2a7579d874c59",
    "jobs/atlas_stuck.py": "1b06123cfb7924cff1a73d590e7b9d984e48bce0b068082d1fd4fd6c855e6f32",
    "sphcap/__init__.py": "b743a501cdca261f22070408889f50db0f5f6b51eef761a33f95b0ef804c4227",
    "sphcap/balance.py": "03eec9b45eaeeb03ab41c9488bd816cd660410d919389bf5c6e9f9f2100e3ead",
@@ -19,26 +19,26 @@
   "versions": {
    "jsonschema": "4.26.0",
    "numpy": "2.5.3",
-   "python": "3.13.18",
+   "python": "3.13.16",
    "scipy": "1.18.1"
   }
  },
  "inputs": [
   {
-   "commit": "de6337a",
+   "commit": "1284d1b",
    "file": "sphcap/data/search/search_N21.json",
    "format": "search",
    "records": 15,
-   "sha256": "16b929863138ebe6e6027ab683494a0c0cbe010197d0f129b4a1edf7d46feb13"
+   "sha256": "1df0e50d36939b056e40fe9ea3b335bb1e1ab02ee7df66109fc5991114c3ae2b"
   }
  ],
- "observations": 30,
+ "observations": 45,
  "outputs": {
-  "observations.json": "97181bbbb00ff8faf0f75fd32b094e4fefe0f703821487e4b9debc8a066cc8b3",
-  "observations.jsonl": "3b61267c54edad2054f1fb2b6085f3aba140d80c3e76b02bac6780f109be0037",
-  "passes.jsonl": "5d89abbe2ba3c0d270c69d463e7b9b54bc23a61d7c0014c86a47fa00a276d017",
-  "stuck.jsonl": "5ec10eb19b41516c84a7759603e25e626a052ce0417560da675873b99294889a"
+  "observations.json": "78b6893a26c091c8041e85d35f8250a89f70f0058b76b2ef24f2e75a5c65faa7",
+  "observations.jsonl": "03b0fd22add84923142e45f20fc614c7fd548b136626c8b3362495c32a5d8b41",
+  "passes.jsonl": "549c7e1c91f81fa45ccea2d8384b23d85bfbd9b30ba62da962a0702e0f4d784c",
+  "stuck.jsonl": "b0df3914276d78f8d589d1cfa9a259f0ba59f785bf73cec149c43bb8ec4d281b"
  },
  "schema_version": "0.2.0",
- "search_passes": 2
+ "search_passes": 3
 }
