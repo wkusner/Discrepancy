@@ -27,3 +27,29 @@ def test_octahedron_hemisphere():
     # four points on the equator: the closed hemisphere holds 5 of 6, area 1/2 -> deviation 1/3
     X = np.array([[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]], float)
     assert discrepancy(X).value >= 1 / 3 - 1e-12
+
+
+def _pencil_max(X, i, M=2000):
+    """Brute force: hemispheres whose boundary contains the antipodal pair X[i], -X[i], swept over M angles."""
+    p = X[i]
+    e1 = np.cross(p, [0.3, 0.5, 0.8]); e1 /= np.linalg.norm(e1); e2 = np.cross(p, e1)
+    N, best = len(X), 0.0
+    for ph in np.linspace(0, 2 * np.pi, M, endpoint=False):
+        pr = X @ (np.cos(ph) * e1 + np.sin(ph) * e2)
+        best = max(best, abs(np.sum(pr >= -1e-12) / N - .5), abs(np.sum(pr > 1e-12) / N - .5))
+    return best
+
+
+def test_antipodal_pairs_reduce_to_great_circle_triples():
+    """For an antipodal pair the hemispheres through it form a pencil of equal area; the count only changes when
+    the boundary passes a third point q, so the extremes are the great-circle triples (p, -p, q), which the
+    three-point caps enumerate.  Check against a brute-force sweep of each pencil."""
+    rng = np.random.default_rng(1)
+    for _ in range(15):
+        N = int(rng.integers(3, 9))
+        X = rng.normal(size=(N, 3)); X /= np.linalg.norm(X, axis=1)[:, None]
+        k = int(rng.integers(1, N // 2 + 1))
+        for a in range(k):
+            X[N - 1 - a] = -X[a]
+        D = discrepancy(X).value
+        assert D >= max(_pencil_max(X, a) for a in range(k)) - 1e-12

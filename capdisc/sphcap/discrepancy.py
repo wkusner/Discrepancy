@@ -224,6 +224,9 @@ def _discrepancy_exact(X: np.ndarray, eps: float, max_size: Optional[int],
                 # cap plane through three points from the cross product: also correct when the three points lie
                 # on a great circle (plane through the origin, singular Gram matrix: the cap is a hemisphere),
                 # which the Gram formula below cannot see.  Same construction as proof/arith.py and csrc/fo.h.
+                # This also covers antipodal pairs: the hemispheres through p and -p form a pencil of equal area
+                # whose count changes only where the boundary passes a third point q, i.e. at the triples
+                # (p, -p, q) enumerated here (tests/test_great_circle_caps.py checks this against a sweep).
                 nv = np.cross(Xb[:, 1] - Xb[:, 0], Xb[:, 2] - Xb[:, 0])
                 nn = np.linalg.norm(nv, axis=1)
                 ok = nn > eps
