@@ -1,5 +1,5 @@
 N=5: 2,626 cells from capcert, T=0.32332565099805344, 3 exclusion box(es) of half-width 0.0003
-[     25s] 1,000/2,626 input cells; {'cells': 5694, 'bounded': 2855, 'boxed': 4, 'sym': 488, 'failed': 0}
-[     50s] 2,000/2,626 input cells; {'cells': 12896, 'bounded': 6490, 'boxed': 6, 'sym': 952, 'failed': 0}
-[     72s] 2,626/2,626 input cells; {'cells': 19660, 'bounded': 9682, 'boxed': 10, 'sym': 1451, 'failed': 0}
+[     36s] 1,000/2,626 input cells; {'cells': 8156, 'bounded': 3997, 'boxed': 4, 'sym': 577, 'failed': 0}
+[     64s] 2,000/2,626 input cells; {'cells': 15048, 'bounded': 7346, 'boxed': 5, 'sym': 1173, 'failed': 0}
+[     84s] 2,626/2,626 input cells; {'cells': 19660, 'bounded': 9682, 'boxed': 10, 'sym': 1451, 'failed': 0}
 ARB-VERIFIED: no cell left

@@ -34,7 +34,7 @@
  "label": "Krawczyk-verified (Arb)",
  "stamp": {
   "step": "PROOF.md Step 6 (congruence of the images)",
-  "commit": "051990c494668986e1da079da07bd38875449128",
+  "commit": "08c731543c80502d92e26ef7f53d4844a5142df5",
   "tree_dirty": false,
   "tree_checked": [
    "proof",
@@ -46,7 +46,7 @@
    "python": "3.13.18",
    "python-flint": "0.9.0",
    "FLINT": "3.6.0",
-   "numpy": "2.5.3",
+   "numpy": "2.5.4",
    "scipy": "1.18.1",
    "sympy": "1.14.0",
    "mpmath": "1.3.0"
@@ -59,12 +59,12 @@
    "results/verify_N5"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-11-04T19:22:35Z",
-  "seconds": 0.3,
+  "date_utc": "2026-11-05T20:49:54Z",
+  "seconds": 0.4,
   "inputs": {
-   "results/verify_N5/symcert_N5_best_img0.json": "b7fdfabd8e207c666c7a9198edbc403e207fa2dd8443c8ec3f021c708afefdfe",
-   "results/verify_N5/symcert_N5_best_img1.json": "8903444d90c0b4b00c5d58c203030fbb9aa72d491cf92afc4ff51d31b7bd21c0",
-   "results/verify_N5/symcert_N5_best_img2.json": "2bc28b331ffcd3fb2dc301cb35ce1d7c42fd759217bfd922ce765ce2c28d70fe"
+   "results/verify_N5/symcert_N5_best_img0.json": "0d67e3988cb2a6d9d5f612e7669082c4f1a33ae479b5ad8695e992058946d20f",
+   "results/verify_N5/symcert_N5_best_img1.json": "0dd75ff249c928ad23ac5ed495aca7f53197947f63903c6df019e71ecbac6be7",
+   "results/verify_N5/symcert_N5_best_img2.json": "f208e9a3343a096f49e2196f4a0ea048e6cdabb6ecd50feba32cac01efcdb435"
   }
  }
 }

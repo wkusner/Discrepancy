@@ -125,7 +125,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 5 (symmetry and exact value)",
-  "commit": "051990c494668986e1da079da07bd38875449128",
+  "commit": "08c731543c80502d92e26ef7f53d4844a5142df5",
   "tree_dirty": false,
   "tree_checked": [
    "proof",
@@ -137,7 +137,7 @@
    "python": "3.13.18",
    "python-flint": "0.9.0",
    "FLINT": "3.6.0",
-   "numpy": "2.5.3",
+   "numpy": "2.5.4",
    "scipy": "1.18.1",
    "sympy": "1.14.0",
    "mpmath": "1.3.0"
@@ -151,10 +151,10 @@
    "results/verify_N5"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-11-04T19:22:35Z",
-  "seconds": 0.6,
+  "date_utc": "2026-11-05T20:49:54Z",
+  "seconds": 0.8,
   "inputs": {
-   "results/verify_N5/localcert_N5_best.json": "c5b9abd693fd083cfad5655d006ce7b89e47385d86948f195cc64e321f05d6af"
+   "results/verify_N5/localcert_N5_best.json": "e55c3f4749d9aeecd5ece252fc2b1f9b31c87c6d318b79a7d2d51fea0cac4602"
   }
  }
 }

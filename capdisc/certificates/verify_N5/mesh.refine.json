@@ -20,12 +20,12 @@
   "prefix": "mesh",
   "files": "2",
   "records": "14085",
-  "surv.0": "0b77a330c2ee1b4a8dc0bfc7e9d72c99bb4a1f4cca5c5c9814114ee38cfb49e6",
-  "surv.1": "84f9ebf28f355e9ee5c52d624bb2a84cde7a000b7059813e2806558baca3cac1",
-  "commit": "051990c494668986e1da079da07bd38875449128",
+  "surv.0": "289322cc34b711df9345464ec2df587cbab28c6d198871fa6ff1b22849e7aebf",
+  "surv.1": "c55bd189b9892c3771b52aa59a7636564c24d20c7b443614469483bb0cd3d65c",
+  "commit": "08c731543c80502d92e26ef7f53d4844a5142df5",
   "tree_dirty": "0",
   "src": "capcert.c,fo.h,ia.h,rig.h,sha256.h",
-  "src_sha256": "b6d656ca81c7a607bf6d332bca3bb0fdd36347b0e65d44b49ae50c029a33b485",
+  "src_sha256": "d74d37486e5438bffa5760a4d784a27e51012363bcf4e2ee1320b95ec8f7e950",
   "cc": "13.3.0",
   "flags": "-O3%20-march=native%20-Wall%20-Wno-unused-function%20-fopenmp%20-DRIGOROUS%20-ffp-contract=off%20-fno-fast-math",
   "build": "rigorous"
@@ -37,7 +37,7 @@
  "sym": 23586,
  "failed": 0,
  "fails": [],
- "time": 760.213342666626,
+ "time": 957.5185248851776,
  "verified": true,
  "kernel": "arb (python-flint)",
  "label": "Arb-verified",
@@ -81,7 +81,7 @@
  ],
  "stamp": {
   "step": "PROOF.md Step 3 (refinement)",
-  "commit": "051990c494668986e1da079da07bd38875449128",
+  "commit": "08c731543c80502d92e26ef7f53d4844a5142df5",
   "tree_dirty": false,
   "tree_checked": [
    "proof",
@@ -93,7 +93,7 @@
    "python": "3.13.18",
    "python-flint": "0.9.0",
    "FLINT": "3.6.0",
-   "numpy": "2.5.3",
+   "numpy": "2.5.4",
    "scipy": "1.18.1",
    "sympy": "1.14.0",
    "mpmath": "1.3.0"
@@ -112,13 +112,13 @@
    "0.32332565099805344"
   ],
   "machine": "Linux x86_64, 2 cpus",
-  "date_utc": "2026-11-04T19:37:38Z",
-  "seconds": 760.5,
+  "date_utc": "2026-11-05T21:08:25Z",
+  "seconds": 957.8,
   "inputs": {
-   "results/verify_N5/localcert_N5_best.json": "c5b9abd693fd083cfad5655d006ce7b89e47385d86948f195cc64e321f05d6af",
-   "results/verify_N5/mesh.done": "b35df599855b9ea729bfe9b7a7b7051755234a8221fe6136d4f9eea00ce3c686",
-   "results/verify_N5/mesh.surv.0": "0b77a330c2ee1b4a8dc0bfc7e9d72c99bb4a1f4cca5c5c9814114ee38cfb49e6",
-   "results/verify_N5/mesh.surv.1": "84f9ebf28f355e9ee5c52d624bb2a84cde7a000b7059813e2806558baca3cac1"
+   "results/verify_N5/localcert_N5_best.json": "e55c3f4749d9aeecd5ece252fc2b1f9b31c87c6d318b79a7d2d51fea0cac4602",
+   "results/verify_N5/mesh.done": "f92df1ebc545051044019b9f36840e5acd59ee1eda716ae94d1c3dabc6d6ef96",
+   "results/verify_N5/mesh.surv.0": "289322cc34b711df9345464ec2df587cbab28c6d198871fa6ff1b22849e7aebf",
+   "results/verify_N5/mesh.surv.1": "c55bd189b9892c3771b52aa59a7636564c24d20c7b443614469483bb0cd3d65c"
   }
  }
 }

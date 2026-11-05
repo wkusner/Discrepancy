@@ -1,0 +1,2 @@
+#capcert-cells N=5 T=0x1.4b15e123fa6b2p-2 MIN_EPS=0x1.47ae147ae147bp-7 from=results/verify_N5/mesh files=2 cells=14085 chunk=1048576 mode=rigorous fo=1 fo_emax=0x1.999999999999ap-4 smear=0 maxc=0 commit=08c731543c80502d92e26ef7f53d4844a5142df5 tree_dirty=0 src_sha256=d74d37486e5438bffa5760a4d784a27e51012363bcf4e2ee1320b95ec8f7e950 cc=13.3.0 flags=-O3%20-march=native%20-Wall%20-Wno-unused-function%20-fopenmp%20-DRIGOROUS%20-ffp-contract=off%20-fno-fast-math build=rigorous
+0 202711 87289 18483 0 2626 0.3228074534017471
