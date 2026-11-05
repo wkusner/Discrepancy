@@ -142,17 +142,43 @@ def test_cap_geometry_and_gram(small):
 
 
 def test_local_enclosures_n7_n8(small):
+    """N7_best: level-2 enclosure of the local minimum (one kernel, Arb).  N8_best: no level-2 value, because its
+    local verification lists redundant worst caps that it does not bound (audit 2026-11-04, finding 2): level 0
+    with a note."""
     _, docs = small
-    for N, name in ((7, 'N7_best'), (8, 'N8_best')):
+    o = next(o for o in docs[7]['observations'] if o['name'] == 'N7_best')
+    v2 = [v for v in o['value'] if v['level'] == 2]
+    assert len(v2) == 1 and v2[0]['status'] == 'interval-verified' and 'no global claim' in v2[0]['note']
+    assert v2[0]['kernels'] == ['Arb']
+    lo, hi = map(float, v2[0]['value']['interval'])
+    # the enclosure is of the local minimum value; D at the stored double configuration is at least that
+    # and exceeds it only by rounding (2e-14 for N = 7)
+    assert lo <= o['value'][0]['value'] <= hi + 1e-12
+    o8 = next(o for o in docs[8]['observations'] if o['name'] == 'N8_best')
+    assert [v['level'] for v in o8['value']] == [0]
+    assert 'local verification incomplete (audit 2026-11-04)' in o8['value'][0]['note']
+    # the N = 8 local verification file lists redundant caps on every image
+    l = json.load(open(os.path.join(ROOT, 'certificates', 'localcert_N8_best.json')))
+    assert all(im.get('extra_caps') for im in l['images'])
+    # N = 8 second and third have no local verification
+    assert all(len(o['value']) == 1 and 'audit' not in o['value'][0]['note']
+               for o in docs[8]['observations'] if o['name'] != 'N8_best')
+
+
+def test_kernel_names_on_proved_descriptions(small):
+    """level-2/3 descriptions name their kernels: N5/N6 value level 2 and the active hypergraph by Arb + mpmath.iv,
+    value level 3 and the Gram matrix by sympy + FLINT"""
+    _, docs = small
+    for N, name in ((5, 'N5_best'), (6, 'N6_best')):
         o = next(o for o in docs[N]['observations'] if o['name'] == name)
-        v2 = [v for v in o['value'] if v['level'] == 2]
-        assert len(v2) == 1 and v2[0]['status'] == 'interval-verified' and 'no global claim' in v2[0]['note']
-        lo, hi = map(float, v2[0]['value']['interval'])
-        # the enclosure is of the local minimum value; D at the stored double configuration is at least that
-        # and exceeds it only by rounding (2e-14 for N = 7)
-        assert lo <= o['value'][0]['value'] <= hi + 1e-12
-    # N = 8 second and third have no certificate
-    assert all(len(o['value']) == 1 for o in docs[8]['observations'] if o['name'] != 'N8_best')
+        by = {v['level']: v for v in o['value']}
+        assert by[2]['kernels'] == ['Arb', 'mpmath.iv'] and by[3]['kernels'] == ['sympy', 'FLINT']
+        assert o['gram']['kernels'] == ['sympy', 'FLINT'] and o['active']['kernels'] == ['Arb', 'mpmath.iv']
+        assert o['active']['level'] == 2
+    for N in (5, 6, 7, 8):
+        for o in docs[N]['observations']:
+            for v in o['value']:
+                assert (v['level'] >= 2) == ('kernels' in v)
 
 
 def test_no_forbidden_word(small):

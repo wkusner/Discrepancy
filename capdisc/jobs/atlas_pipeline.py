@@ -82,6 +82,15 @@ _p_24_25 = dict(_p_21_22, workers=4, source='commit c3ae1de (first pass: 10 roun
 _p_23 = dict(_p_24_25, improving_in_last_round=True,
              source='commit 86088fd (first pass: 10 rounds x 4 workers x 12 runs; "best still improving at round 10"); '
                     'seed not recorded')
+# second pass (sphcap/data/search/pass2/, with its README and the per-round logs of both passes): 15 more rounds
+# resuming the pass-1 .pkl, so the hits in these files are cumulative.  The best value per round is in the logs
+# (search_N21_N22.log, search_N23_N25.log; pass 2 is the block after the second "start" line); passing the pass-2
+# lines of the matching log as --search-log fills best_by_round and improving_in_last_round.
+_p2_src = ('search pass 2 (sphcap/data/search/pass2/README.md): 15 rounds resuming the pass-1 .pkl, seed 0, 12 runs per '
+           'task; best per round from the per-round log of that pass')
+_p2_21_22 = dict(seed=0, rounds=15, workers=2, runs_per_task=12, resumes_previous=True, improving_in_last_round=None,
+                 source=_p2_src)
+_p2_23_25 = dict(_p2_21_22, workers=4)
 for _sha, _p in [
         ('7b3dd5650d1f5abc4fdc2d409426e79832e1b14b9a22f641b38351d831df33b4', _p_9_12),
         ('c4e017ba790159ca9e54ddfa4563bc3bbfaad0f03f98289a2e7da810b2d85b3f', _p_9_12),
@@ -99,7 +108,12 @@ for _sha, _p in [
         ('f245ecec1a52f17cefb0ea5bd580df61f59c6c6ca846cfe50b7b761cfa74e45c', _p_21_22),
         ('1ee82b1fb616cda80f76dd67ee39a7ef8edf3a8b46fef1c778bfc562100ad49c', _p_23),
         ('9567eba0c64d0153036e83d21055a03f6935b2b500b6aee1ebe1c2b27864a216', _p_24_25),
-        ('10400777cb2637fb339ec51e9db00166fbc6d01c7bd465ae8c88a535e4387d54', _p_24_25)]:
+        ('10400777cb2637fb339ec51e9db00166fbc6d01c7bd465ae8c88a535e4387d54', _p_24_25),
+        ('16b929863138ebe6e6027ab683494a0c0cbe010197d0f129b4a1edf7d46feb13', _p2_21_22),
+        ('0c3f6734998882a24d89dce2f4d4691c3b75a80d67e4268d869956e53f954696', _p2_21_22),
+        ('45e7bafead9812bc3b5d7e54fd8e4090a2955bb69fcc82f4898bcbd7d08dc179', _p2_23_25),
+        ('8afd2d7a6f612ed173166324d4d79b8e559eff1ee598a87c51cca00cad77e9aa', _p2_23_25),
+        ('eaca7f63f0e704c5e6fbeac852babf79777dbe5e0804afd39469b19c26938079', _p2_23_25)]:
     KNOWN_PASSES[_sha] = _p
 PASS_FIELDS = ('seed', 'rounds', 'workers', 'runs_per_task', 'resumes_previous', 'improving_in_last_round', 'source')
 

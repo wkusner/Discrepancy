@@ -52,6 +52,12 @@ FUNCTIONAL = dict(
     critical_point='balanced: a nonnegative combination of the gradients of the worst caps vanishes (Clarke stationary)',
     gauge='x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)')
 LEVEL_LABEL = {0: 'numerical', 1: 'high-precision', 2: 'interval-verified', 3: 'exact (test-verified)'}
+# names of the rigorous kernels behind a level-2/3 description (one name: "verified (kernel)"; two: "cross-verified
+# (kernel + kernel)"), as the certificates state them: gramcert kernels "exact: sympy + FLINT (fmpq_poly); intervals:
+# Arb (python-flint) + mpmath.iv"; localcert kernel Arb; xcheck_local kernel mpmath.iv
+KERNELS_EXACT = ['sympy', 'FLINT']
+KERNELS_INTERVAL = ['Arb', 'mpmath.iv']
+KERNELS_LOCAL = ['Arb']
 TOL = 1e-9
 EXPORT = os.path.join(ROOT, 'export', 'sphere', 'd3', FUNCTIONAL['id'])
 
@@ -266,14 +272,17 @@ def upgrades(name):
     return dict(
         value_extra=[
             dict(id='v2', level=2, status=LEVEL_LABEL[2], value={'interval': [repr(enc[0]), repr(enc[1])]},
+                 kernels=KERNELS_INTERVAL,
                  note='Krawczyk-verified (Arb), cross-verified with mpmath.iv',
                  evidence=[ref(f'certificates/localcert_{name}.json'), ref(f'certificates/xcheck_local_{name}.json')]),
             dict(id='v3', level=3, status=LEVEL_LABEL[3],
                  value=dict(minpoly=[str(c) for c in ge['D_minpoly_ascending']], isolating_interval=g['D_isolating_interval'],
                             closed_form=None, decimal=ge['D'][:40]),
+                 kernels=KERNELS_EXACT,
                  note='minimal polynomial = P_N(N x) up to a constant; one root in the isolating interval',
                  evidence=[ref('certificates/xcheck_roots.json'), ref(f'certificates/gramcert_{name}.json')])],
         gram=dict(level=3, status=LEVEL_LABEL[3], ref=dict(ref('sphcap/data/gram_exact.json'), pointer=f'/{name}'),
+                  kernels=KERNELS_EXACT,
                   cross_checks=[dict(kernel=k) for k in g['kernels'].split('; ')],
                   evidence=[ref(f'certificates/gramcert_{name}.json')],
                   note='entries in Q(D) as (sum coeffs[i] D^i)/denom, labelled as the X of this record (checked '
@@ -283,14 +292,22 @@ def upgrades(name):
 
 
 def local_upgrade(name, lc):
-    """Level-2 description of the value of a *local* minimum (N = 7, 8): the enclosure of the local verification
-    (Krawczyk test + orthant test, Arb) around image 0.  A local statement only: no global claim."""
+    """Level-2 description of the value of a *local* minimum (N = 7): the enclosure of the local verification
+    (Krawczyk test + orthant test, Arb) around image 0.  A local statement only: no global claim.
+
+    No level-2 value when an image lists redundant worst caps (extra_caps): the local verification does not bound
+    them, so D(q*) = D* is not established there (code audit 2026-11-04, finding 2; the N = 8 certificate is in this
+    state).  Such a record keeps its level-0 value, with a note."""
     l = json.load(open(lc))
     if not (l.get('verified') and all(im.get('verified') for im in l['images'])): return {}
+    if any(im.get('extra_caps') for im in l['images']):
+        return dict(value_note='local verification incomplete (audit 2026-11-04): the local verification does not bound '
+                               'its redundant worst caps, so it gives no enclosure of the value; level 0 only')
     enc = l['images'][0]['D_enclosure']; rel = os.path.relpath(lc, ROOT)
     return dict(
         value_extra=[dict(
             id='v2', level=2, status=LEVEL_LABEL[2], value={'interval': [repr(enc[0]), repr(enc[1])]},
+            kernels=KERNELS_LOCAL,
             note=('verified (Krawczyk, Arb): enclosure of the value of the local minimum near this configuration '
                   f'(boxes of half-width {l["box_radius"]} around each of {len(l["images"])} images); a local statement, '
                   'no global claim'),
@@ -300,9 +317,13 @@ def local_upgrade(name, lc):
 
 def apply_upgrades(rec, name):
     """Add the level-2/3 descriptions of the certificates (N5_best, N6_best: value, Gram matrix, active level 2;
-    N7_best, N8_best: level-2 enclosure of the local-minimum value) to the record of that name."""
+    N7_best: level-2 enclosure of the local-minimum value) to the record of that name.  A local certificate that
+    does not establish the value (N8_best) adds only a note to the level-0 value."""
     up = upgrades(name)
     if not up:
+        return rec
+    if 'value_note' in up:
+        rec['value'][0]['note'] += '; ' + up['value_note']
         return rec
     if 'gram' in up:
         ge = json.load(open(os.path.join(ROOT, 'sphcap/data/gram_exact.json')))[name]
@@ -312,6 +333,7 @@ def apply_upgrades(rec, name):
         assert np.allclose(Xr @ Xr.T, Gn, atol=1e-9), f'{name}: labelling of gram_exact.json differs from X'
         rec['gram'] = up['gram']
         rec['active']['level'] = up['active_level']; rec['active']['status'] = LEVEL_LABEL[2]
+        rec['active']['kernels'] = KERNELS_INTERVAL
         rec['active']['note'] = ('counts of the worst caps frozen on the box of the local verification and every '
                                  'other cap below D* there (Arb, cross-verified with mpmath.iv)')
     if 'enclosure' in up:   # the stored configuration must lie at the verified local minimum

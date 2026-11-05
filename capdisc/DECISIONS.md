@@ -71,11 +71,21 @@ question of the spec (its section 10.3); they are choices for this export, to be
 18. **Gram matrix.** `gram_numerical` (level 0, N×N doubles, X Xᵀ of the stored X) on every observation. The proved
     minimizers keep their level-3 `gram` (by reference); the two are separate fields because the earlier `gram`
     field is a single object, not a list of descriptions.
-19. **N = 7, 8.** `value` of N7_best and N8_best gets a level-2 description: the enclosure of the value of the local
-    minimum from `certificates/localcert_N{7,8}_best.json`, noted "verified (Krawczyk, Arb) ... a local statement, no
-    global claim". The active hypergraph of these two stays level 0, although the local verification also checks
-    frozen counts and the other caps on the box (as it does for N = 5, 6, where the active level is 2): there is no
-    second kernel for N = 7, 8, and the upgrade is left to the maintainer (open question).
+19. **N = 7, 8.** `value` of N7_best gets a level-2 description: the enclosure of the value of the local minimum
+    from `certificates/localcert_N7_best.json`, noted "verified (Krawczyk, Arb) ... a local statement, no global
+    claim". The active hypergraph stays level 0, although the local verification also checks frozen counts and the
+    other caps on the box (as it does for N = 5, 6, where the active level is 2): there is no second kernel for
+    N = 7, and the upgrade is left to the maintainer (open question).
+    **N8_best gets no level-2 value** (integration 2026-11-04, maintainer decision after the code audit, finding 2):
+    a local verification file whose images list redundant worst caps (`extra_caps`) does not bound them, so it does
+    not establish D(q*) = D*; the exporter then adds only the note "local verification incomplete (audit
+    2026-11-04)" to the level-0 value. The rule is by content (any image with `extra_caps`), not by name, so a
+    regenerated N = 8 file without redundant caps would get its level-2 value again.
+19a. **Kernel names.** Level-2/3 descriptions, the level-2 `active` and the level-3 `gram` carry `kernels`, a list of
+    the rigorous kernels' names as the certificates state them (gramcert: sympy + FLINT for the exact data, Arb +
+    mpmath.iv for the intervals; localcert: Arb). Readers word "verified (kernel)" for one name and "cross-verified
+    (kernel + kernel)" for two from this list instead of parsing the free-text notes. Not a spec field (the spec's
+    status has no kernel list); proposed for the spec.
 
 ## Reproducibility
 

@@ -26,9 +26,10 @@ The work has four layers, each with its own data:
 4. **Papers**: kept in a separate repository (not part of this one).
 
 Status: N ≤ 4 proved by hand; N = 5, 6 proved (computer-assisted: interval-, Arb- and
-Krawczyk-verified; second-kernel cross-checks in progress); N = 7, 8: the best configuration is locally verified
-(Krawczyk, level-2 enclosure of the local minimum), with no global claim for N ≥ 7; N = 9–25 search values only
-(numerical, level 0; N = 21–25 from a first search pass that has not converged).
+Krawczyk-verified; second-kernel cross-checks in progress); N = 7: the best configuration is locally verified
+(Krawczyk, level-2 enclosure of the local minimum), with no global claim for N ≥ 7; N = 8: local verification
+incomplete (audit 2026-11-04: the local verification does not bound its redundant worst caps), so numerical only;
+N = 9–25 search values only (numerical, level 0; N = 21–25 after two search passes, not converged).
 
 ## Conventions (used by every file)
 
@@ -142,9 +143,14 @@ passes, converged_note}`. Per observation:
   Names: `N5_best` (curated classes), `search_N21#3` (record 3 of the first search pass), `search_N21.pass2#3` (a later pass).
 * `value`: list of descriptions `{id, level, status, value, note, evidence}`; level 0 double; for N5_best and N6_best
   also level 2 (`{interval: [lo, hi]}`, cross-verified) and level 3 (`{minpoly (ascending, strings),
-  isolating_interval (rationals), closed_form, decimal}`); for N7_best and N8_best also level 2: the enclosure of the
-  value of the **local** minimum from `certificates/localcert_N{7,8}_best.json` (verified (Krawczyk, Arb); no global
-  claim). The level-0 value is D at the stored double configuration, which may exceed the local minimum by rounding.
+  isolating_interval (rationals), closed_form, decimal}`); for N7_best also level 2: the enclosure of the value of the
+  **local** minimum from `certificates/localcert_N7_best.json` (verified (Krawczyk, Arb); no global claim). The
+  level-0 value is D at the stored double configuration, which may exceed the local minimum by rounding. Level-2/3
+  descriptions (and the level-2 `active`, the level-3 `gram`) carry `kernels`, the names of the rigorous kernels
+  behind them (`['Arb', 'mpmath.iv']`, `['sympy', 'FLINT']`, `['Arb']`): one name means "verified (kernel)", two
+  "cross-verified (kernel + kernel)". N8_best has **no** level-2 value: its local verification lists redundant
+  worst caps that it does not bound, so D(q*) = D* is not established (code audit 2026-11-04, finding 2); its
+  level-0 note says "local verification incomplete (audit 2026-11-04)".
 * `active`: the **active hypergraph**: vertices are the points, hyperedges the worst caps, each written as
   the over-full closed cap, `{boundary, interior, count, branches, weight_range, in_support, cap}`
   (`boundary`: points on the circle; `interior`: points strictly inside; an under-full open cap is
