@@ -25,20 +25,20 @@
  },
  "inputs": [
   {
-   "commit": "c3ae1de",
+   "commit": "de6337a",
    "file": "sphcap/data/search/search_N24.json",
    "format": "search",
    "records": 15,
-   "sha256": "9567eba0c64d0153036e83d21055a03f6935b2b500b6aee1ebe1c2b27864a216"
+   "sha256": "8afd2d7a6f612ed173166324d4d79b8e559eff1ee598a87c51cca00cad77e9aa"
   }
  ],
- "observations": 15,
+ "observations": 30,
  "outputs": {
-  "observations.json": "9296fbe0700ff6180afef1bcdc517ccd8d735ab1ae2f1f1def018f0f0d963b15",
-  "observations.jsonl": "357d9d5d0e2141e2333c7234f43d544101e4ce097855e0c079964f0bf69a781c",
-  "passes.jsonl": "4dfaa1ac827d88c7b5e0f4d29e5218ac0530faae1eb88f38f2ffea07d2584bab",
-  "stuck.jsonl": "94324a8b6da794505f32d0d8b850c98151c73b31a7146a9d8f2b2ff7e84a02d2"
+  "observations.json": "399040f467138a54642a9ebe0f6b008fd5e3f1ad4658b608daeddad2b1eed82c",
+  "observations.jsonl": "da9be3e6f8af07259cf7a33fd9f542e61fcdcc8f31129c5ddaf934873ca4fa6a",
+  "passes.jsonl": "83d06ae5f815bcca1c9eab9836520cd1d751c13e605b07665db50274d57c4b85",
+  "stuck.jsonl": "b50d4710f70695744d99c4cb344f497d29dabbe63e7d381854f36da6f164112e"
  },
  "schema_version": "0.2.0",
- "search_passes": 1
+ "search_passes": 2
 }

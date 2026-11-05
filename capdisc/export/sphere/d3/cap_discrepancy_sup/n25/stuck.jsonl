@@ -4,12 +4,24 @@
 {"key":"163958260f54d967","version":"ac44d3513e175f54","block":{"class":"non-strict minimum","flat_dim":4,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
 {"key":"1807a70b51f3cea2","version":"ac44d3513e175f54","block":{"class":"non-strict minimum","flat_dim":6,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
 {"key":"1e1864fa7fa64fd6","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"25c5a85911ac5596","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum","flat_dim":4}}
 {"key":"2ab00fd9abb1a415","version":"ac44d3513e175f54","block":{"class":"non-strict minimum","flat_dim":4,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
 {"key":"38eb539f13007885","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"4cca61ffe75f64bd","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum (probe descends: not a local minimum)","flat_dim":6}}
+{"key":"4f0ac0f5a0720e62","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum","flat_dim":6}}
+{"key":"561a44bdcbce26dd","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum (probe descends: not a local minimum)","flat_dim":6}}
+{"key":"5aa7866620e6caaf","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum (probe descends: not a local minimum)","flat_dim":6}}
+{"key":"5e1805fa2b538257","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum","flat_dim":6}}
 {"key":"62ffea7f77cb3557","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
 {"key":"68598cbc2936f213","version":"ac44d3513e175f54","block":{"class":"non-strict minimum","flat_dim":6,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
 {"key":"9543aae833c6391f","version":"ac44d3513e175f54","block":{"class":"non-strict minimum","flat_dim":6,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"9f7a04b95387ad4c","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"sharp minimum"}}
+{"key":"a23a7b3620278a6c","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum (probe descends: not a local minimum)","flat_dim":6}}
 {"key":"b34debb6fac2d96b","version":"ac44d3513e175f54","block":{"class":"non-strict minimum","flat_dim":6,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
 {"key":"bced4ee04f369a20","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"bf01a5096f66515d","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum","flat_dim":6}}
 {"key":"c1eaaf48ecc70d92","version":"ac44d3513e175f54","block":{"class":"non-strict minimum","flat_dim":2,"level":0,"script":"sphcap/stuck.py","status":"numerical"}}
 {"key":"d24f0fb7ad6a38ed","version":"ac44d3513e175f54","block":{"class":"sharp minimum","level":0,"script":"sphcap/stuck.py","status":"numerical"}}
+{"key":"e47c4d0f1d4b4bcc","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum (probe descends: not a local minimum)","flat_dim":6}}
+{"key":"e9dcfec1dad57c34","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"sharp minimum"}}
+{"key":"ed569da4eeee7659","version":"ac44d3513e175f54","block":{"level":0,"status":"numerical","script":"sphcap/stuck.py","class":"non-strict minimum","flat_dim":4}}
