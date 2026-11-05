@@ -112,6 +112,15 @@ def _boundary_cap_for_subset(X: np.ndarray, I: tuple, eps: float):
     i.e. not usable as a boundary-defining set for a generic point
     configuration (this is the ``eps``-tolerant genericity guard).
     """
+    if len(I) == 3 and X.shape[1] == 3:
+        a, b, c = X[list(I)]
+        nv = np.cross(b - a, c - a)
+        nn = np.linalg.norm(nv)
+        if nn < eps:
+            return None
+        w = nv / nn
+        t = float(w @ a)
+        return (t, w) if t >= 0 else (-t, -w)
     X_I = X[list(I), :].T  # n x |I|
     G = X_I.T @ X_I  # |I| x |I| Gram matrix
     # guard against near-singular Gram matrices (near-collinear /
@@ -165,6 +174,31 @@ def _discrepancy_bruteforce(X: np.ndarray, eps: float, max_size: Optional[int]) 
 # ---------------------------------------------------------------------
 # method: exact (vectorized / batched, chunked through a Backend)
 # ---------------------------------------------------------------------
+def _scan_caps(X, w_I, t_good, block_good, N, n, eps, best, best_w, best_t, best_I):
+    """Both sides of each boundary cap (w, t): update the running maximum of |empirical - cap measure|."""
+    proj = w_I @ X.T  # (m', N)
+    cap_pos = cap_measure(t_good, n)  # (m',)
+    emp_pos = np.count_nonzero(proj >= (t_good[:, None] - eps), axis=1) / N
+    d_pos = np.abs(emp_pos - cap_pos)
+
+    cap_neg = cap_measure(-t_good, n)
+    emp_neg = np.count_nonzero(-proj >= (-t_good[:, None] - eps), axis=1) / N
+    d_neg = np.abs(emp_neg - cap_neg)
+
+    local_best_pos = np.argmax(d_pos)
+    local_best_neg = np.argmax(d_neg)
+    if d_pos[local_best_pos] > best:
+        best = float(d_pos[local_best_pos])
+        best_w, best_t = w_I[local_best_pos], float(t_good[local_best_pos])
+        best_I = tuple(block_good[local_best_pos])
+    if d_neg[local_best_neg] > best:
+        best = float(d_neg[local_best_neg])
+        best_w = -w_I[local_best_neg]
+        best_t = -float(t_good[local_best_neg])
+        best_I = tuple(block_good[local_best_neg])
+    return best, best_w, best_t, best_I
+
+
 def _discrepancy_exact(X: np.ndarray, eps: float, max_size: Optional[int],
                         backend: Optional[Backend] = None,
                         chunk_size: int = 4096) -> DiscrepancyResult:
@@ -186,6 +220,21 @@ def _discrepancy_exact(X: np.ndarray, eps: float, max_size: Optional[int],
         for start in range(0, M, chunk_size):
             block = idx[start:start + chunk_size]  # (m, k)
             Xb = X[block]  # (m, k, n)
+            if k == 3 and n == 3:
+                # cap plane through three points from the cross product: also correct when the three points lie
+                # on a great circle (plane through the origin, singular Gram matrix: the cap is a hemisphere),
+                # which the Gram formula below cannot see.  Same construction as proof/arith.py and csrc/fo.h.
+                nv = np.cross(Xb[:, 1] - Xb[:, 0], Xb[:, 2] - Xb[:, 0])
+                nn = np.linalg.norm(nv, axis=1)
+                ok = nn > eps
+                if not np.any(ok):
+                    continue
+                w_I = nv[ok] / nn[ok, None]
+                t_good = np.einsum("mn,mn->m", w_I, Xb[ok, 0])
+                block_good = block[ok]
+                best, best_w, best_t, best_I = _scan_caps(X, w_I, t_good, block_good, N, n, eps,
+                                                          best, best_w, best_t, best_I)
+                continue
             G = np.einsum("mik,mjk->mij", Xb, Xb)  # (m,k,k) Gram matrices
             # batched solve; mask out (near-)singular ones
             ones = np.ones(k)
@@ -209,26 +258,8 @@ def _discrepancy_exact(X: np.ndarray, eps: float, max_size: Optional[int],
             t_good = t_I[good][ok]
             block_good = block[good][ok]
 
-            proj = w_I @ X.T  # (m', N)
-            cap_pos = cap_measure(t_good, n)  # (m',)
-            emp_pos = np.count_nonzero(proj >= (t_good[:, None] - eps), axis=1) / N
-            d_pos = np.abs(emp_pos - cap_pos)
-
-            cap_neg = cap_measure(-t_good, n)
-            emp_neg = np.count_nonzero(-proj >= (-t_good[:, None] - eps), axis=1) / N
-            d_neg = np.abs(emp_neg - cap_neg)
-
-            local_best_pos = np.argmax(d_pos)
-            local_best_neg = np.argmax(d_neg)
-            if d_pos[local_best_pos] > best:
-                best = float(d_pos[local_best_pos])
-                best_w, best_t = w_I[local_best_pos], float(t_good[local_best_pos])
-                best_I = tuple(block_good[local_best_pos])
-            if d_neg[local_best_neg] > best:
-                best = float(d_neg[local_best_neg])
-                best_w = -w_I[local_best_neg]
-                best_t = -float(t_good[local_best_neg])
-                best_I = tuple(block_good[local_best_neg])
+            best, best_w, best_t, best_I = _scan_caps(X, w_I, t_good, block_good, N, n, eps,
+                                                      best, best_w, best_t, best_I)
 
     return DiscrepancyResult(best, "exact", best_w, best_t, best_I)
 
