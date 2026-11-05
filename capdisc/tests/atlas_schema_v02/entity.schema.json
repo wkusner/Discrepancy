@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:critical-atlas:schema:entity:0.2",
+  "title": "Entity (excerpt: only the definitions that observation.schema.json refers to)",
+  "$defs": {
+    "tolerances": {
+      "type": "object",
+      "required": ["contact", "stress_support", "eigenvalue"],
+      "properties": {
+        "contact": {"type": "number", "minimum": 0},
+        "stress_support": {"type": "number", "minimum": 0},
+        "eigenvalue": {"type": "number", "minimum": 0},
+        "symmetry": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -30,9 +30,14 @@ Levels follow the atlas: 0 numerical (all of the above unless stated), 2 interva
 and a level-3 Gram matrix by reference (certificates/gramcert_*.json); their active hypergraph is level 2
 (counts frozen on the box of the local verification, all other caps below D*).
 
-usage: python jobs/atlas_export.py [--only] [EXTRA.json ...]   (--only: export just the extra files' N)   (extra inputs: outputs of search_parallel.py or
-       atlas.py, lists or {"classes": [...]} of records with "points")
-writes export/sphere/d3/cap_discrepancy_sup/n<N>/observations.json
+cap           (on every hyperedge) the geometry of the over-full closed cap: unit center, height, angular radius.
+gram_numerical  the Gram matrix of X in double precision (level 0); the proved minimizers also keep `gram` (level 3).
+
+The entry point is jobs/atlas_pipeline.py, which keeps an append-only observation log per N and calls observation()
+and apply_upgrades() of this module.  Running this module directly rewrites observations.json from its inputs alone
+and refuses to do so where a log exists (unless --force):
+usage: python jobs/atlas_export.py [--only] [--force] [EXTRA.json ...]   (--only: export just the extra files' N)
+       (extra inputs: outputs of search_parallel.py or atlas.py, lists or {"classes": [...]} of records with "points")
 """
 import sys, os, json, hashlib, subprocess, itertools
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, '..'); sys.path.insert(0, ROOT)
@@ -48,6 +53,7 @@ FUNCTIONAL = dict(
     gauge='x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)')
 LEVEL_LABEL = {0: 'numerical', 1: 'high-precision', 2: 'interval-verified', 3: 'exact (test-verified)'}
 TOL = 1e-9
+EXPORT = os.path.join(ROOT, 'export', 'sphere', 'd3', FUNCTIONAL['id'])
 
 
 def sha(path):
@@ -77,7 +83,27 @@ def hyperedges(X, act):
         key = (tuple(np.flatnonzero(on)), tuple(np.flatnonzero(inside)))
         e = caps.setdefault(key, dict(boundary=[int(i) for i in key[0]], interior=[int(i) for i in key[1]], branches=[]))
         e['branches'].append(k)
-    return list(caps.values())
+        e.setdefault('_branch', b)
+    out = list(caps.values())
+    for e in out:
+        b = e.pop('_branch', None)
+        if b is not None:
+            e['cap'] = cap_geometry(b)
+    return out
+
+
+def cap_geometry(b):
+    """Geometry of the over-full closed cap of branch b, {y : <y, center> >= height}: unit center, height, angular
+    radius arccos(height) in radians and degrees.  For an "up" branch this is the closed cap of the branch; for a
+    "low" branch the complement of its open cap (center -w, height -t).  Level 0 (double precision)."""
+    w = np.asarray(b.w, float); t = float(b.t)
+    if b.kind == 'low':
+        w, t = -w, -t
+    rad = float(np.arccos(np.clip(t, -1.0, 1.0)))
+    return dict(center=[float(v) for v in w], height=t, angular_radius=rad, angular_radius_deg=float(np.degrees(rad)),
+                level=0, status=LEVEL_LABEL[0],
+                note='the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, '
+                     'Euclidean radius sqrt(1 - height^2); double precision from the stored X')
 
 
 # ------------------------------------------------------------------ canonical code (individualization-refinement)
@@ -202,7 +228,10 @@ def observation(X, name, source, extra=None):
                        graph_hash=hashlib.sha256(f"sphere|d3|{FUNCTIONAL['id']}|N{N}|{code}".encode()).hexdigest()[:12]),
         first_order=dict(rank=rank, dim_quotient=dimq, kernel_dim=kdim, sharp=sharp, stationary=bool(W.get('nonempty')),
                          multipliers_unique=bool(W.get('nonempty') and W['dim'] == 0), level=0, status=LEVEL_LABEL[0]),
-        source=source)
+        source=source,
+        gram_numerical=dict(level=0, status=LEVEL_LABEL[0], value=(X @ X.T).tolist(),
+                            note='Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it '
+                                 'determines the configuration up to O(3)'))
     if kdim > 0 and W.get('nonempty'):
         H = B.lagrangian_hessian(X, act, W['_lam'])
         R = B.rotation_generators(X, E)
@@ -226,6 +255,8 @@ def upgrades(name):
     """Level-2/3 descriptions for the proved minimizers, from the certificate files."""
     cert = os.path.join(ROOT, 'certificates')
     gc, lc = os.path.join(cert, f'gramcert_{name}.json'), os.path.join(cert, f'localcert_{name}.json')
+    if os.path.exists(lc) and not os.path.exists(gc):
+        return local_upgrade(name, lc)
     if not (os.path.exists(gc) and os.path.exists(lc)): return {}
     g, l = json.load(open(gc)), json.load(open(lc))
     if not (g.get('verified') and l.get('verified')): return {}
@@ -251,10 +282,55 @@ def upgrades(name):
         active_level=2)
 
 
+def local_upgrade(name, lc):
+    """Level-2 description of the value of a *local* minimum (N = 7, 8): the enclosure of the local verification
+    (Krawczyk test + orthant test, Arb) around image 0.  A local statement only: no global claim."""
+    l = json.load(open(lc))
+    if not (l.get('verified') and all(im.get('verified') for im in l['images'])): return {}
+    enc = l['images'][0]['D_enclosure']; rel = os.path.relpath(lc, ROOT)
+    return dict(
+        value_extra=[dict(
+            id='v2', level=2, status=LEVEL_LABEL[2], value={'interval': [repr(enc[0]), repr(enc[1])]},
+            note=('verified (Krawczyk, Arb): enclosure of the value of the local minimum near this configuration '
+                  f'(boxes of half-width {l["box_radius"]} around each of {len(l["images"])} images); a local statement, '
+                  'no global claim'),
+            evidence=[dict(file=rel, file_sha256=sha(lc))])],
+        enclosure=enc)
+
+
+def apply_upgrades(rec, name):
+    """Add the level-2/3 descriptions of the certificates (N5_best, N6_best: value, Gram matrix, active level 2;
+    N7_best, N8_best: level-2 enclosure of the local-minimum value) to the record of that name."""
+    up = upgrades(name)
+    if not up:
+        return rec
+    if 'gram' in up:
+        ge = json.load(open(os.path.join(ROOT, 'sphcap/data/gram_exact.json')))[name]
+        vals = [float(e['value']) for e in ge['entries']]
+        Gn = np.array([[1.0 if i == j else vals[ge['gram_pattern'][i][j]] for j in range(rec['N'])] for i in range(rec['N'])])
+        Xr = np.array(rec['X'])
+        assert np.allclose(Xr @ Xr.T, Gn, atol=1e-9), f'{name}: labelling of gram_exact.json differs from X'
+        rec['gram'] = up['gram']
+        rec['active']['level'] = up['active_level']; rec['active']['status'] = LEVEL_LABEL[2]
+        rec['active']['note'] = ('counts of the worst caps frozen on the box of the local verification and every '
+                                 'other cap below D* there (Arb, cross-verified with mpmath.iv)')
+    if 'enclosure' in up:   # the stored configuration must lie at the verified local minimum
+        lo, hi = up['enclosure']; D0 = rec['value'][0]['value']
+        assert lo - 1e-12 <= D0 <= hi + 1e-12, f'{name}: D = {D0} outside the local enclosure [{lo}, {hi}]'
+    rec['value'] += up['value_extra']
+    return rec
+
+
 def main():
+    logged = [d for d in sorted(os.listdir(EXPORT)) if os.path.exists(os.path.join(EXPORT, d, 'observations.jsonl'))] \
+        if os.path.isdir(EXPORT) else []
+    if logged and '--force' not in sys.argv:
+        sys.exit('export has observation logs (%s): use jobs/atlas_pipeline.py, which adds to them; this command '
+                 'would rewrite observations.json from its inputs alone (--force to do it anyway)' % ', '.join(logged))
     data = json.load(open(os.path.join(ROOT, 'sphcap/data/critical_configurations.json')))['classes']
     src_cc = dict(file='sphcap/data/critical_configurations.json', script='jobs/atlas_export.py', commit=commit())
     only = '--only' in sys.argv          # export only the given files (leave the other N untouched)
+    sys.argv = [a for a in sys.argv if a != '--force']
     items = [] if only else [(c['points'], c['name'], dict(src_cc, pointer=c['name'])) for c in data]
     for f in [a for a in sys.argv[1:] if a != '--only']:
         d = json.load(open(f)); rows = d['classes'] if isinstance(d, dict) else d
@@ -265,17 +341,7 @@ def main():
     byN = {}
     for X, name, src in items:
         rec = observation(X, name, src)
-        up = upgrades(name)
-        if up:
-            ge = json.load(open(os.path.join(ROOT, 'sphcap/data/gram_exact.json')))[name]
-            vals = [float(e['value']) for e in ge['entries']]
-            Gn = np.array([[1.0 if i == j else vals[ge['gram_pattern'][i][j]] for j in range(rec['N'])] for i in range(rec['N'])])
-            Xr = np.array(rec['X'])
-            assert np.allclose(Xr @ Xr.T, Gn, atol=1e-9), f'{name}: labelling of gram_exact.json differs from X'
-            rec['value'] += up['value_extra']; rec['gram'] = up['gram']
-            rec['active']['level'] = up['active_level']; rec['active']['status'] = LEVEL_LABEL[2]
-            rec['active']['note'] = ('counts of the worst caps frozen on the box of the local verification and every '
-                                     'other cap below D* there (Arb, cross-verified with mpmath.iv)')
+        apply_upgrades(rec, name)
         byN.setdefault(rec['N'], []).append(rec)
         w = rec['weights']
         print(f"{name}: N={rec['N']} D={rec['value'][0]['value']:.10f} caps={rec['active']['n_hyperedges']} "
