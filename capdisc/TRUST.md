@@ -54,7 +54,11 @@ false check pass. Floating-point output is never used as a bound.
 * Proof mode starts clean: `verify.sh` refuses to run when the proof code (or `check/`) differs from the commit,
   rebuilds `capcert_rig`, checks that the binary is from this commit, and deletes its output directory; nothing is
   resumed. (`capcert_rig` itself can resume an interrupted pass; the stamp then records `resumed=` and the hashes
-  cover everything in the files, so a resumed run is still checkable. Duplicated cells only cost time.)
+  cover everything in the files, so a resumed run is still checkable. Duplicated cells only cost time. The progress
+  file's header carries the identity of the binary — commit, tree state, source hash, compiler, flags, build — and a
+  pass is resumed only by a binary with the same identity, so the stamp's provenance holds for every root of the run;
+  a binary from another commit, or built from other sources, refuses to resume. Progress files written before
+  2026-11-05 have no identity and are refused too.)
 * The rigorous build refuses `--keep-prob`, `--max-cells-per-root` and `--balls`; the stamps record the keep
   fraction, the exclusion balls and the cell cap actually used.
 

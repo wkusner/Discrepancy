@@ -30,6 +30,14 @@ def result(d):
     return json.load(open(d + '.result.json'))
 
 
+
+def zero_fill(p):
+    """replace a file's content by zero bytes of the same size (the record count stays right; only the hash changes)"""
+    n = os.path.getsize(p)
+    with open(p, 'wb') as f:
+        f.write(bytes(n))
+    assert os.path.getsize(p) == n and n > 0
+
 def sha(p):
     return hashlib.sha256(open(p, 'rb').read()).hexdigest()
 
@@ -148,7 +156,7 @@ def test_refinement_for_another_N_fails(chain):
 # ---------------------------------------------------------------- survivor files bound by hash (findings 3, 6)
 def test_zeroed_first_pass_survivors_fail_in_the_two_pass_chain(chain2):
     """the audit's reproduction: mesh.surv.0 replaced by zero bytes of the same size"""
-    p = os.path.join(chain2, 'mesh.surv.0'); open(p, 'wb').write(bytes(os.path.getsize(p)))
+    p = os.path.join(chain2, 'mesh.surv.0'); zero_fill(p)
     rc, out = run(chain2); assert rc == 1 and 'mesh.surv.0: SHA-256 differs' in out
 
 
@@ -286,6 +294,19 @@ def test_legacy_two_pass_chain_passes_with_sidecars(tmp_path):
     assert 'second_pass_input_by_count' in {f['kind'] for f in r['flags']}
 
 
+def test_legacy_flags_name_where_the_missing_provenance_is_and_what_to_audit(tmp_path):
+    """review 2026-11-04, R3: the result of a mixed chain names only the Python certificates' commit; the flags must
+    send the reader to verify.log for the mesh binaries' commits and must not call the Python commit 'the code'"""
+    d = copy(LEG2, tmp_path)
+    rc, out = run(d); assert rc == 0, out
+    texts = {f['kind']: f['message'] for f in result(d)['flags']}
+    prov = texts['mesh_provenance_missing']
+    assert 'verify.log' in prov and 'csrc' in prov and 'not recorded' in prov
+    assert 'commit' in texts['second_pass_input_by_count'] or 'sidecar' in texts['second_pass_input_by_count']
+    diff = texts['proof_code_differs_from_checker']
+    assert 'Python certificates' in diff and 'mesh' in diff
+
+
 def test_legacy_two_pass_chain_in_a_renamed_directory_fails(tmp_path):
     d = copy(LEG2, tmp_path, name='elsewhere')
     rc, out = run(d); assert rc == 1 and 'not in this directory' in out
@@ -315,7 +336,7 @@ def test_legacy_sidecar_must_list_every_file(tmp_path):
 
 
 def test_legacy_survivors_must_match_the_sidecar(tmp_path):
-    d = copy(LEG2, tmp_path); p = os.path.join(d, 'mesh.surv.1'); open(p, 'wb').write(bytes(os.path.getsize(p)))
+    d = copy(LEG2, tmp_path); p = os.path.join(d, 'mesh.surv.1'); zero_fill(p)
     rc, out = run(d); assert rc == 1 and 'mesh.surv.1: SHA-256 differs from mesh.surv.sha256' in out
 
 

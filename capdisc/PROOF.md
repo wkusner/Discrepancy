@@ -249,16 +249,34 @@ so q*_k need not be the minimizer in B_k), and everything global. The statement 
 0.23079914617973746]" is therefore not established by this certificate. Closing this needs Step 5 for the C₂ family of N = 8
 (Krawczyk on the symmetry-reduced square system and the orbit cover with counts), which is later work.
 
-**The N = 7 run started at `768cefc`.** The global N = 7 run on the server was built and started at commit
-`768cefc` (2026-10-31) and finishes with that code. Its stamps predate the fixes of 2026-11-04: `mesh.done` (and a
-`mesh2.done`, if any) carry no survivor hashes and no provenance, and the `tree_dirty` of its Python stamps is
-always false (finding 1). The chain checker accepts such a stamp only together with a sidecar `mesh.surv.sha256`
-(resp. `mesh2.surv.sha256`) whose first line is `# stamp mesh.done sha256 <hex>  hashed <time>` with `<hex>` the
-SHA-256 of that stamp, followed by `sha256sum` lines for exactly the survivor files in the directory; the result
-records the route ("sidecar") and the time of hashing, the absence of mesh provenance, and that the tree state of
-the old stamps is not evidence. A second pass from before 2026-11-04 is bound to its input only by the directory
-name and the record count; the result says so. The N = 7 local certificate has no redundant caps, so finding 2
-does not affect it.
+**The N = 7 run (two commits).** The global N = 7 run on the server is mixed. Its first mesh pass (`mesh.done`,
+`mesh.surv.*`) was computed by the `capcert_rig` built at commit `768cefc` (2026-10-31). Step 4 was then re-run,
+and the second pass (`mesh2.done`, `mesh2.surv.*`), the refinement and the chain check run at commit `b6d9c35`
+(`jobs/verify_continue.sh`, which rebuilds at the current commit and checks that T is unchanged). Between the two
+commits `proof/` is identical and `csrc/` differs only by the added second pass (`--cells`) and the stamp format:
+`ia.h`, `rig.h`, `fo.h` and the first-pass code path are the same, so the first-pass binary runs the code audited on
+2026-11-04. The run's stamps predate the fixes of 2026-11-04: `mesh.done` and `mesh2.done` carry no survivor hashes
+and no provenance, and the `tree_dirty` of its Python stamps is always false (finding 1). Consequently the chain
+result names only `b6d9c35` (the commit of the local certificate and the refinement) and reports
+`mesh_commits: null`; the commit of the first-pass binary is recorded nowhere but in `verify.log` ("verify N=7 …
+commit 768cefc" and the "continuing at commit b6d9c35 … csrc changes since the first pass was built" lines), which
+therefore belongs with the chain. A reader of the N = 7 result has to audit `csrc/` at `768cefc` (the first pass)
+and `csrc/` and `proof/` at `b6d9c35` (everything else), and the server-side evidence that the first-pass binary
+was built from a clean tree at `768cefc`.
+
+The chain checker accepts a stamp without hashes only together with a sidecar `mesh.surv.sha256` (resp.
+`mesh2.surv.sha256`) whose first line is `# stamp mesh.done sha256 <hex>  hashed <time>` with `<hex>` the SHA-256 of
+that stamp, followed by `sha256sum` lines for exactly the survivor files `mesh.surv.<t>` in the directory. Write it
+with `check/make_sidecar.sh <DIR> mesh` (and `… mesh2`) right after each pass has written its stamp and before
+anything reads or copies the files; the script lists exactly those files, never itself, and refuses to replace an
+existing sidecar. The result records the route ("sidecar") and the hashing time (which the checker cannot verify;
+it is the operator's statement), the absence of mesh provenance, and that the tree state of the old stamps is not
+evidence. A second pass from before 2026-11-04 is bound to its input only by the directory name and the record
+count, and its `mesh.done` is bound by nothing but its own sidecar (a one-pass chain binds `mesh.done` through the
+refinement's recorded hash); the result says so. Re-running Step 4, the second pass and the refinement with the
+fixed code removes both gaps: the new second pass records the SHA-256 of `mesh.done` and of every input file, which
+the checker compares with the sidecar. The N = 7 local certificate has no redundant caps, so finding 2 does not
+affect it.
 
 ## 4. What is proved by hand, not by code
 

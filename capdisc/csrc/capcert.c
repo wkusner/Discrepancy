@@ -242,6 +242,35 @@ static void put_provenance(FILE *f) {
 #endif
 }
 
+/* put_enc into a buffer */
+static size_t enc_to(char *dst, size_t n, const char *s) {
+    size_t k = 0;
+    for (; *s && k + 4 < n; s++) {
+        unsigned char ch = (unsigned char)*s;
+        if (ch <= ' ' || ch == '%' || ch >= 127) k += (size_t)snprintf(dst + k, n - k, "%%%02X", ch); else dst[k++] = (char)ch;
+    }
+    dst[k] = 0; return k;
+}
+
+/* The identity of this binary, as one line fragment for the progress-file headers (the same key=value tokens as in
+   the stamps and in --version): a pass may only be resumed by a binary with the same identity, so that the completion
+   stamp's provenance describes every root (chunk) of the run. */
+static const char *binary_identity(void) {
+    static char id[4096];
+    if (!id[0]) {
+        char cc[1024], flags[2048];
+        enc_to(cc, sizeof cc, CAPCERT_CC); enc_to(flags, sizeof flags, CAPCERT_FLAGS);
+        snprintf(id, sizeof id, "commit=%s tree_dirty=%s src_sha256=%s cc=%s flags=%s build=%s",
+                 CAPCERT_COMMIT, CAPCERT_TREE_DIRTY, CAPCERT_SRC_SHA, cc, flags,
+#ifdef RIGOROUS
+                 "rigorous");
+#else
+                 "float");
+#endif
+    }
+    return id;
+}
+
 /* the survivor files PREFIX.surv.0 .. PREFIX.surv.<n-1>: they must be contiguous (a gap would make the readers stop
    early) and hold whole records.  Returns n >= 0, or -1 (gap), -2 (partial record), -3 (too many files). */
 static int surv_count(const char *prefix, long rec) {
@@ -406,14 +435,17 @@ static int run_cells(const char *prefix, const char *out, long maxc, int nthr) {
         if (have_want && have_want != nfiles) { fprintf(stderr, "%s lists %d survivor files, found %d\n", pdone, have_want, nfiles); return 1; }
     }
     long nchunks = (total + CHUNK - 1) / CHUNK;
-    char pfn[4200], hdr[1024]; snprintf(pfn, sizeof pfn, "%s.progress", out);
-    snprintf(hdr, sizeof hdr, "#capcert-cells N=%d T=%a MIN_EPS=%a from=%s files=%d cells=%ld chunk=%ld mode=rigorous fo=%d fo_emax=%a smear=%d maxc=%ld\n",
-             N, TGT, MIN_EPS, prefix, nfiles, total, CHUNK, FO, FO_EMAX, SMEAR, maxc);
+    char pfn[4200], hdr[8192]; snprintf(pfn, sizeof pfn, "%s.progress", out);
+    snprintf(hdr, sizeof hdr, "#capcert-cells N=%d T=%a MIN_EPS=%a from=%s files=%d cells=%ld chunk=%ld mode=rigorous fo=%d fo_emax=%a smear=%d maxc=%ld %s\n",
+             N, TGT, MIN_EPS, prefix, nfiles, total, CHUNK, FO, FO_EMAX, SMEAR, maxc, binary_identity());
     char *done = calloc(nchunks + 1, 1); Stats tot = {0, 0, 0, 0, 0, INFINITY, 0};
     FILE *pf = fopen(pfn, "r"); int have_header = 0; long resumed = 0;
     if (pf) {
-        char line[1024] = "";
-        if (!fgets(line, sizeof line, pf) || strcmp(line, hdr)) { fprintf(stderr, "refusing to resume: %s has other settings\n", pfn); return 2; }
+        char line[8192] = "";
+        if (!fgets(line, sizeof line, pf) || strcmp(line, hdr)) {
+            fprintf(stderr, "refusing to resume: %s was written with other settings or by another binary\n  file: %s  now:  %s", pfn, line, hdr);
+            return 2;
+        }
         have_header = 1; long idx, p, cc, s, b, v; double ml;
         while (fscanf(pf, "%ld %ld %ld %ld %ld %ld %lf", &idx, &p, &cc, &s, &b, &v, &ml) == 7)
             if (idx >= 0 && idx < nchunks && !done[idx]) { done[idx] = 1; resumed++; tot.processed += p; tot.bounded += cc; tot.sym += s;
@@ -599,27 +631,28 @@ int main(int argc, char **argv) {
         free(F); F = G; nf *= 2;
     }
     /* checkpoint.  The progress file starts with a header recording everything that determines the
-       frontier and the meaning of a finished root; resuming with different settings is refused. */
-    char fn[4096], hdr[512];
+       frontier and the meaning of a finished root, and the identity of the binary; resuming with different
+       settings or with another binary is refused (the stamp's provenance must hold for every root). */
+    char fn[4096], hdr[8192];
     snprintf(fn, sizeof fn, "%s.progress", out);
 #ifdef RIGOROUS
     const char *mode = "rigorous";
 #else
     const char *mode = "float";
 #endif
-    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld fo=%d fo_emax=%a smear=%d\n",
-             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc, FO, FO_EMAX, SMEAR);
+    snprintf(hdr, sizeof hdr, "#capcert N=%d T=%a MIN_EPS=%a nf=%zu mode=%s keep=%a balls=%d maxc=%ld fo=%d fo_emax=%a smear=%d %s\n",
+             N, TGT, MIN_EPS, nf, mode, KEEP_PROB, NBALLS, maxc, FO, FO_EMAX, SMEAR, binary_identity());
     char *done = calloc(nf, 1);
     if (!done) { fprintf(stderr, "out of memory\n"); return 3; }
     Stats tot = {0, 0, 0, 0, 0, INFINITY, 0};
     FILE *pf = fopen(fn, "r");
     int have_header = 0;
     if (pf) {
-        char line[512] = "";
+        char line[8192] = "";
         long pos = ftell(pf);
         if (fgets(line, sizeof line, pf) && line[0] == '#') {
             if (strcmp(line, hdr)) {
-                fprintf(stderr, "refusing to resume: %s was written with different settings\n  file: %s  now:  %s", fn, line, hdr);
+                fprintf(stderr, "refusing to resume: %s was written with different settings or by another binary\n  file: %s  now:  %s", fn, line, hdr);
                 return 2;
             }
             have_header = 1;

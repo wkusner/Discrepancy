@@ -297,7 +297,9 @@ class Checker:
             else:
                 r2['binding'] = 'record count only (stamp written before 2026-11-04)'
                 self.flag('second_pass_input_by_count', 'mesh2.done predates input hashes: the second pass is bound to '
-                                                        'mesh.surv.* only by the record count and the directory name')
+                                                        'mesh.surv.* only by the record count and the directory name, and '
+                                                        'mesh.done is bound by nothing but its own sidecar (verify.log holds '
+                                                        'a copy of it); a second pass re-run with the fixed binary binds both by hash')
             self.check('C4', int(s2['input_cells']) == rec1, f"second pass read {s2['input_cells']} cells, mesh.surv.* hold {rec1}")
             self.check('C4', int(s2['input_cells']) >= int(s1['survivors']), f"second pass read {s2['input_cells']} cells, the first pass counted {s1['survivors']}")
             h2, rec2 = self.bind_survivors('mesh2', s2, rec, 'C4')
@@ -359,8 +361,10 @@ class Checker:
         for P, s in (('mesh', s1),) + ((('mesh2', last),) if TWO else ()):
             if 'commit' not in s:
                 mesh_commits[P] = None
-                self.flag('mesh_provenance_missing', f'{P}.done predates provenance (2026-11-04): the commit, sources '
-                                                     'and flags of its binary are not recorded')
+                self.flag('mesh_provenance_missing', f'{P}.done predates provenance (2026-11-04): the commit, sources and '
+                                                     f'flags of the binary that wrote it are not recorded, so this result '
+                                                     f'does not name them; take the commit from verify.log and audit the '
+                                                     f'csrc/ of that commit as well')
                 continue
             mesh_commits[P] = s['commit']
             self.check('C8', re.fullmatch(r'[0-9a-f]{40}', s['commit']) is not None, f'{P}: binary built without a commit ({s["commit"]})')
@@ -388,9 +392,12 @@ class Checker:
                 same, files = same_code(allc[0], me)
                 self.code.update(proof_code_same_as_checker=same, differing_files=files)
                 if not same:
-                    self.flag('proof_code_differs_from_checker', f'the certificates come from the proof code of '
+                    unknown = [P for P, c in mesh_commits.items() if c is None]
+                    also = (f' (and the csrc/ of the binaries that wrote {", ".join(f"{P}.done" for P in unknown)}, '
+                            f'whose commits are not recorded here)') if unknown else ''
+                    self.flag('proof_code_differs_from_checker', f'the Python certificates come from the proof code of '
                               f'{allc[0][:8]}, which differs from this checkout ({me[:8]}) in {files}: audit the code of '
-                              f'{allc[0][:8]}, not of this checkout')
+                              f'{allc[0][:8]}{also}, not of this checkout')
         except GitError as e:
             self.code.update(checker_commit=None, checker_error=str(e))
             self.flag('checker_commit_unknown', f'cannot compare with the checker commit: {e}')

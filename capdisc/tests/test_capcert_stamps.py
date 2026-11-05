@@ -126,3 +126,71 @@ def test_rigorous_build_refuses_options_that_change_the_survivors(rig, tmp_path,
 def test_version_prints_provenance(rig):
     out = subprocess.run([rig, '--version'], check=True, capture_output=True, text=True).stdout
     assert 'commit=' in out and 'src_sha256=' in out and 'flags=' in out
+
+
+# ---- resume (review 2026-11-04, R1): a pass may only be resumed by a binary with the same identity --------------------
+
+def version(rig):
+    out = subprocess.run([rig, '--version'], capture_output=True, text=True, check=True).stdout
+    return dict(kv.split('=', 1) for kv in out.split()[1:])
+
+
+def header(progress):
+    with open(progress) as f:
+        return f.readline()
+
+
+def _other_identity(line, me):
+    """the same header as written by a binary built from other sources at another commit"""
+    assert me['commit'] in line and me['src_sha256'] in line, line
+    return line.replace(me['commit'], '0' * 40).replace(me['src_sha256'], 'f' * 64)
+
+
+def test_progress_header_records_the_binary_identity(rig, passes):
+    """both progress files name the commit, the tree state, the source hash, the compiler and the flags of the binary"""
+    me = version(rig)
+    for p in ('mesh.progress', 'mesh2.progress'):
+        line = header(passes / p)
+        assert line.startswith('#capcert')
+        for key in ('commit', 'tree_dirty', 'src_sha256', 'cc', 'flags'):
+            assert f' {key}={me[key]}' in line, (p, key, line)
+
+
+def test_resume_by_a_binary_with_another_identity_is_refused(rig, passes, tmp_path):
+    """an interrupted first pass whose progress file was written by another binary is not resumed"""
+    me = version(rig)
+    for f in os.listdir(passes):
+        if f.startswith('mesh.') and not f.startswith('mesh.done'):
+            shutil.copy(passes / f, tmp_path / f)
+    lines = open(tmp_path / 'mesh.progress').read().split('\n')
+    lines[0] = _other_identity(lines[0], me)
+    open(tmp_path / 'mesh.progress', 'w').write('\n'.join(lines))
+    r = subprocess.run([rig, str(N), T, EPS1, str(tmp_path / 'mesh'), '--threads', '2'], capture_output=True, text=True)
+    assert r.returncode != 0 and 'refusing to resume' in r.stderr, r.stdout + r.stderr
+    assert not os.path.exists(tmp_path / 'mesh.done')
+
+
+def test_second_pass_resume_by_a_binary_with_another_identity_is_refused(rig, passes, tmp_path):
+    me = version(rig)
+    for f in os.listdir(passes):
+        if f.startswith('mesh') and not f.startswith('mesh2.done'):
+            shutil.copy(passes / f, tmp_path / f)
+    lines = open(tmp_path / 'mesh2.progress').read().split('\n')
+    lines[0] = _other_identity(lines[0], me)
+    open(tmp_path / 'mesh2.progress', 'w').write('\n'.join(lines))
+    r = subprocess.run([rig, str(N), T, EPS2, str(tmp_path / 'mesh2'), '--threads', '2', '--cells', str(tmp_path / 'mesh')],
+                       capture_output=True, text=True)
+    assert r.returncode != 0 and 'refusing to resume' in r.stderr, r.stdout + r.stderr
+    assert not os.path.exists(tmp_path / 'mesh2.done')
+
+
+def test_resume_by_the_same_binary_completes_and_records_resumed(rig, passes, tmp_path):
+    """the same binary resumes its own interrupted pass (here: a finished one whose stamp is missing) and says so"""
+    for f in os.listdir(passes):
+        if f.startswith('mesh.') and not f.startswith('mesh.done'):
+            shutil.copy(passes / f, tmp_path / f)
+    r = subprocess.run([rig, str(N), T, EPS1, str(tmp_path / 'mesh'), '--threads', '2'], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    s = stamp(tmp_path / 'mesh.done')
+    assert int(s['resumed']) == int(s['nf']) and s['survivors'] == stamp(passes / 'mesh.done')['survivors']
+    assert s['commit'] == version(rig)['commit']
