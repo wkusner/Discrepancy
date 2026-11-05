@@ -68,6 +68,10 @@
        "0.27867881517624277"
       ]
      },
+     "kernels": [
+      "Arb",
+      "mpmath.iv"
+     ],
      "note": "Krawczyk-verified (Arb), cross-verified with mpmath.iv",
      "evidence": [
       {
@@ -107,6 +111,10 @@
       "closed_form": null,
       "decimal": "0.27867881517624233405485411421653163455"
      },
+     "kernels": [
+      "sympy",
+      "FLINT"
+     ],
      "note": "minimal polynomial = P_N(N x) up to a constant; one root in the isolating interval",
      "evidence": [
       {
@@ -482,6 +490,10 @@
      }
     ],
     "code": "0,1,2/;0,1,3/4,5;0,2,4/3,5;0,3/2,5;0,3,4/1,2;1,2,5/3,4;1,3,5/0,2;1,5/0,4;2,4/1,3;2,4,5/0,1;3,4,5/",
+    "kernels": [
+     "Arb",
+     "mpmath.iv"
+    ],
     "note": "counts of the worst caps frozen on the box of the local verification and every other cap below D* there (Arb, cross-verified with mpmath.iv)"
    },
    "weights": {
@@ -650,6 +662,10 @@
      "file_sha256": "740a1f738febead9e92289df5184377636275b0d318b9f266cb44e5bca2fb16c",
      "pointer": "/N6_best"
     },
+    "kernels": [
+     "sympy",
+     "FLINT"
+    ],
     "cross_checks": [
      {
       "kernel": "exact: sympy + FLINT (fmpq_poly)"

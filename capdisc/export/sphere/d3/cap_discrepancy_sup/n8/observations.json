@@ -66,25 +66,7 @@
      "value": 0.23079914617978103,
      "level": 0,
      "status": "numerical",
-     "note": "double precision"
-    },
-    {
-     "id": "v2",
-     "level": 2,
-     "status": "interval-verified",
-     "value": {
-      "interval": [
-       "0.23079914617973496",
-       "0.23079914617973746"
-      ]
-     },
-     "note": "verified (Krawczyk, Arb): enclosure of the value of the local minimum near this configuration (boxes of half-width 0.0001 around each of 2 images); a local statement, no global claim",
-     "evidence": [
-      {
-       "file": "certificates/localcert_N8_best.json",
-       "file_sha256": "a5c39a394882285a5624d3dbe861ddaf58f947625bbc902bf44ff509ebe6eb00"
-      }
-     ]
+     "note": "double precision; local verification incomplete (audit 2026-11-04): the local verification does not bound its redundant worst caps, so it gives no enclosure of the value; level 0 only"
     }
    ],
    "active": {

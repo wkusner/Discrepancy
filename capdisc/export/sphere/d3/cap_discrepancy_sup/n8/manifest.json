@@ -5,12 +5,12 @@
  "generated_by": {
   "classifier_version": "ac44d3513e175f54",
   "code_modified": false,
-  "commit": "436a0dc",
-  "last_code_commit": "436a0dc",
+  "commit": "23c831e",
+  "last_code_commit": "23c831e",
   "script": "jobs/atlas_pipeline.py",
   "scripts": {
-   "jobs/atlas_export.py": "7307e14c958e8bb3fc09225ade08442f235199b001ed78d0f0c5fdbcb26b2959",
-   "jobs/atlas_pipeline.py": "bc276efac8831fdb0c1171e8700fef4baf50664bee5fe05a29be869ef31d5c7d",
+   "jobs/atlas_export.py": "9471f7ef896e424c0b6d3e1c434a2cc746b6bce6c01c70c36e680eb73ff518c5",
+   "jobs/atlas_pipeline.py": "594c1e8d51be68443f622192c23cbc809feabc2ae1e1ccba58c4d2fbd9f09674",
    "jobs/atlas_stuck.py": "1b06123cfb7924cff1a73d590e7b9d984e48bce0b068082d1fd4fd6c855e6f32",
    "sphcap/__init__.py": "b743a501cdca261f22070408889f50db0f5f6b51eef761a33f95b0ef804c4227",
    "sphcap/balance.py": "03eec9b45eaeeb03ab41c9488bd816cd660410d919389bf5c6e9f9f2100e3ead",
@@ -30,16 +30,11 @@
    "format": "critical-configurations",
    "records": 3,
    "sha256": "0097f707b1174bcf13b83062077d9eee2f0f9bc66d5b4e458ce1f14084676bfb"
-  },
-  {
-   "commit": "3918edc",
-   "file": "certificates/localcert_N8_best.json",
-   "sha256": "a5c39a394882285a5624d3dbe861ddaf58f947625bbc902bf44ff509ebe6eb00"
   }
  ],
  "observations": 3,
  "outputs": {
-  "observations.json": "86780bb1367cc14c144c46ac7cd61ade45802c3bb05d9125ca5766c304444c23",
+  "observations.json": "9d778c5a4f32a18c0659b3ca48bec78c9f46fb606f31c51a472ebc54fbcfad4a",
   "observations.jsonl": "bc058dd955acb254425779bf52783644f6a42add4c3f0d4ad3e1479eed99747b",
   "stuck.jsonl": "e4757df3b15eb2750ea6b8eeec41fa01ac577e9313f0bdd8bf07faa34c9f23a1"
  },

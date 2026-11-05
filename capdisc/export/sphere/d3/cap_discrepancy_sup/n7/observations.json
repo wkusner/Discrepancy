@@ -73,6 +73,9 @@
        "0.2608588072703328"
       ]
      },
+     "kernels": [
+      "Arb"
+     ],
      "note": "verified (Krawczyk, Arb): enclosure of the value of the local minimum near this configuration (boxes of half-width 0.0001 around each of 2 images); a local statement, no global claim",
      "evidence": [
       {
