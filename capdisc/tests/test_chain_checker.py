@@ -77,6 +77,9 @@ def test_reference_chain_passes(chain):
     assert r['level'] == 'full' and r['routes']['mesh']['binding'] == 'stamp'
     assert set(r['code']) >= {'certificate_commits', 'mesh_commits', 'checker_commit', 'proof_code_same_as_checker'}
     assert all(r['code']['mesh_commits'].values())
+    # the only flag a new-format chain can carry: later proof code in this checkout
+    assert {f['kind'] for f in r['flags']} <= {'proof_code_differs_from_checker'}
+    assert r['verdict'] == 'chain complete' + (f" ({len(r['flags'])} flags)" if r['flags'] else '')
 
 
 def test_two_pass_chain_passes(chain2):
@@ -267,6 +270,10 @@ def test_legacy_single_pass_chain_passes_with_the_sidecar(tmp_path):
     r = result(d)
     assert r['routes']['mesh']['binding'] == 'sidecar' and r['routes']['mesh']['stamp_sha256'] == sha(os.path.join(d, 'mesh.done'))
     assert r['code']['mesh_commits'] == {'mesh': None}
+    kinds = {f['kind'] for f in r['flags']}
+    assert {'survivors_bound_by_sidecar', 'tree_state_unreliable', 'mesh_provenance_missing',
+            'proof_code_differs_from_checker'} <= kinds
+    assert r['verdict'] == f"chain complete ({len(r['flags'])} flags)" and 'FLAG [mesh_provenance_missing]' in out
     assert set(r['code']['certificate_commits'].values()) == {_full('768cefc')}
 
 
@@ -276,6 +283,7 @@ def test_legacy_two_pass_chain_passes_with_sidecars(tmp_path):
     r = result(d)
     assert r['routes']['mesh']['binding'] == r['routes']['mesh2']['binding'] == 'sidecar'
     assert r['routes']['mesh2_input']['binding'].startswith('record count')
+    assert 'second_pass_input_by_count' in {f['kind'] for f in r['flags']}
 
 
 def test_legacy_two_pass_chain_in_a_renamed_directory_fails(tmp_path):

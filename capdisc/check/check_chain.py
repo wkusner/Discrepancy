@@ -29,7 +29,12 @@ and does no numerics beyond exact rational comparisons of the values stored in t
       stamps and, for mesh stamps that record it, the commit the mesh binary was built from, whose C sources must
       have the SHA-256 baked into the binary; no stamp reports a modified tree.  The commits, the checker's own
       commit, and whether the checker's proof code is the certificates' are recorded in the output (a difference
-      there is reported, not rejected: an older chain stays checkable by a newer checker).
+      there is flagged, not rejected: an older chain stays checkable by a newer checker).
+
+Flags: caveats that do not make the chain incomplete but limit what it shows about provenance (the certificates'
+proof code differs from this checkout; stamps from before 2026-11-04: tree state not evidence, no mesh provenance,
+survivors bound by a sidecar, second-pass input bound by count). Printed as FLAG lines above the verdict, counted in
+the verdict ("chain complete (2 flags)"), and listed in the result under 'flags'.
 
 Levels: "full" (N = 5, 6; Steps 4-6, formerly called "certified") and "verified" (N = 7: Step 4 only, so C2 and C3
 are skipped, C5 requires T > the largest upper end of the local D* enclosures (verify.sh takes the next double),
@@ -125,7 +130,7 @@ class Incomplete(Exception):
 class Checker:
     def __init__(self, N, DIR):
         self.N, self.DIR = N, DIR
-        self.checks, self.notes, self.routes, self.code = {}, [], {}, {}
+        self.checks, self.notes, self.routes, self.code, self.flags = {}, [], {}, {}, []
         self._sha = {}
 
     # ---------------------------------------------------------------- helpers
@@ -133,6 +138,11 @@ class Checker:
         self.checks[key] = bool(ok) and self.checks.get(key, True)
         if not ok: self.notes.append(f'{key}: {why}')
         return bool(ok)
+
+    def flag(self, kind, msg):
+        """a caveat that does not make the chain incomplete but limits what it shows about provenance: printed
+        as FLAG above the verdict and listed in the result under 'flags'"""
+        self.flags.append(dict(kind=kind, message=msg))
 
     def path(self, fn):
         return os.path.join(self.DIR, fn)
@@ -200,6 +210,8 @@ class Checker:
                               files=len(names), records=total,
                               note='stamp written before 2026-11-04 (no hashes); survivor files bound by the sidecar, '
                                    'which names the SHA-256 of the stamp')
+        self.flag('survivors_bound_by_sidecar', f'{P}.surv.* are bound by {P}.surv.sha256 (hashed {m.group(3).strip()}), '
+                                                f'not by hashes in {P}.done (stamp written before 2026-11-04)')
         return want, total
 
     def proof_mode(self, s, P, key):
@@ -284,7 +296,8 @@ class Checker:
                 r2['binding'] = 'hashes (from_stamp, in.<t>)'
             else:
                 r2['binding'] = 'record count only (stamp written before 2026-11-04)'
-                self.notes.append('C4 note: the second-pass stamp predates input hashes; its input is bound by the record count')
+                self.flag('second_pass_input_by_count', 'mesh2.done predates input hashes: the second pass is bound to '
+                                                        'mesh.surv.* only by the record count and the directory name')
             self.check('C4', int(s2['input_cells']) == rec1, f"second pass read {s2['input_cells']} cells, mesh.surv.* hold {rec1}")
             self.check('C4', int(s2['input_cells']) >= int(s1['survivors']), f"second pass read {s2['input_cells']} cells, the first pass counted {s1['survivors']}")
             h2, rec2 = self.bind_survivors('mesh2', s2, rec, 'C4')
@@ -339,14 +352,15 @@ class Checker:
             self.check('C8', s.get('tree_dirty') is False, f'{what}: modified proof code ({s.get("tree_dirty_files", "")})')
         legacy = [what for what, s in named if 'tree_checked' not in s]
         if legacy:
-            self.notes.append(f'C8 note: the stamps of {legacy} predate the fixed tree check (2026-11-04): their tree_dirty is '
-                              'not evidence of a clean tree (audit finding 1); their commits are compared below')
+            self.flag('tree_state_unreliable', f'the stamps of {legacy} predate the fixed tree check (2026-11-04): their '
+                                               'tree_dirty=false is not evidence that the proof code was unmodified')
         commits = {what: s.get('commit') for what, s in named}
         mesh_commits = {}
         for P, s in (('mesh', s1),) + ((('mesh2', last),) if TWO else ()):
             if 'commit' not in s:
                 mesh_commits[P] = None
-                self.notes.append(f'C8 note: {P}.done predates provenance (2026-11-04): the commit of its binary is not recorded')
+                self.flag('mesh_provenance_missing', f'{P}.done predates provenance (2026-11-04): the commit, sources '
+                                                     'and flags of its binary are not recorded')
                 continue
             mesh_commits[P] = s['commit']
             self.check('C8', re.fullmatch(r'[0-9a-f]{40}', s['commit']) is not None, f'{P}: binary built without a commit ({s["commit"]})')
@@ -374,11 +388,12 @@ class Checker:
                 same, files = same_code(allc[0], me)
                 self.code.update(proof_code_same_as_checker=same, differing_files=files)
                 if not same:
-                    self.notes.append(f'C8 note: the certificates come from proof code that differs from this checkout '
-                                      f'({allc[0][:8]} vs {me[:8]}: {files}); recorded, not rejected')
+                    self.flag('proof_code_differs_from_checker', f'the certificates come from the proof code of '
+                              f'{allc[0][:8]}, which differs from this checkout ({me[:8]}) in {files}: audit the code of '
+                              f'{allc[0][:8]}, not of this checkout')
         except GitError as e:
             self.code.update(checker_commit=None, checker_error=str(e))
-            self.notes.append(f'C8 note: cannot compare with the checker commit: {e}')
+            self.flag('checker_commit_unknown', f'cannot compare with the checker commit: {e}')
         self.T, self.Dstar = T, Dstar
 
 
@@ -404,7 +419,8 @@ def main(argv):
     files = {f: ch.fsha(f) for f in sorted(os.listdir(DIR))
              if (f.endswith('.json') and not f.startswith('chain_')) or f.endswith('.done') or '.surv.' in f}
     res = dict(N=N, name=paper['name'], level=ch.level, directory=public_dir(DIR), checks=ch.checks, notes=ch.notes,
-               verdict='chain complete' if ok else 'CHAIN INCOMPLETE', routes=ch.routes, code=ch.code,
+               verdict=('chain complete' + (f' ({len(ch.flags)} flags)' if ch.flags else '')) if ok else 'CHAIN INCOMPLETE',
+               flags=ch.flags, routes=ch.routes, code=ch.code,
                T=str(ch.T), D_star_upper=str(max(d for _, d in ch.Dstar)), files=files)
     tmp = out + '.tmp'
     with open(tmp, 'w') as f: json.dump(res, f, indent=1); f.write('\n')
@@ -413,6 +429,7 @@ def main(argv):
     for n_ in ch.notes: print('  ' + n_)
     for P, r in sorted(ch.routes.items()): print(f'  route {P}: {r.get("binding")}' + (f' ({r["directory"]})' if 'directory' in r else ''))
     print(f'  result written to {public_dir(out)}')
+    for fl in ch.flags: print(f'FLAG [{fl["kind"]}]: {fl["message"]}')
     print(res['verdict'])
     return 0 if ok else 1
 
