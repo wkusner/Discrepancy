@@ -1,0 +1,6020 @@
+{
+ "functional": {
+  "id": "cap_discrepancy_sup",
+  "definition": "D(X) = sup over closed spherical caps C of |#(X n C)/N - sigma(C)|, sigma the normalized area",
+  "sense": "minimize",
+  "container": "sphere",
+  "d": 3,
+  "critical_point": "balanced: a nonnegative combination of the gradients of the worst caps vanishes (Clarke stationary)",
+  "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)"
+ },
+ "N": 4,
+ "observations": [
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_arc_end_symmetric",
+   "X": [
+    [
+     0.29331346468200636,
+     0.6760056255077459,
+     0.6760056255077459
+    ],
+    [
+     0.29331346468200636,
+     -0.6760056255077459,
+     -0.6760056255077459
+    ],
+    [
+     -0.29331346468200636,
+     0.6760056255077459,
+     -0.6760056255077459
+    ],
+    [
+     -0.29331346468200636,
+     -0.6760056255077459,
+     0.6760056255077459
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.37500000000000006,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v0x",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.375,
+     "note": "cross-check by sphcap.discrepancy (as fixed in audit-refactor 7f7fd86 / 105e525): method exact 0.375, method bruteforce 0.375; |exact - 3/8| = 0.0e+00, |bruteforce - 3/8| = 0.0e+00",
+     "cross_check": {
+      "exact": 0.375,
+      "bruteforce": 0.375,
+      "closed_form": "3/8"
+     }
+    },
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D of this configuration; hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        0.8523304590569537,
+        0.36981940765984866,
+        -0.36981940765984866
+       ],
+       "height": 0.25000000000000006,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       3
+      ],
+      "branches": [
+       "low:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        -0.8523304590569537,
+        -0.36981940765984866,
+        0.36981940765984866
+       ],
+       "height": -0.25000000000000006,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [
+       2
+      ],
+      "branches": [
+       "up:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8523304590569537,
+        0.36981940765984866,
+        -0.36981940765984866
+       ],
+       "height": -0.25000000000000006,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        0.8523304590569537,
+        -0.36981940765984866,
+        0.36981940765984866
+       ],
+       "height": 0.25000000000000006,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8523304590569537,
+        0.36981940765984866,
+        0.36981940765984866
+       ],
+       "height": 0.2500000000000001,
+       "angular_radius": 1.3181160716528177,
+       "angular_radius_deg": 75.52248781407006,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [
+       1
+      ],
+      "branches": [
+       "low:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8523304590569537,
+        -0.36981940765984866,
+        -0.36981940765984866
+       ],
+       "height": -0.2500000000000001,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       0
+      ],
+      "branches": [
+       "up:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8523304590569537,
+        0.36981940765984866,
+        0.36981940765984866
+       ],
+       "height": -0.2500000000000001,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8523304590569537,
+        -0.36981940765984866,
+        -0.36981940765984866
+       ],
+       "height": 0.2500000000000001,
+       "angular_radius": 1.3181160716528177,
+       "angular_radius_deg": 75.52248781407006,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 3,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-2",
+     "up:0-1-3",
+     "low:0-1-3",
+     "up:0-2-3",
+     "low:0-2-3",
+     "up:1-2-3",
+     "low:1-2-3"
+    ],
+    "ranges": {
+     "up:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "up:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "up:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "up:1-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:1-2-3": [
+      0.0,
+      0.5
+     ]
+    },
+    "maxmin": {
+     "up:0-1-2": 0.125,
+     "low:0-1-2": 0.125,
+     "up:0-1-3": 0.125,
+     "low:0-1-3": 0.125,
+     "up:0-2-3": 0.125,
+     "low:0-2-3": 0.125,
+     "up:1-2-3": 0.125,
+     "low:1-2-3": 0.125
+    },
+    "maxmin_value": 0.125,
+    "signed_dim": 4
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0",
+    "graph_hash": "7c76fc2219fe"
+   },
+   "first_order": {
+    "rank": 4,
+    "dim_quotient": 5,
+    "kernel_dim": 1,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": false,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "N4_arc_end_symmetric",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76",
+    "pipeline": "jobs/atlas_small_n.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0000000000000002,
+      -0.827934422872475,
+      -0.0860327885637626,
+      -0.08603278856376263
+     ],
+     [
+      -0.827934422872475,
+      1.0000000000000002,
+      -0.08603278856376263,
+      -0.0860327885637626
+     ],
+     [
+      -0.0860327885637626,
+      -0.08603278856376263,
+      1.0000000000000002,
+      -0.827934422872475
+     ],
+     [
+      -0.08603278856376263,
+      -0.0860327885637626,
+      -0.827934422872475,
+      1.0000000000000002
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "second_order": {
+    "level": 0,
+    "status": "numerical",
+    "kernel_dim": 1,
+    "hessian_eigenvalues_on_kernel": [
+     0.0
+    ],
+    "descending": 0,
+    "ascending": 0,
+    "null": 1,
+    "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/small_n.json",
+     "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+     "pointer": "/classes/11/gram_exact"
+    },
+    "entries": [
+     [
+      "1",
+      "-3/16 - 1/16*sqrt(105)",
+      "-13/32 + 1/32*sqrt(105)",
+      "-13/32 + 1/32*sqrt(105)"
+     ],
+     [
+      "-3/16 - 1/16*sqrt(105)",
+      "1",
+      "-13/32 + 1/32*sqrt(105)",
+      "-13/32 + 1/32*sqrt(105)"
+     ],
+     [
+      "-13/32 + 1/32*sqrt(105)",
+      "-13/32 + 1/32*sqrt(105)",
+      "1",
+      "-3/16 - 1/16*sqrt(105)"
+     ],
+     [
+      "-13/32 + 1/32*sqrt(105)",
+      "-13/32 + 1/32*sqrt(105)",
+      "-3/16 - 1/16*sqrt(105)",
+      "1"
+     ]
+    ],
+    "note": "exact Gram matrix of the closed form (Q or Q(sqrt k), entries as strings, labelled as the X of this record); checked by jobs/atlas_small_n.py: entries equal the inner products of X to 1e-14, det G = 0 exactly for N >= 3"
+   },
+   "small_n": {
+    "params": {
+     "x": 0.08603278856376256,
+     "y": 0.4569836057181187,
+     "z": 0.4569836057181187
+    },
+    "drawn_by": "N4_ARC_END_SYMMETRIC of sphcap/gram.py: x = (13 - sqrt 105)/32, y = z = (19 + sqrt 105)/64",
+    "stratum": "N4_SYM"
+   },
+   "obs_id": "o-d68f50e704d1023e",
+   "seq": 1,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null,
+    "note": "closed form, not from a search"
+   },
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 0,
+      "level": 0,
+      "status": "numerical",
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     }
+    ],
+    "codim": [
+     {
+      "value": 5,
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "coindex": [
+     {
+      "value": 4,
+      "level": 0,
+      "status": "numerical",
+      "note": "the arc passes through this point in the labelled configuration space (two-sided flat along it); modulo the relabelling that swaps y and z it is an end point; first-order growth in the four other directions; derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 1,
+      "level": 0,
+      "status": "numerical",
+      "note": "the arc passes through this point in the labelled configuration space (two-sided flat along it); modulo the relabelling that swaps y and z it is an end point; first-order growth in the four other directions; derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "non-strict minimum",
+      "level": 0,
+      "status": "numerical",
+      "note": "the arc passes through this point in the labelled configuration space (two-sided flat along it); modulo the relabelling that swaps y and z it is an end point; first-order growth in the four other directions; derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 1
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_arc_end_edge",
+   "X": [
+    [
+     0.296684800510661,
+     0.5911667524023567,
+     0.75
+    ],
+    [
+     0.296684800510661,
+     -0.5911667524023567,
+     -0.75
+    ],
+    [
+     -0.296684800510661,
+     0.5911667524023567,
+     -0.75
+    ],
+    [
+     -0.296684800510661,
+     -0.5911667524023567,
+     0.75
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.37500000000000006,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v0x",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.375,
+     "note": "cross-check by sphcap.discrepancy (as fixed in audit-refactor 7f7fd86 / 105e525): method exact 0.375, method bruteforce 0.375; |exact - 3/8| = 0.0e+00, |bruteforce - 3/8| = 0.0e+00",
+     "cross_check": {
+      "exact": 0.375,
+      "bruteforce": 0.375,
+      "closed_form": "3/8"
+     }
+    },
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D of this configuration; hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 10,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-3"
+      ],
+      "cap": {
+       "center": [
+        0.0,
+        0.0,
+        1.0
+       ],
+       "height": 0.75,
+       "angular_radius": 0.7227342478134156,
+       "angular_radius_deg": 41.409622109270856,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.0
+      ],
+      "in_support": false,
+      "count": 2
+     },
+     {
+      "boundary": [
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:1-2"
+      ],
+      "cap": {
+       "center": [
+        0.0,
+        0.0,
+        -1.0
+       ],
+       "height": 0.75,
+       "angular_radius": 0.7227342478134156,
+       "angular_radius_deg": 41.409622109270856,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.0
+      ],
+      "in_support": false,
+      "count": 2
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        0.8426451222634055,
+        0.422892523952102,
+        -0.33333333333333326
+       ],
+       "height": 0.25000000000000006,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       3
+      ],
+      "branches": [
+       "low:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        -0.8426451222634055,
+        -0.422892523952102,
+        0.33333333333333326
+       ],
+       "height": -0.25000000000000006,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [
+       2
+      ],
+      "branches": [
+       "up:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8426451222634055,
+        0.422892523952102,
+        -0.33333333333333326
+       ],
+       "height": -0.24999999999999997,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        0.8426451222634055,
+        -0.422892523952102,
+        0.33333333333333326
+       ],
+       "height": 0.24999999999999997,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8426451222634055,
+        0.422892523952102,
+        0.33333333333333326
+       ],
+       "height": 0.24999999999999992,
+       "angular_radius": 1.3181160716528182,
+       "angular_radius_deg": 75.52248781407009,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [
+       1
+      ],
+      "branches": [
+       "low:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8426451222634055,
+        -0.422892523952102,
+        -0.33333333333333326
+       ],
+       "height": -0.24999999999999992,
+       "angular_radius": 1.8234765819369751,
+       "angular_radius_deg": 104.47751218592992,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       0
+      ],
+      "branches": [
+       "up:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8426451222634055,
+        0.422892523952102,
+        0.33333333333333326
+       ],
+       "height": -0.24999999999999992,
+       "angular_radius": 1.8234765819369751,
+       "angular_radius_deg": 104.47751218592992,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8426451222634055,
+        -0.422892523952102,
+        -0.33333333333333326
+       ],
+       "height": 0.24999999999999992,
+       "angular_radius": 1.3181160716528182,
+       "angular_radius_deg": 75.52248781407009,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1/;0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0;2,3/"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 3,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-2",
+     "up:0-1-3",
+     "low:0-1-3",
+     "up:0-2-3",
+     "low:0-2-3",
+     "up:1-2-3",
+     "low:1-2-3"
+    ],
+    "ranges": {
+     "up:0-3": [
+      0.0,
+      -0.0
+     ],
+     "up:1-2": [
+      0.0,
+      -0.0
+     ],
+     "up:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "up:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "up:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "up:1-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:1-2-3": [
+      0.0,
+      0.5
+     ]
+    },
+    "maxmin": {
+     "up:0-3": 0.0,
+     "up:1-2": 0.0,
+     "up:0-1-2": 0.125,
+     "low:0-1-2": 0.125,
+     "up:0-1-3": 0.125,
+     "low:0-1-3": 0.125,
+     "up:0-2-3": 0.125,
+     "low:0-2-3": 0.125,
+     "up:1-2-3": 0.125,
+     "low:1-2-3": 0.125
+    },
+    "maxmin_value": 0.125,
+    "signed_dim": 5
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0",
+    "graph_hash": "7c76fc2219fe"
+   },
+   "first_order": {
+    "rank": 5,
+    "dim_quotient": 5,
+    "kernel_dim": 0,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": false,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "N4_arc_end_edge",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76",
+    "pipeline": "jobs/atlas_small_n.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0,
+      -0.8239562582918987,
+      -0.3010437417081014,
+      0.12499999999999994
+     ],
+     [
+      -0.8239562582918987,
+      1.0,
+      0.12499999999999994,
+      -0.3010437417081014
+     ],
+     [
+      -0.3010437417081014,
+      0.12499999999999994,
+      1.0,
+      -0.8239562582918987
+     ],
+     [
+      0.12499999999999994,
+      -0.3010437417081014,
+      -0.8239562582918987,
+      1.0
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/small_n.json",
+     "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+     "pointer": "/classes/12/gram_exact"
+    },
+    "entries": [
+     [
+      "1",
+      "-9/16 - 1/32*sqrt(70)",
+      "-9/16 + 1/32*sqrt(70)",
+      "1/8"
+     ],
+     [
+      "-9/16 - 1/32*sqrt(70)",
+      "1",
+      "1/8",
+      "-9/16 + 1/32*sqrt(70)"
+     ],
+     [
+      "-9/16 + 1/32*sqrt(70)",
+      "1/8",
+      "1",
+      "-9/16 - 1/32*sqrt(70)"
+     ],
+     [
+      "1/8",
+      "-9/16 + 1/32*sqrt(70)",
+      "-9/16 - 1/32*sqrt(70)",
+      "1"
+     ]
+    ],
+    "note": "exact Gram matrix of the closed form (Q or Q(sqrt k), entries as strings, labelled as the X of this record); checked by jobs/atlas_small_n.py: entries equal the inner products of X to 1e-14, det G = 0 exactly for N >= 3"
+   },
+   "small_n": {
+    "params": {
+     "x": 0.0880218708540507,
+     "y": 0.34947812914594933,
+     "z": 0.5625
+    },
+    "drawn_by": "N4_ARC_END_EDGE of sphcap/gram.py: x = (14 - sqrt 70)/64, y = (14 + sqrt 70)/64, z = 9/16",
+    "stratum": "N4_EDGE"
+   },
+   "obs_id": "o-44c67095afc7b810",
+   "seq": 2,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null,
+    "note": "closed form, not from a search"
+   },
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 0,
+      "level": 0,
+      "status": "numerical",
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     }
+    ],
+    "codim": [
+     {
+      "value": 5,
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "coindex": [
+     {
+      "value": 5,
+      "level": 0,
+      "status": "numerical",
+      "note": "one-sided flat into N4_ARC (z decreasing), first-order growth in every other direction (the smallest cap through the edge of length given by z grows past 3/8 for z > 9/16); derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 0,
+      "status": "numerical",
+      "note": "one-sided flat into N4_ARC (z decreasing), first-order growth in every other direction (the smallest cap through the edge of length given by z grows past 3/8 for z > 9/16); derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "non-strict minimum",
+      "level": 0,
+      "status": "numerical",
+      "note": "one-sided flat into N4_ARC (z decreasing), first-order growth in every other direction (the smallest cap through the edge of length given by z grows past 3/8 for z > 9/16); derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 4
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_arc_z_15_32",
+   "X": [
+    [
+     0.29335152620360005,
+     0.6672292575075066,
+     0.6846531968814576
+    ],
+    [
+     0.29335152620360005,
+     -0.6672292575075066,
+     -0.6846531968814576
+    ],
+    [
+     -0.29335152620360005,
+     0.6672292575075066,
+     -0.6846531968814576
+    ],
+    [
+     -0.29335152620360005,
+     -0.6672292575075066,
+     0.6846531968814576
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.375,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v0x",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.375,
+     "note": "cross-check by sphcap.discrepancy (as fixed in audit-refactor 7f7fd86 / 105e525): method exact 0.375, method bruteforce 0.375; |exact - 3/8| = 0.0e+00, |bruteforce - 3/8| = 0.0e+00",
+     "cross_check": {
+      "exact": 0.375,
+      "bruteforce": 0.375,
+      "closed_form": "3/8"
+     }
+    },
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D of this configuration; hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        0.8522198716173986,
+        0.37468380948086255,
+        -0.3651483716701107
+       ],
+       "height": 0.25,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       3
+      ],
+      "branches": [
+       "low:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        -0.8522198716173986,
+        -0.37468380948086255,
+        0.3651483716701107
+       ],
+       "height": -0.25,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [
+       2
+      ],
+      "branches": [
+       "up:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8522198716173986,
+        0.37468380948086255,
+        -0.3651483716701107
+       ],
+       "height": -0.25,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        0.8522198716173986,
+        -0.37468380948086255,
+        0.3651483716701107
+       ],
+       "height": 0.25,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8522198716173986,
+        0.37468380948086255,
+        0.3651483716701107
+       ],
+       "height": 0.24999999999999997,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [
+       1
+      ],
+      "branches": [
+       "low:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8522198716173986,
+        -0.37468380948086255,
+        -0.3651483716701107
+       ],
+       "height": -0.24999999999999997,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       0
+      ],
+      "branches": [
+       "up:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8522198716173986,
+        0.37468380948086255,
+        0.3651483716701107
+       ],
+       "height": -0.24999999999999997,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8522198716173986,
+        -0.37468380948086255,
+        -0.3651483716701107
+       ],
+       "height": 0.24999999999999997,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 3,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-2",
+     "up:0-1-3",
+     "low:0-1-3",
+     "up:0-2-3",
+     "low:0-2-3",
+     "up:1-2-3",
+     "low:1-2-3"
+    ],
+    "ranges": {
+     "up:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "up:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "up:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "up:1-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:1-2-3": [
+      0.0,
+      0.5
+     ]
+    },
+    "maxmin": {
+     "up:0-1-2": 0.125,
+     "low:0-1-2": 0.125,
+     "up:0-1-3": 0.125,
+     "low:0-1-3": 0.125,
+     "up:0-2-3": 0.125,
+     "low:0-2-3": 0.125,
+     "up:1-2-3": 0.125,
+     "low:1-2-3": 0.125
+    },
+    "maxmin_value": 0.125,
+    "signed_dim": 4
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0",
+    "graph_hash": "7c76fc2219fe"
+   },
+   "first_order": {
+    "rank": 4,
+    "dim_quotient": 5,
+    "kernel_dim": 1,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": false,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "N4_arc_z_15_32",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76",
+    "pipeline": "jobs/atlas_small_n.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0,
+      -0.8278897641480372,
+      -0.1096102358519629,
+      -0.06249999999999999
+     ],
+     [
+      -0.8278897641480372,
+      1.0,
+      -0.06249999999999999,
+      -0.1096102358519629
+     ],
+     [
+      -0.1096102358519629,
+      -0.06249999999999999,
+      1.0,
+      -0.8278897641480372
+     ],
+     [
+      -0.06249999999999999,
+      -0.1096102358519629,
+      -0.8278897641480372,
+      1.0
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "second_order": {
+    "level": 0,
+    "status": "numerical",
+    "kernel_dim": 1,
+    "hessian_eigenvalues_on_kernel": [
+     0.0
+    ],
+    "descending": 0,
+    "ascending": 0,
+    "null": 1,
+    "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/small_n.json",
+     "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+     "pointer": "/classes/13/gram_exact"
+    },
+    "entries": [
+     [
+      "1",
+      "-15/32 - 1/416*sqrt(22321)",
+      "-15/32 + 1/416*sqrt(22321)",
+      "-1/16"
+     ],
+     [
+      "-15/32 - 1/416*sqrt(22321)",
+      "1",
+      "-1/16",
+      "-15/32 + 1/416*sqrt(22321)"
+     ],
+     [
+      "-15/32 + 1/416*sqrt(22321)",
+      "-1/16",
+      "1",
+      "-15/32 - 1/416*sqrt(22321)"
+     ],
+     [
+      "-1/16",
+      "-15/32 + 1/416*sqrt(22321)",
+      "-15/32 - 1/416*sqrt(22321)",
+      "1"
+     ]
+    ],
+    "note": "exact Gram matrix of the closed form (Q or Q(sqrt k), entries as strings, labelled as the X of this record); checked by jobs/atlas_small_n.py: entries equal the inner products of X to 1e-14, det G = 0 exactly for N >= 3"
+   },
+   "small_n": {
+    "params": {
+     "x": 0.08605511792598144,
+     "y": 0.4451948820740186,
+     "z": 0.46875
+    },
+    "drawn_by": "interior point of the arc at z = 15/32 (x < y the roots of t^2 - (1 - z) t + z (1 - z)/(16 z - 1))",
+    "stratum": "N4_ARC"
+   },
+   "obs_id": "o-fd48e0db49299503",
+   "seq": 3,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null,
+    "note": "closed form, not from a search"
+   },
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 1,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     }
+    ],
+    "codim": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "coindex": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "sharp minimum",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 1
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_arc_z_1_2",
+   "X": [
+    [
+     0.29383087367226357,
+     0.6431667106411791,
+     0.7071067811865476
+    ],
+    [
+     0.29383087367226357,
+     -0.6431667106411791,
+     -0.7071067811865476
+    ],
+    [
+     -0.29383087367226357,
+     0.6431667106411791,
+     -0.7071067811865476
+    ],
+    [
+     -0.29383087367226357,
+     -0.6431667106411791,
+     0.7071067811865476
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.375,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v0x",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.375,
+     "note": "cross-check by sphcap.discrepancy (as fixed in audit-refactor 7f7fd86 / 105e525): method exact 0.375, method bruteforce 0.375; |exact - 3/8| = 0.0e+00, |bruteforce - 3/8| = 0.0e+00",
+     "cross_check": {
+      "exact": 0.375,
+      "bruteforce": 0.375,
+      "closed_form": "3/8"
+     }
+    },
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D of this configuration; hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        0.850829583956,
+        0.38870170962482276,
+        -0.35355339059327373
+       ],
+       "height": 0.25,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       3
+      ],
+      "branches": [
+       "low:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        -0.850829583956,
+        -0.38870170962482276,
+        0.35355339059327373
+       ],
+       "height": -0.25,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [
+       2
+      ],
+      "branches": [
+       "up:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        -0.850829583956,
+        0.38870170962482276,
+        -0.35355339059327373
+       ],
+       "height": -0.24999999999999997,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        0.850829583956,
+        -0.38870170962482276,
+        0.35355339059327373
+       ],
+       "height": 0.24999999999999997,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.850829583956,
+        0.38870170962482276,
+        0.35355339059327373
+       ],
+       "height": 0.25,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [
+       1
+      ],
+      "branches": [
+       "low:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.850829583956,
+        -0.38870170962482276,
+        -0.35355339059327373
+       ],
+       "height": -0.25,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       0
+      ],
+      "branches": [
+       "up:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.850829583956,
+        0.38870170962482276,
+        0.35355339059327373
+       ],
+       "height": -0.25,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.850829583956,
+        -0.38870170962482276,
+        -0.35355339059327373
+       ],
+       "height": 0.25,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 3,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-2",
+     "up:0-1-3",
+     "low:0-1-3",
+     "up:0-2-3",
+     "low:0-2-3",
+     "up:1-2-3",
+     "low:1-2-3"
+    ],
+    "ranges": {
+     "up:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "up:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "up:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "up:1-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:1-2-3": [
+      0.0,
+      0.5
+     ]
+    },
+    "maxmin": {
+     "up:0-1-2": 0.125,
+     "low:0-1-2": 0.125,
+     "up:0-1-3": 0.125,
+     "low:0-1-3": 0.125,
+     "up:0-2-3": 0.125,
+     "low:0-2-3": 0.125,
+     "up:1-2-3": 0.125,
+     "low:1-2-3": 0.125
+    },
+    "maxmin_value": 0.125,
+    "signed_dim": 4
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0",
+    "graph_hash": "7c76fc2219fe"
+   },
+   "first_order": {
+    "rank": 4,
+    "dim_quotient": 5,
+    "kernel_dim": 1,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": false,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "N4_arc_z_1_2",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76",
+    "pipeline": "jobs/atlas_small_n.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0,
+      -0.8273268353539887,
+      -0.1726731646460115,
+      1.2386923780787705e-16
+     ],
+     [
+      -0.8273268353539887,
+      1.0,
+      1.2386923780787705e-16,
+      -0.1726731646460115
+     ],
+     [
+      -0.1726731646460115,
+      1.2386923780787705e-16,
+      1.0,
+      -0.8273268353539887
+     ],
+     [
+      1.2386923780787705e-16,
+      -0.1726731646460115,
+      -0.8273268353539887,
+      1.0
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "second_order": {
+    "level": 0,
+    "status": "numerical",
+    "kernel_dim": 1,
+    "hessian_eigenvalues_on_kernel": [
+     0.0
+    ],
+    "descending": 0,
+    "ascending": 0,
+    "null": 1,
+    "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/small_n.json",
+     "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+     "pointer": "/classes/14/gram_exact"
+    },
+    "entries": [
+     [
+      "1",
+      "-1/2 - 1/14*sqrt(21)",
+      "-1/2 + 1/14*sqrt(21)",
+      "0"
+     ],
+     [
+      "-1/2 - 1/14*sqrt(21)",
+      "1",
+      "0",
+      "-1/2 + 1/14*sqrt(21)"
+     ],
+     [
+      "-1/2 + 1/14*sqrt(21)",
+      "0",
+      "1",
+      "-1/2 - 1/14*sqrt(21)"
+     ],
+     [
+      "0",
+      "-1/2 + 1/14*sqrt(21)",
+      "-1/2 - 1/14*sqrt(21)",
+      "1"
+     ]
+    ],
+    "note": "exact Gram matrix of the closed form (Q or Q(sqrt k), entries as strings, labelled as the X of this record); checked by jobs/atlas_small_n.py: entries equal the inner products of X to 1e-14, det G = 0 exactly for N >= 3"
+   },
+   "small_n": {
+    "params": {
+     "x": 0.08633658232300573,
+     "y": 0.41366341767699427,
+     "z": 0.5
+    },
+    "drawn_by": "interior point of the arc at z = 1/2 (x < y the roots of t^2 - (1 - z) t + z (1 - z)/(16 z - 1))",
+    "stratum": "N4_ARC"
+   },
+   "obs_id": "o-a62b7daae8bc9b05",
+   "seq": 4,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null,
+    "note": "closed form, not from a search"
+   },
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 1,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     }
+    ],
+    "codim": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "coindex": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "sharp minimum",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 1
+   }
+  },
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_arc_z_17_32",
+   "X": [
+    [
+     0.2949051454478467,
+     0.6178842571132432,
+     0.7288689868556627
+    ],
+    [
+     0.2949051454478467,
+     -0.6178842571132432,
+     -0.7288689868556627
+    ],
+    [
+     -0.2949051454478467,
+     0.6178842571132432,
+     -0.7288689868556627
+    ],
+    [
+     -0.2949051454478467,
+     -0.6178842571132432,
+     0.7288689868556627
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.375,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v0x",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.3750000000000001,
+     "note": "cross-check by sphcap.discrepancy (as fixed in audit-refactor 7f7fd86 / 105e525): method exact 0.3750000000000001, method bruteforce 0.375; |exact - 3/8| = 1.1e-16, |bruteforce - 3/8| = 0.0e+00",
+     "cross_check": {
+      "exact": 0.3750000000000001,
+      "bruteforce": 0.375,
+      "closed_form": "3/8"
+     }
+    },
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D of this configuration; hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 8,
+    "hyperedges": [
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        0.8477302070140108,
+        0.40460652156441185,
+        -0.34299717028501764
+       ],
+       "height": 0.25,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       2
+      ],
+      "interior": [
+       3
+      ],
+      "branches": [
+       "low:0-1-2"
+      ],
+      "cap": {
+       "center": [
+        -0.8477302070140108,
+        -0.40460652156441185,
+        0.34299717028501764
+       ],
+       "height": -0.25,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [
+       2
+      ],
+      "branches": [
+       "up:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8477302070140108,
+        0.40460652156441185,
+        -0.34299717028501764
+       ],
+       "height": -0.24999999999999997,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       0,
+       1,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:0-1-3"
+      ],
+      "cap": {
+       "center": [
+        0.8477302070140108,
+        -0.40460652156441185,
+        0.34299717028501764
+       ],
+       "height": 0.24999999999999997,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "up:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8477302070140108,
+        0.40460652156441185,
+        0.34299717028501764
+       ],
+       "height": 0.24999999999999997,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     },
+     {
+      "boundary": [
+       0,
+       2,
+       3
+      ],
+      "interior": [
+       1
+      ],
+      "branches": [
+       "low:0-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8477302070140108,
+        -0.40460652156441185,
+        -0.34299717028501764
+       ],
+       "height": -0.24999999999999997,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [
+       0
+      ],
+      "branches": [
+       "up:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        0.8477302070140108,
+        0.40460652156441185,
+        0.34299717028501764
+       ],
+       "height": -0.24999999999999997,
+       "angular_radius": 1.8234765819369754,
+       "angular_radius_deg": 104.47751218592994,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 4
+     },
+     {
+      "boundary": [
+       1,
+       2,
+       3
+      ],
+      "interior": [],
+      "branches": [
+       "low:1-2-3"
+      ],
+      "cap": {
+       "center": [
+        -0.8477302070140108,
+        -0.40460652156441185,
+        -0.34299717028501764
+       ],
+       "height": 0.24999999999999997,
+       "angular_radius": 1.318116071652818,
+       "angular_radius_deg": 75.52248781407008,
+       "level": 0,
+       "status": "numerical",
+       "note": "the over-full closed cap {y : <y, center> >= height}; boundary circle: center height*center, Euclidean radius sqrt(1 - height^2); double precision from the stored X"
+      },
+      "weight_range": [
+       0.0,
+       0.5
+      ],
+      "in_support": true,
+      "count": 3
+     }
+    ],
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0"
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 3,
+    "support": [
+     "up:0-1-2",
+     "low:0-1-2",
+     "up:0-1-3",
+     "low:0-1-3",
+     "up:0-2-3",
+     "low:0-2-3",
+     "up:1-2-3",
+     "low:1-2-3"
+    ],
+    "ranges": {
+     "up:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-2": [
+      0.0,
+      0.5
+     ],
+     "up:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-1-3": [
+      0.0,
+      0.5
+     ],
+     "up:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:0-2-3": [
+      0.0,
+      0.5
+     ],
+     "up:1-2-3": [
+      0.0,
+      0.5
+     ],
+     "low:1-2-3": [
+      0.0,
+      0.5
+     ]
+    },
+    "maxmin": {
+     "up:0-1-2": 0.125,
+     "low:0-1-2": 0.125,
+     "up:0-1-3": 0.125,
+     "low:0-1-3": 0.125,
+     "up:0-2-3": 0.125,
+     "low:0-2-3": 0.125,
+     "up:1-2-3": 0.125,
+     "low:1-2-3": 0.125
+    },
+    "maxmin_value": 0.125,
+    "signed_dim": 4
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0",
+    "graph_hash": "7c76fc2219fe"
+   },
+   "first_order": {
+    "rank": 4,
+    "dim_quotient": 5,
+    "kernel_dim": 1,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": false,
+    "level": 0,
+    "status": "numerical"
+   },
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "N4_arc_z_17_32",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76",
+    "pipeline": "jobs/atlas_small_n.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0000000000000002,
+      -0.8260619103767691,
+      -0.23643808962323132,
+      0.0625000000000001
+     ],
+     [
+      -0.8260619103767691,
+      1.0000000000000002,
+      0.0625000000000001,
+      -0.23643808962323132
+     ],
+     [
+      -0.23643808962323132,
+      0.0625000000000001,
+      1.0000000000000002,
+      -0.8260619103767691
+     ],
+     [
+      0.0625000000000001,
+      -0.23643808962323132,
+      -0.8260619103767691,
+      1.0000000000000002
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "second_order": {
+    "level": 0,
+    "status": "numerical",
+    "kernel_dim": 1,
+    "hessian_eigenvalues_on_kernel": [
+     0.0
+    ],
+    "descending": 0,
+    "ascending": 0,
+    "null": 1,
+    "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers; the weight space has positive dimension, so the result may depend on that choice"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/small_n.json",
+     "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+     "pointer": "/classes/15/gram_exact"
+    },
+    "entries": [
+     [
+      "1",
+      "-17/32 - 1/32*sqrt(89)",
+      "-17/32 + 1/32*sqrt(89)",
+      "1/16"
+     ],
+     [
+      "-17/32 - 1/32*sqrt(89)",
+      "1",
+      "1/16",
+      "-17/32 + 1/32*sqrt(89)"
+     ],
+     [
+      "-17/32 + 1/32*sqrt(89)",
+      "1/16",
+      "1",
+      "-17/32 - 1/32*sqrt(89)"
+     ],
+     [
+      "1/16",
+      "-17/32 + 1/32*sqrt(89)",
+      "-17/32 - 1/32*sqrt(89)",
+      "1"
+     ]
+    ],
+    "note": "exact Gram matrix of the closed form (Q or Q(sqrt k), entries as strings, labelled as the X of this record); checked by jobs/atlas_small_n.py: entries equal the inner products of X to 1e-14, det G = 0 exactly for N >= 3"
+   },
+   "small_n": {
+    "params": {
+     "x": 0.08696904481161558,
+     "y": 0.3817809551883844,
+     "z": 0.53125
+    },
+    "drawn_by": "interior point of the arc at z = 17/32 (x < y the roots of t^2 - (1 - z) t + z (1 - z)/(16 z - 1))",
+    "stratum": "N4_ARC"
+   },
+   "obs_id": "o-d88be67907fece3c",
+   "seq": 5,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null,
+    "note": "closed form, not from a search"
+   },
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 1,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     }
+    ],
+    "codim": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "coindex": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "sharp minimum",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "stuck_point": {
+    "level": 0,
+    "status": "numerical",
+    "script": "sphcap/stuck.py",
+    "class": "non-strict minimum",
+    "flat_dim": 1
+   }
+  }
+ ],
+ "families": [
+  {
+   "kind": "family",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_ARC",
+   "label": "the disphenoid arc on the cubic, interior points",
+   "stratum_kind": "minimizer_family",
+   "key_basis": {
+    "method": "active-hypergraph canonical code at the generic sample N4_arc_z_1_2 (individualization-refinement, jobs/atlas_export.py canonical_code); the ordinal is minted by the atlas",
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0",
+    "graph_hash": "7c76fc2219fe"
+   },
+   "system": {
+    "level": 3,
+    "status": "proved (manuscript)",
+    "proof": {
+     "kind": "manuscript",
+     "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+    },
+    "variables": [
+     {
+      "name": "x_0, ..., x_3",
+      "kind": "coordinates",
+      "meaning": "the points, unit vectors of R^3"
+     },
+     {
+      "name": "x, y, z",
+      "kind": "parameters",
+      "meaning": "squares of the coordinates of the disphenoid (+-sqrt x, +-sqrt y, +-sqrt z), even number of minus signs"
+     },
+     {
+      "name": "G_ij",
+      "kind": "gram",
+      "meaning": "<x_i, x_j> = 2x - 1, 2y - 1 or 2z - 1 (sphcap/gram.py disphenoid_gram)"
+     }
+    ],
+    "equations": [
+     "x + y + z = 1",
+     "16 x y z = x y + y z + z x (on x + y + z = 1 this is sphcap/gram.py n4_cubic: every face cap has height t = 1/4)",
+     "x_0 = (sqrt x, sqrt y, sqrt z), x_1 = (sqrt x, -sqrt y, -sqrt z), x_2 = (-sqrt x, sqrt y, -sqrt z), x_3 = (-sqrt x, -sqrt y, sqrt z)"
+    ],
+    "inequalities": [
+     "max(x, y, z) <= 9/16 (at 9/16 the smallest cap through an edge reaches D = 3/8)",
+     "x, y, z > 0",
+     "(19 + sqrt 105)/64 < z < 9/16 (modulo relabelling)"
+    ],
+    "gauge": "configurations modulo rotations (O(3) including reflections) and relabelling",
+    "note": "the stratum as a subset of the minimizer set; exact strings"
+   },
+   "dimension": [
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "value": 1,
+     "note": "modulo rotations and relabelling",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     }
+    }
+   ],
+   "parameterization": {
+    "level": 3,
+    "status": "proved (manuscript)",
+    "proof": {
+     "kind": "manuscript",
+     "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+    },
+    "parameters": [
+     {
+      "name": "z",
+      "domain": "[(19 + sqrt 105)/64, 9/16]"
+     }
+    ],
+    "region": [
+     "(19 + sqrt 105)/64 <= z <= 9/16"
+    ],
+    "map": {
+     "kind": "points",
+     "formula": [
+      "y = ((1 - z) + sqrt((1 - z)^2 - 4 z (1 - z)/(16 z - 1)))/2, x = 1 - y - z (x < y: the two roots of t^2 - (1 - z) t + z (1 - z)/(16 z - 1))",
+      "x_0 = (sqrt x, sqrt y, sqrt z), x_1 = (sqrt x, -sqrt y, -sqrt z), x_2 = (-sqrt x, sqrt y, -sqrt z), x_3 = (-sqrt x, -sqrt y, sqrt z)"
+     ]
+    },
+    "covering": "z in [(14 + sqrt 70)/64, 9/16] covers the arc of minimizers in the labelled configuration space; the relabelling that swaps y and z (a symmetry of the disphenoid family) folds it at z = (19 + sqrt 105)/64, where y = z, so modulo relabelling the arc is z in [(19 + sqrt 105)/64, 9/16]",
+    "source": "sphcap/gram.py disphenoid_points, n4_cubic, N4_ARC_END_SYMMETRIC, N4_ARC_END_EDGE"
+   },
+   "value": [
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D on the whole stratum (constant); hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    },
+    {
+     "id": "v0",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.3750000000000001,
+     "note": "largest D over the samples (sphcap.discrepancy exact); largest deviation from the closed form 1.1e-16"
+    }
+   ],
+   "closure": [
+    {
+     "name": "N4_SYM",
+     "reason": "orbit_type"
+    },
+    {
+     "name": "N4_EDGE",
+     "reason": "active_type"
+    }
+   ],
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 1,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 1,
+      "note": "rank, modulo rotations, of the derivative of the parameterization along the stratum at N4_arc_z_15_32 (relative tolerance 1e-7)"
+     }
+    ],
+    "codim": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 0,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_z_15_32 yes, N4_arc_z_1_2 yes, N4_arc_z_17_32 yes"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "coindex": [
+     {
+      "value": 4,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 4,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_z_15_32 yes, N4_arc_z_1_2 yes, N4_arc_z_17_32 yes"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 0,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_z_15_32 yes, N4_arc_z_1_2 yes, N4_arc_z_17_32 yes"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "sharp minimum",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "two-branch balance: each face {i, j, k} has two worst caps, the cap through the face without the fourth point (count 3/4) and the one with it (count 1), with values 1/4 + t_F/2 and 1/2 - t_F/2, so D - 3/8 >= |t_F - 1/4|/2 for every face F; the arc is {t_F = 1/4 for all F}, and where the four differentials dt_F are independent modulo rotations D grows at first order in every transverse direction (rank 4 at the samples: first_order.rank of the export, level 0)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "samples": [
+    {
+     "name": "N4_arc_z_15_32",
+     "obs_id": "o-fd48e0db49299503",
+     "params": {
+      "x": 0.08605511792598144,
+      "y": 0.4451948820740186,
+      "z": 0.46875
+     },
+     "drawn_by": "interior point of the arc at z = 15/32 (x < y the roots of t^2 - (1 - z) t + z (1 - z)/(16 z - 1))"
+    },
+    {
+     "name": "N4_arc_z_1_2",
+     "obs_id": "o-a62b7daae8bc9b05",
+     "params": {
+      "x": 0.08633658232300573,
+      "y": 0.41366341767699427,
+      "z": 0.5
+     },
+     "drawn_by": "interior point of the arc at z = 1/2 (x < y the roots of t^2 - (1 - z) t + z (1 - z)/(16 z - 1))"
+    },
+    {
+     "name": "N4_arc_z_17_32",
+     "obs_id": "o-d88be67907fece3c",
+     "params": {
+      "x": 0.08696904481161558,
+      "y": 0.3817809551883844,
+      "z": 0.53125
+     },
+     "drawn_by": "interior point of the arc at z = 17/32 (x < y the roots of t^2 - (1 - z) t + z (1 - z)/(16 z - 1))"
+    }
+   ],
+   "sampling": {
+    "method": "closed-form points chosen by hand: a generic point of the stratum with exact cosines or exact parameters, or the special point itself (sphcap/data/small_n.json, field drawn_by)",
+    "count": 3
+   },
+   "charts": [
+    {
+     "level": 0,
+     "status": "numerical",
+     "sample": "N4_arc_z_15_32",
+     "obs_id": "o-fd48e0db49299503",
+     "base_point": [
+      [
+       0.29335152620360005,
+       0.6672292575075066,
+       0.6846531968814576
+      ],
+      [
+       0.29335152620360005,
+       -0.6672292575075066,
+       -0.6846531968814576
+      ],
+      [
+       -0.29335152620360005,
+       0.6672292575075066,
+       -0.6846531968814576
+      ],
+      [
+       -0.29335152620360005,
+       -0.6672292575075066,
+       0.6846531968814576
+      ]
+     ],
+     "tangent_basis": [
+      [
+       0.003091190282,
+       -0.35873500532,
+       0.34828097924,
+       0.003091190282,
+       0.35873500532,
+       -0.34828097924,
+       -0.003091190282,
+       -0.35873500532,
+       -0.34828097924,
+       -0.003091190282,
+       0.35873500532,
+       0.34828097924
+      ]
+     ],
+     "coordinates": "displacements of x_0, ..., x_3 in R^3, flattened, orthogonal to the rotations",
+     "note": "tangent basis of the stratum at the sample from the derivative of the parameterization (central differences, h = 1e-6), orthonormalized; double precision"
+    },
+    {
+     "level": 0,
+     "status": "numerical",
+     "sample": "N4_arc_z_1_2",
+     "obs_id": "o-a62b7daae8bc9b05",
+     "base_point": [
+      [
+       0.29383087367226357,
+       0.6431667106411791,
+       0.7071067811865476
+      ],
+      [
+       0.29383087367226357,
+       -0.6431667106411791,
+       -0.7071067811865476
+      ],
+      [
+       -0.29383087367226357,
+       0.6431667106411791,
+       -0.7071067811865476
+      ],
+      [
+       -0.29383087367226357,
+       -0.6431667106411791,
+       0.7071067811865476
+      ]
+     ],
+     "tangent_basis": [
+      [
+       0.011540867287,
+       -0.37216014297,
+       0.333711906241,
+       0.011540867287,
+       0.37216014297,
+       -0.333711906241,
+       -0.011540867287,
+       -0.37216014297,
+       -0.333711906241,
+       -0.011540867287,
+       0.37216014297,
+       0.333711906241
+      ]
+     ],
+     "coordinates": "displacements of x_0, ..., x_3 in R^3, flattened, orthogonal to the rotations",
+     "note": "tangent basis of the stratum at the sample from the derivative of the parameterization (central differences, h = 1e-6), orthonormalized; double precision"
+    },
+    {
+     "level": 0,
+     "status": "numerical",
+     "sample": "N4_arc_z_17_32",
+     "obs_id": "o-d88be67907fece3c",
+     "base_point": [
+      [
+       0.29490514544784663,
+       0.6178842571132431,
+       0.7288689868556626
+      ],
+      [
+       0.29490514544784663,
+       -0.6178842571132431,
+       -0.7288689868556626
+      ],
+      [
+       -0.29490514544784663,
+       0.6178842571132431,
+       -0.7288689868556626
+      ],
+      [
+       -0.29490514544784663,
+       -0.6178842571132431,
+       0.7288689868556626
+      ]
+     ],
+     "tangent_basis": [
+      [
+       0.020808194707,
+       -0.385187387466,
+       0.318115852435,
+       0.020808194707,
+       0.385187387466,
+       -0.318115852435,
+       -0.020808194707,
+       -0.385187387466,
+       -0.318115852435,
+       -0.020808194707,
+       0.385187387466,
+       0.318115852435
+      ]
+     ],
+     "coordinates": "displacements of x_0, ..., x_3 in R^3, flattened, orthogonal to the rotations",
+     "note": "tangent basis of the stratum at the sample from the derivative of the parameterization (central differences, h = 1e-6), orthonormalized; double precision"
+    }
+   ],
+   "probe": {
+    "level": 0,
+    "status": "numerical",
+    "results": [
+     {
+      "sample": "N4_arc_z_15_32",
+      "step": 1e-06,
+      "D": 0.375,
+      "param_rank_mod_rotations": 1,
+      "transverse_dim": 4,
+      "max_rate_two_sided_flat": 2.9753977059954195e-08,
+      "max_rate_one_sided_flat": null,
+      "min_rate_opposite_of_one_sided": null,
+      "min_rate_transverse": 0.1495478986202059,
+      "index": 0,
+      "nullity": 0,
+      "coindex": 4,
+      "consistent": true
+     },
+     {
+      "sample": "N4_arc_z_1_2",
+      "step": 1e-06,
+      "D": 0.375,
+      "param_rank_mod_rotations": 1,
+      "transverse_dim": 4,
+      "max_rate_two_sided_flat": 3.0531133177191805e-08,
+      "max_rate_one_sided_flat": null,
+      "min_rate_opposite_of_one_sided": null,
+      "min_rate_transverse": 0.15069497527608888,
+      "index": 0,
+      "nullity": 0,
+      "coindex": 4,
+      "consistent": true
+     },
+     {
+      "sample": "N4_arc_z_17_32",
+      "step": 1e-06,
+      "D": 0.3750000000000001,
+      "param_rank_mod_rotations": 1,
+      "transverse_dim": 4,
+      "max_rate_two_sided_flat": 3.2307490016592055e-08,
+      "max_rate_one_sided_flat": null,
+      "min_rate_opposite_of_one_sided": null,
+      "min_rate_transverse": 0.15116869456210935,
+      "index": 0,
+      "nullity": 0,
+      "coindex": 4,
+      "consistent": true
+     }
+    ],
+    "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_z_15_32 yes, N4_arc_z_1_2 yes, N4_arc_z_17_32 yes"
+   },
+   "trajectory": {
+    "level": 0,
+    "status": "numerical",
+    "parameters": [
+     "z"
+    ],
+    "points": [
+     {
+      "params": {
+       "z": 0.4569836057181187
+      },
+      "X": [
+       [
+        0.2933134646820064,
+        0.6760056255077459,
+        0.6760056255077458
+       ],
+       [
+        0.2933134646820064,
+        -0.6760056255077459,
+        -0.6760056255077458
+       ],
+       [
+        -0.2933134646820064,
+        0.6760056255077459,
+        -0.6760056255077458
+       ],
+       [
+        -0.2933134646820064,
+        -0.6760056255077459,
+        0.6760056255077458
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4602809930394275
+      },
+      "X": [
+       [
+        0.29331644710015825,
+        0.6735610357058316,
+        0.678440117504432
+       ],
+       [
+        0.29331644710015825,
+        -0.6735610357058316,
+        -0.678440117504432
+       ],
+       [
+        -0.29331644710015825,
+        0.6735610357058316,
+        -0.678440117504432
+       ],
+       [
+        -0.29331644710015825,
+        -0.6735610357058316,
+        0.678440117504432
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4635783803607363
+      },
+      "X": [
+       [
+        0.2933254033423571,
+        0.6711049302406497,
+        0.6808659048305593
+       ],
+       [
+        0.2933254033423571,
+        -0.6711049302406497,
+        -0.6808659048305593
+       ],
+       [
+        -0.2933254033423571,
+        0.6711049302406497,
+        -0.6808659048305593
+       ],
+       [
+        -0.2933254033423571,
+        -0.6711049302406497,
+        0.6808659048305593
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4668757676820451
+      },
+      "X": [
+       [
+        0.29334035091884075,
+        0.6686371742886917,
+        0.6832830801959354
+       ],
+       [
+        0.29334035091884075,
+        -0.6686371742886917,
+        -0.6832830801959354
+       ],
+       [
+        -0.29334035091884075,
+        0.6686371742886917,
+        -0.6832830801959354
+       ],
+       [
+        -0.29334035091884075,
+        -0.6686371742886917,
+        0.6832830801959354
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4701731550033539
+      },
+      "X": [
+       [
+        0.29336131276337263,
+        0.6661576278707592,
+        0.6856917346762712
+       ],
+       [
+        0.29336131276337263,
+        -0.6661576278707592,
+        -0.6856917346762712
+       ],
+       [
+        -0.29336131276337263,
+        0.6661576278707592,
+        -0.6856917346762712
+       ],
+       [
+        -0.29336131276337263,
+        -0.6661576278707592,
+        0.6856917346762712
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4734705423246626
+      },
+      "X": [
+       [
+        0.29338831730964754,
+        0.6636661456949201,
+        0.6880919577532225
+       ],
+       [
+        0.29338831730964754,
+        -0.6636661456949201,
+        -0.6880919577532225
+       ],
+       [
+        -0.29338831730964754,
+        0.6636661456949201,
+        -0.6880919577532225
+       ],
+       [
+        -0.29338831730964754,
+        -0.6636661456949201,
+        0.6880919577532225
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4767679296459714
+      },
+      "X": [
+       [
+        0.2934213985817439,
+        0.6611625769872052,
+        0.6904838373531791
+       ],
+       [
+        0.2934213985817439,
+        -0.6611625769872052,
+        -0.6904838373531791
+       ],
+       [
+        -0.2934213985817439,
+        0.6611625769872052,
+        -0.6904838373531791
+       ],
+       [
+        -0.2934213985817439,
+        -0.6611625769872052,
+        0.6904838373531791
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4800653169672802
+      },
+      "X": [
+       [
+        0.2934605962991541,
+        0.658646765309346,
+        0.6928674598848471
+       ],
+       [
+        0.2934605962991541,
+        -0.658646765309346,
+        -0.6928674598848471
+       ],
+       [
+        -0.2934605962991541,
+        0.658646765309346,
+        -0.6928674598848471
+       ],
+       [
+        -0.2934605962991541,
+        -0.658646765309346,
+        0.6928674598848471
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.483362704288589
+      },
+      "X": [
+       [
+        0.29350595599701224,
+        0.656118548362787,
+        0.6952429102756741
+       ],
+       [
+        0.29350595599701224,
+        -0.656118548362787,
+        -0.6952429102756741
+       ],
+       [
+        -0.29350595599701224,
+        0.656118548362787,
+        -0.6952429102756741
+       ],
+       [
+        -0.29350595599701224,
+        -0.656118548362787,
+        0.6952429102756741
+       ]
+      ],
+      "D": 0.3750000000000001
+     },
+     {
+      "params": {
+       "z": 0.4866600916098978
+      },
+      "X": [
+       [
+        0.29355752916221145,
+        0.6535777577781235,
+        0.6976102720071558
+       ],
+       [
+        0.29355752916221145,
+        -0.6535777577781235,
+        -0.6976102720071558
+       ],
+       [
+        -0.29355752916221145,
+        0.6535777577781235,
+        -0.6976102720071558
+       ],
+       [
+        -0.29355752916221145,
+        -0.6535777577781235,
+        0.6976102720071558
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4899574789312066
+      },
+      "X": [
+       [
+        0.29361537338621807,
+        0.651024218889025,
+        0.699969627149069
+       ],
+       [
+        0.29361537338621807,
+        -0.651024218889025,
+        -0.699969627149069
+       ],
+       [
+        -0.29361537338621807,
+        0.651024218889025,
+        -0.699969627149069
+       ],
+       [
+        -0.29361537338621807,
+        -0.651024218889025,
+        0.699969627149069
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.4932548662525154
+      },
+      "X": [
+       [
+        0.29367955253546113,
+        0.6484577504896182,
+        0.7023210563926696
+       ],
+       [
+        0.29367955253546113,
+        -0.6484577504896182,
+        -0.7023210563926696
+       ],
+       [
+        -0.29367955253546113,
+        0.6484577504896182,
+        -0.7023210563926696
+       ],
+       [
+        -0.29367955253546113,
+        -0.6484577504896182,
+        0.7023210563926696
+       ]
+      ],
+      "D": 0.3750000000000001
+     },
+     {
+      "params": {
+       "z": 0.49655225357382415
+      },
+      "X": [
+       [
+        0.2937501369403218,
+        0.645878164574185,
+        0.7046646390828932
+       ],
+       [
+        0.2937501369403218,
+        -0.645878164574185,
+        -0.7046646390828932
+       ],
+       [
+        -0.2937501369403218,
+        0.645878164574185,
+        -0.7046646390828932
+       ],
+       [
+        -0.2937501369403218,
+        -0.645878164574185,
+        0.7046646390828932
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.49984964089513295
+      },
+      "X": [
+       [
+        0.29382720360382797,
+        0.6432852660579299,
+        0.7070004532495952
+       ],
+       [
+        0.29382720360382797,
+        -0.6432852660579299,
+        -0.7070004532495952
+       ],
+       [
+        -0.29382720360382797,
+        0.6432852660579299,
+        -0.7070004532495952
+       ],
+       [
+        -0.29382720360382797,
+        -0.6432852660579299,
+        0.7070004532495952
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5031470282164417
+      },
+      "X": [
+       [
+        0.29391083643133137,
+        0.6406788524774276,
+        0.7093285756378646
+       ],
+       [
+        0.29391083643133137,
+        -0.6406788524774276,
+        -0.7093285756378646
+       ],
+       [
+        -0.29391083643133137,
+        0.6406788524774276,
+        -0.7093285756378646
+       ],
+       [
+        -0.29391083643133137,
+        -0.6406788524774276,
+        0.7093285756378646
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5064444155377505
+      },
+      "X": [
+       [
+        0.2940011264825529,
+        0.6380587136692355,
+        0.7116490817374463
+       ],
+       [
+        0.2940011264825529,
+        -0.6380587136692355,
+        -0.7116490817374463
+       ],
+       [
+        -0.2940011264825529,
+        0.6380587136692355,
+        -0.7116490817374463
+       ],
+       [
+        -0.2940011264825529,
+        -0.6380587136692355,
+        0.7116490817374463
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5097418028590593
+      },
+      "X": [
+       [
+        0.29409817224757107,
+        0.6354246314249855,
+        0.7139620458113017
+       ],
+       [
+        0.29409817224757107,
+        -0.6354246314249855,
+        -0.7139620458113017
+       ],
+       [
+        -0.29409817224757107,
+        0.6354246314249855,
+        -0.7139620458113017
+       ],
+       [
+        -0.29409817224757107,
+        -0.6354246314249855,
+        0.7139620458113017
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5130391901803681
+      },
+      "X": [
+       [
+        0.29420207994848574,
+        0.6327763791211052,
+        0.7162675409233398
+       ],
+       [
+        0.29420207994848574,
+        -0.6327763791211052,
+        -0.7162675409233398
+       ],
+       [
+        -0.29420207994848574,
+        0.6327763791211052,
+        -0.7162675409233398
+       ],
+       [
+        -0.29420207994848574,
+        -0.6327763791211052,
+        0.7162675409233398
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5163365775016769
+      },
+      "X": [
+       [
+        0.29431296386869893,
+        0.630113721321116,
+        0.7185656389653466
+       ],
+       [
+        0.29431296386869893,
+        -0.630113721321116,
+        -0.7185656389653466
+       ],
+       [
+        -0.29431296386869893,
+        0.630113721321116,
+        -0.7185656389653466
+       ],
+       [
+        -0.29431296386869893,
+        -0.630113721321116,
+        0.7185656389653466
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5196339648229857
+      },
+      "X": [
+       [
+        0.2944309467119639,
+        0.627436413348246,
+        0.7208564106831441
+       ],
+       [
+        0.2944309467119639,
+        -0.627436413348246,
+        -0.7208564106831441
+       ],
+       [
+        -0.2944309467119639,
+        0.627436413348246,
+        -0.7208564106831441
+       ],
+       [
+        -0.2944309467119639,
+        -0.627436413348246,
+        0.7208564106831441
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5229313521442945
+      },
+      "X": [
+       [
+        0.2945561599936063,
+        0.6247442008258471,
+        0.7231399257020004
+       ],
+       [
+        0.2945561599936063,
+        -0.6247442008258471,
+        -0.7231399257020004
+       ],
+       [
+        -0.2945561599936063,
+        0.6247442008258471,
+        -0.7231399257020004
+       ],
+       [
+        -0.2945561599936063,
+        -0.6247442008258471,
+        0.7231399257020004
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5262287394656033
+      },
+      "X": [
+       [
+        0.2946887444665873,
+        0.6220368191828383,
+        0.7254162525513219
+       ],
+       [
+        0.2946887444665873,
+        -0.6220368191828383,
+        -0.7254162525513219
+       ],
+       [
+        -0.2946887444665873,
+        0.6220368191828383,
+        -0.7254162525513219
+       ],
+       [
+        -0.2946887444665873,
+        -0.6220368191828383,
+        0.7254162525513219
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5295261267869121
+      },
+      "X": [
+       [
+        0.2948288505853891,
+        0.6193139931210874,
+        0.7276854586886509
+       ],
+       [
+        0.2948288505853891,
+        -0.6193139931210874,
+        -0.7276854586886509
+       ],
+       [
+        -0.2948288505853891,
+        0.6193139931210874,
+        -0.7276854586886509
+       ],
+       [
+        -0.2948288505853891,
+        -0.6193139931210874,
+        0.7276854586886509
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5328235141082209
+      },
+      "X": [
+       [
+        0.29497663901104465,
+        0.6165754360413063,
+        0.7299476105229887
+       ],
+       [
+        0.29497663901104465,
+        -0.6165754360413063,
+        -0.7299476105229887
+       ],
+       [
+        -0.29497663901104465,
+        0.6165754360413063,
+        -0.7299476105229887
+       ],
+       [
+        -0.29497663901104465,
+        -0.6165754360413063,
+        0.7299476105229887
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5361209014295296
+      },
+      "X": [
+       [
+        0.29513228116102536,
+        0.6138208494236408,
+        0.7322027734374745
+       ],
+       [
+        0.29513228116102536,
+        -0.6138208494236408,
+        -0.7322027734374745
+       ],
+       [
+        -0.29513228116102536,
+        0.6138208494236408,
+        -0.7322027734374745
+       ],
+       [
+        -0.29513228116102536,
+        -0.6138208494236408,
+        0.7322027734374745
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5394182887508385
+      },
+      "X": [
+       [
+        0.29529595980813156,
+        0.611049922158702,
+        0.7344510118114336
+       ],
+       [
+        0.29529595980813156,
+        -0.611049922158702,
+        -0.7344510118114336
+       ],
+       [
+        -0.29529595980813156,
+        0.611049922158702,
+        -0.7344510118114336
+       ],
+       [
+        -0.29529595980813156,
+        -0.611049922158702,
+        0.7344510118114336
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5427156760721472
+      },
+      "X": [
+       [
+        0.29546786973303224,
+        0.6082623298242927,
+        0.736692389041822
+       ],
+       [
+        0.29546786973303224,
+        -0.6082623298242927,
+        -0.736692389041822
+       ],
+       [
+        -0.29546786973303224,
+        0.6082623298242927,
+        -0.736692389041822
+       ],
+       [
+        -0.29546786973303224,
+        -0.6082623298242927,
+        0.736692389041822
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.546013063393456
+      },
+      "X": [
+       [
+        0.29564821843565836,
+        0.6054577339025122,
+        0.7389269675640862
+       ],
+       [
+        0.29564821843565836,
+        -0.6054577339025122,
+        -0.7389269675640862
+       ],
+       [
+        -0.29564821843565836,
+        0.6054577339025122,
+        -0.7389269675640862
+       ],
+       [
+        -0.29564821843565836,
+        -0.6054577339025122,
+        0.7389269675640862
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5493104507147648
+      },
+      "X": [
+       [
+        0.2958372269112972,
+        0.6026357809312926,
+        0.7411548088724547
+       ],
+       [
+        0.2958372269112972,
+        -0.6026357809312926,
+        -0.7411548088724547
+       ],
+       [
+        -0.2958372269112972,
+        0.6026357809312926,
+        -0.7411548088724547
+       ],
+       [
+        -0.2958372269112972,
+        -0.6026357809312926,
+        0.7411548088724547
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5526078380360736
+      },
+      "X": [
+       [
+        0.2960351304979572,
+        0.599796101583683,
+        0.7433759735396844
+       ],
+       [
+        0.2960351304979572,
+        -0.599796101583683,
+        -0.7433759735396844
+       ],
+       [
+        -0.2960351304979572,
+        0.599796101583683,
+        -0.7433759735396844
+       ],
+       [
+        -0.2960351304979572,
+        -0.599796101583683,
+        0.7433759735396844
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5559052253573824
+      },
+      "X": [
+       [
+        0.2962421798024143,
+        0.5969383096673656,
+        0.7455905212362764
+       ],
+       [
+        0.2962421798024143,
+        -0.5969383096673656,
+        -0.7455905212362764
+       ],
+       [
+        -0.2962421798024143,
+        0.5969383096673656,
+        -0.7455905212362764
+       ],
+       [
+        -0.2962421798024143,
+        -0.5969383096673656,
+        0.7455905212362764
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5592026126786912
+      },
+      "X": [
+       [
+        0.29645864171329567,
+        0.5940620010359328,
+        0.7477985107491798
+       ],
+       [
+        0.29645864171329567,
+        -0.5940620010359328,
+        -0.7477985107491798
+       ],
+       [
+        -0.29645864171329567,
+        0.5940620010359328,
+        -0.7477985107491798
+       ],
+       [
+        -0.29645864171329567,
+        -0.5940620010359328,
+        0.7477985107491798
+       ]
+      ],
+      "D": 0.375
+     },
+     {
+      "params": {
+       "z": 0.5625
+      },
+      "X": [
+       [
+        0.29668480051066093,
+        0.5911667524023567,
+        0.75
+       ],
+       [
+        0.29668480051066093,
+        -0.5911667524023567,
+        -0.75
+       ],
+       [
+        -0.29668480051066093,
+        0.5911667524023567,
+        -0.75
+       ],
+       [
+        -0.29668480051066093,
+        -0.5911667524023567,
+        0.75
+       ]
+      ],
+      "D": 0.375
+     }
+    ],
+    "note": "z from (19 + sqrt 105)/64 (symmetric end) to 9/16 (edge end)"
+   },
+   "plot": {
+    "level": 0,
+    "status": "numerical",
+    "coordinates": [
+     "z"
+    ],
+    "features": [
+     {
+      "stratum": "N4_ARC",
+      "kind": "segment",
+      "points": [
+       [
+        0.4569836057181187
+       ],
+       [
+        0.5625
+       ]
+      ]
+     },
+     {
+      "stratum": "N4_SYM",
+      "kind": "point",
+      "points": [
+       [
+        0.4569836057181187
+       ]
+      ]
+     },
+     {
+      "stratum": "N4_EDGE",
+      "kind": "point",
+      "points": [
+       [
+        0.5625
+       ]
+      ]
+     }
+    ],
+    "curve": {
+     "coordinates": [
+      "y",
+      "z"
+     ],
+     "points": [
+      [
+       0.5625,
+       0.34947812914594933
+      ],
+      [
+       0.559088323681235,
+       0.3530284936601835
+      ],
+      [
+       0.5556706228304593,
+       0.3565788581744177
+      ],
+      [
+       0.55224705967857,
+       0.3601292226886519
+      ],
+      [
+       0.548817786865438,
+       0.36367958720288607
+      ],
+      [
+       0.5453829479414769,
+       0.36722995171712025
+      ],
+      [
+       0.5419426778304217,
+       0.3707803162313544
+      ],
+      [
+       0.5384971032562871,
+       0.37433068074558856
+      ],
+      [
+       0.5350463431371847,
+       0.37788104525982275
+      ],
+      [
+       0.5315905089484219,
+       0.38143140977405693
+      ],
+      [
+       0.5281297050570732,
+       0.3849817742882911
+      ],
+      [
+       0.5246640290300013,
+       0.3885321388025253
+      ],
+      [
+       0.5211935719171172,
+       0.3920825033167595
+      ],
+      [
+       0.5177184185114909,
+       0.39563286783099366
+      ],
+      [
+       0.5142386475877709,
+       0.39918323234522785
+      ],
+      [
+       0.5107543321202188,
+       0.402733596859462
+      ],
+      [
+       0.5072655394815414,
+       0.40628396137369616
+      ],
+      [
+       0.50377233162357,
+       0.40983432588793034
+      ],
+      [
+       0.5002747652407332,
+       0.4133846904021645
+      ],
+      [
+       0.49677289191715707,
+       0.4169350549163987
+      ],
+      [
+       0.4932667582581344,
+       0.4204854194306329
+      ],
+      [
+       0.4897564060066094,
+       0.4240357839448671
+      ],
+      [
+       0.4862418721452392,
+       0.42758614845910126
+      ],
+      [
+       0.48272318898451183,
+       0.43113651297333544
+      ],
+      [
+       0.4792003842373226,
+       0.4346868774875696
+      ],
+      [
+       0.47567348108033297,
+       0.4382372420018038
+      ],
+      [
+       0.47214249820236787,
+       0.44178760651603793
+      ],
+      [
+       0.46860744984003067,
+       0.4453379710302721
+      ],
+      [
+       0.46506834580064815,
+       0.4488883355445063
+      ],
+      [
+       0.4615251914725902,
+       0.4524387000587405
+      ],
+      [
+       0.4579779878229292,
+       0.45598906457297467
+      ],
+      [
+       0.45442673138234746,
+       0.45953942908720885
+      ],
+      [
+       0.45087141421711263,
+       0.46308979360144303
+      ],
+      [
+       0.4473120238878804,
+       0.4666401581156772
+      ],
+      [
+       0.4437485433949927,
+       0.47019052262991134
+      ],
+      [
+       0.44018095110986943,
+       0.47374088714414553
+      ],
+      [
+       0.4366092206919938,
+       0.4772912516583797
+      ],
+      [
+       0.43303332099090847,
+       0.4808416161726139
+      ],
+      [
+       0.4294532159325336,
+       0.4843919806868481
+      ],
+      [
+       0.42586886438901406,
+       0.48794234520108226
+      ],
+      [
+       0.42228022003118604,
+       0.49149270971531644
+      ],
+      [
+       0.4186872311626254,
+       0.49504307422955063
+      ],
+      [
+       0.41508984053410203,
+       0.4985934387437848
+      ],
+      [
+       0.4114879851371077,
+       0.502143803258019
+      ],
+      [
+       0.40788159597496065,
+       0.5056941677722532
+      ],
+      [
+       0.4042705978097927,
+       0.5092445322864874
+      ],
+      [
+       0.4006549088835225,
+       0.5127948968007215
+      ],
+      [
+       0.39703444061067594,
+       0.5163452613149557
+      ],
+      [
+       0.39340909724065487,
+       0.5198956258291898
+      ],
+      [
+       0.3897787754867523,
+       0.5234459903434241
+      ],
+      [
+       0.3861433641188838,
+       0.5269963548576582
+      ],
+      [
+       0.3825027435166117,
+       0.5305467193718925
+      ],
+      [
+       0.3788567851786221,
+       0.5340970838861265
+      ],
+      [
+       0.3752053511843046,
+       0.5376474484003607
+      ],
+      [
+       0.3715482936025392,
+       0.5411978129145949
+      ],
+      [
+       0.36788545384213844,
+       0.5447481774288291
+      ],
+      [
+       0.36421666193766156,
+       0.5482985419430633
+      ],
+      [
+       0.36054173576346327,
+       0.5518489064572975
+      ],
+      [
+       0.3568604801678595,
+       0.5553992709715316
+      ],
+      [
+       0.353172686018154,
+       0.5589496354857658
+      ],
+      [
+       0.34947812914594933,
+       0.5625
+      ]
+     ],
+     "note": "the arc in the (y, z) plane, cover z in [(14 + sqrt 70)/64, 9/16]; the fold y = z is at the symmetric end"
+    },
+    "note": "the parameter interval of N = 4 modulo relabelling, z in [(19 + sqrt 105)/64, 9/16], double precision"
+   },
+   "note": "the minimizers of D for N = 4 are the disphenoids of the cubic with max(x, y, z) <= 9/16 (D = 3/8): an arc, not a unique minimizer. hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+   "obs_id": "o-aa17dcb8859fa65f",
+   "seq": 6,
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "/families/7",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76"
+   }
+  },
+  {
+   "kind": "family",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_SYM",
+   "label": "the symmetric end of the arc (y = z)",
+   "stratum_kind": "minimizer_family",
+   "key_basis": {
+    "method": "active-hypergraph canonical code at the generic sample N4_arc_end_symmetric (individualization-refinement, jobs/atlas_export.py canonical_code); the ordinal is minted by the atlas",
+    "code": "0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0",
+    "graph_hash": "7c76fc2219fe"
+   },
+   "system": {
+    "level": 3,
+    "status": "proved (manuscript)",
+    "proof": {
+     "kind": "manuscript",
+     "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+    },
+    "variables": [
+     {
+      "name": "x_0, ..., x_3",
+      "kind": "coordinates",
+      "meaning": "the points, unit vectors of R^3"
+     },
+     {
+      "name": "x, y, z",
+      "kind": "parameters",
+      "meaning": "squares of the coordinates of the disphenoid (+-sqrt x, +-sqrt y, +-sqrt z), even number of minus signs"
+     },
+     {
+      "name": "G_ij",
+      "kind": "gram",
+      "meaning": "<x_i, x_j> = 2x - 1, 2y - 1 or 2z - 1 (sphcap/gram.py disphenoid_gram)"
+     }
+    ],
+    "equations": [
+     "x + y + z = 1",
+     "16 x y z = x y + y z + z x (on x + y + z = 1 this is sphcap/gram.py n4_cubic: every face cap has height t = 1/4)",
+     "x_0 = (sqrt x, sqrt y, sqrt z), x_1 = (sqrt x, -sqrt y, -sqrt z), x_2 = (-sqrt x, sqrt y, -sqrt z), x_3 = (-sqrt x, -sqrt y, sqrt z)"
+    ],
+    "inequalities": [
+     "max(x, y, z) <= 9/16 (at 9/16 the smallest cap through an edge reaches D = 3/8)",
+     "x, y, z > 0",
+     "y = z = (19 + sqrt 105)/64",
+     "x = (13 - sqrt 105)/32"
+    ],
+    "gauge": "configurations modulo rotations (O(3) including reflections) and relabelling",
+    "note": "the stratum as a subset of the minimizer set; exact strings"
+   },
+   "dimension": [
+    {
+     "level": 0,
+     "status": "numerical",
+     "value": 0,
+     "note": "modulo rotations and relabelling"
+    }
+   ],
+   "parameterization": null,
+   "value": [
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D on the whole stratum (constant); hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    },
+    {
+     "id": "v0",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.375,
+     "note": "largest D over the samples (sphcap.discrepancy exact); largest deviation from the closed form 0.0e+00"
+    }
+   ],
+   "closure": [],
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 0,
+      "level": 0,
+      "status": "numerical",
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 0,
+      "note": "rank, modulo rotations, of the derivative of the parameterization along the stratum at N4_arc_end_symmetric (relative tolerance 1e-7)"
+     }
+    ],
+    "codim": [
+     {
+      "value": 5,
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 0,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_symmetric yes"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "coindex": [
+     {
+      "value": 4,
+      "level": 0,
+      "status": "numerical",
+      "note": "the arc passes through this point in the labelled configuration space (two-sided flat along it); modulo the relabelling that swaps y and z it is an end point; first-order growth in the four other directions; derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 4,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_symmetric yes"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 1,
+      "level": 0,
+      "status": "numerical",
+      "note": "the arc passes through this point in the labelled configuration space (two-sided flat along it); modulo the relabelling that swaps y and z it is an end point; first-order growth in the four other directions; derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 1,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_symmetric yes"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "non-strict minimum",
+      "level": 0,
+      "status": "numerical",
+      "note": "the arc passes through this point in the labelled configuration space (two-sided flat along it); modulo the relabelling that swaps y and z it is an end point; first-order growth in the four other directions; derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "samples": [
+    {
+     "name": "N4_arc_end_symmetric",
+     "obs_id": "o-d68f50e704d1023e",
+     "params": {
+      "x": 0.08603278856376256,
+      "y": 0.4569836057181187,
+      "z": 0.4569836057181187
+     },
+     "drawn_by": "N4_ARC_END_SYMMETRIC of sphcap/gram.py: x = (13 - sqrt 105)/32, y = z = (19 + sqrt 105)/64"
+    }
+   ],
+   "sampling": {
+    "method": "closed-form points chosen by hand: a generic point of the stratum with exact cosines or exact parameters, or the special point itself (sphcap/data/small_n.json, field drawn_by)",
+    "count": 1
+   },
+   "charts": [
+    {
+     "level": 0,
+     "status": "numerical",
+     "sample": "N4_arc_end_symmetric",
+     "obs_id": "o-d68f50e704d1023e",
+     "base_point": [
+      [
+       0.2933134646820063,
+       0.6760056255077458,
+       0.6760056255077458
+      ],
+      [
+       0.2933134646820063,
+       -0.6760056255077458,
+       -0.6760056255077458
+      ],
+      [
+       -0.2933134646820063,
+       0.6760056255077458,
+       -0.6760056255077458
+      ],
+      [
+       -0.2933134646820063,
+       -0.6760056255077458,
+       0.6760056255077458
+      ]
+     ],
+     "tangent_basis": [],
+     "coordinates": "displacements of x_0, ..., x_3 in R^3, flattened, orthogonal to the rotations",
+     "note": "tangent basis of the stratum at the sample from the derivative of the parameterization (central differences, h = 1e-6), orthonormalized; double precision"
+    }
+   ],
+   "probe": {
+    "level": 0,
+    "status": "numerical",
+    "results": [
+     {
+      "sample": "N4_arc_end_symmetric",
+      "step": 1e-06,
+      "D": 0.375,
+      "param_rank_mod_rotations": 1,
+      "transverse_dim": 4,
+      "max_rate_two_sided_flat": 2.964295475749168e-08,
+      "max_rate_one_sided_flat": null,
+      "min_rate_opposite_of_one_sided": null,
+      "min_rate_transverse": 0.14894303135282172,
+      "index": 0,
+      "nullity": 1,
+      "coindex": 4,
+      "consistent": true
+     }
+    ],
+    "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_symmetric yes"
+   },
+   "plot": {
+    "level": 0,
+    "status": "numerical",
+    "coordinates": [
+     "z"
+    ],
+    "features": [
+     {
+      "stratum": "N4_ARC",
+      "kind": "segment",
+      "points": [
+       [
+        0.4569836057181187
+       ],
+       [
+        0.5625
+       ]
+      ]
+     },
+     {
+      "stratum": "N4_SYM",
+      "kind": "point",
+      "points": [
+       [
+        0.4569836057181187
+       ]
+      ]
+     },
+     {
+      "stratum": "N4_EDGE",
+      "kind": "point",
+      "points": [
+       [
+        0.5625
+       ]
+      ]
+     }
+    ],
+    "curve": {
+     "coordinates": [
+      "y",
+      "z"
+     ],
+     "points": [
+      [
+       0.5625,
+       0.34947812914594933
+      ],
+      [
+       0.559088323681235,
+       0.3530284936601835
+      ],
+      [
+       0.5556706228304593,
+       0.3565788581744177
+      ],
+      [
+       0.55224705967857,
+       0.3601292226886519
+      ],
+      [
+       0.548817786865438,
+       0.36367958720288607
+      ],
+      [
+       0.5453829479414769,
+       0.36722995171712025
+      ],
+      [
+       0.5419426778304217,
+       0.3707803162313544
+      ],
+      [
+       0.5384971032562871,
+       0.37433068074558856
+      ],
+      [
+       0.5350463431371847,
+       0.37788104525982275
+      ],
+      [
+       0.5315905089484219,
+       0.38143140977405693
+      ],
+      [
+       0.5281297050570732,
+       0.3849817742882911
+      ],
+      [
+       0.5246640290300013,
+       0.3885321388025253
+      ],
+      [
+       0.5211935719171172,
+       0.3920825033167595
+      ],
+      [
+       0.5177184185114909,
+       0.39563286783099366
+      ],
+      [
+       0.5142386475877709,
+       0.39918323234522785
+      ],
+      [
+       0.5107543321202188,
+       0.402733596859462
+      ],
+      [
+       0.5072655394815414,
+       0.40628396137369616
+      ],
+      [
+       0.50377233162357,
+       0.40983432588793034
+      ],
+      [
+       0.5002747652407332,
+       0.4133846904021645
+      ],
+      [
+       0.49677289191715707,
+       0.4169350549163987
+      ],
+      [
+       0.4932667582581344,
+       0.4204854194306329
+      ],
+      [
+       0.4897564060066094,
+       0.4240357839448671
+      ],
+      [
+       0.4862418721452392,
+       0.42758614845910126
+      ],
+      [
+       0.48272318898451183,
+       0.43113651297333544
+      ],
+      [
+       0.4792003842373226,
+       0.4346868774875696
+      ],
+      [
+       0.47567348108033297,
+       0.4382372420018038
+      ],
+      [
+       0.47214249820236787,
+       0.44178760651603793
+      ],
+      [
+       0.46860744984003067,
+       0.4453379710302721
+      ],
+      [
+       0.46506834580064815,
+       0.4488883355445063
+      ],
+      [
+       0.4615251914725902,
+       0.4524387000587405
+      ],
+      [
+       0.4579779878229292,
+       0.45598906457297467
+      ],
+      [
+       0.45442673138234746,
+       0.45953942908720885
+      ],
+      [
+       0.45087141421711263,
+       0.46308979360144303
+      ],
+      [
+       0.4473120238878804,
+       0.4666401581156772
+      ],
+      [
+       0.4437485433949927,
+       0.47019052262991134
+      ],
+      [
+       0.44018095110986943,
+       0.47374088714414553
+      ],
+      [
+       0.4366092206919938,
+       0.4772912516583797
+      ],
+      [
+       0.43303332099090847,
+       0.4808416161726139
+      ],
+      [
+       0.4294532159325336,
+       0.4843919806868481
+      ],
+      [
+       0.42586886438901406,
+       0.48794234520108226
+      ],
+      [
+       0.42228022003118604,
+       0.49149270971531644
+      ],
+      [
+       0.4186872311626254,
+       0.49504307422955063
+      ],
+      [
+       0.41508984053410203,
+       0.4985934387437848
+      ],
+      [
+       0.4114879851371077,
+       0.502143803258019
+      ],
+      [
+       0.40788159597496065,
+       0.5056941677722532
+      ],
+      [
+       0.4042705978097927,
+       0.5092445322864874
+      ],
+      [
+       0.4006549088835225,
+       0.5127948968007215
+      ],
+      [
+       0.39703444061067594,
+       0.5163452613149557
+      ],
+      [
+       0.39340909724065487,
+       0.5198956258291898
+      ],
+      [
+       0.3897787754867523,
+       0.5234459903434241
+      ],
+      [
+       0.3861433641188838,
+       0.5269963548576582
+      ],
+      [
+       0.3825027435166117,
+       0.5305467193718925
+      ],
+      [
+       0.3788567851786221,
+       0.5340970838861265
+      ],
+      [
+       0.3752053511843046,
+       0.5376474484003607
+      ],
+      [
+       0.3715482936025392,
+       0.5411978129145949
+      ],
+      [
+       0.36788545384213844,
+       0.5447481774288291
+      ],
+      [
+       0.36421666193766156,
+       0.5482985419430633
+      ],
+      [
+       0.36054173576346327,
+       0.5518489064572975
+      ],
+      [
+       0.3568604801678595,
+       0.5553992709715316
+      ],
+      [
+       0.353172686018154,
+       0.5589496354857658
+      ],
+      [
+       0.34947812914594933,
+       0.5625
+      ]
+     ],
+     "note": "the arc in the (y, z) plane, cover z in [(14 + sqrt 70)/64, 9/16]; the fold y = z is at the symmetric end"
+    },
+    "note": "the parameter interval of N = 4 modulo relabelling, z in [(19 + sqrt 105)/64, 9/16], double precision"
+   },
+   "note": "orbit type: the tetragonal disphenoid (y = z) has the larger symmetry group; the active caps are those of N4_ARC",
+   "obs_id": "o-08b4fcf2c3f103ff",
+   "seq": 7,
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "/families/8",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76"
+   }
+  },
+  {
+   "kind": "family",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 4,
+   "name": "N4_EDGE",
+   "label": "the end of the arc where an edge cap becomes worst (z = 9/16)",
+   "stratum_kind": "minimizer_family",
+   "key_basis": {
+    "method": "active-hypergraph canonical code at the generic sample N4_arc_end_edge (individualization-refinement, jobs/atlas_export.py canonical_code); the ordinal is minted by the atlas",
+    "code": "0,1/;0,1,2/;0,1,2/3;0,1,3/;0,1,3/2;0,2,3/;0,2,3/1;1,2,3/;1,2,3/0;2,3/",
+    "graph_hash": "dc12d3f81251"
+   },
+   "system": {
+    "level": 3,
+    "status": "proved (manuscript)",
+    "proof": {
+     "kind": "manuscript",
+     "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+    },
+    "variables": [
+     {
+      "name": "x_0, ..., x_3",
+      "kind": "coordinates",
+      "meaning": "the points, unit vectors of R^3"
+     },
+     {
+      "name": "x, y, z",
+      "kind": "parameters",
+      "meaning": "squares of the coordinates of the disphenoid (+-sqrt x, +-sqrt y, +-sqrt z), even number of minus signs"
+     },
+     {
+      "name": "G_ij",
+      "kind": "gram",
+      "meaning": "<x_i, x_j> = 2x - 1, 2y - 1 or 2z - 1 (sphcap/gram.py disphenoid_gram)"
+     }
+    ],
+    "equations": [
+     "x + y + z = 1",
+     "16 x y z = x y + y z + z x (on x + y + z = 1 this is sphcap/gram.py n4_cubic: every face cap has height t = 1/4)",
+     "x_0 = (sqrt x, sqrt y, sqrt z), x_1 = (sqrt x, -sqrt y, -sqrt z), x_2 = (-sqrt x, sqrt y, -sqrt z), x_3 = (-sqrt x, -sqrt y, sqrt z)"
+    ],
+    "inequalities": [
+     "max(x, y, z) <= 9/16 (at 9/16 the smallest cap through an edge reaches D = 3/8)",
+     "x, y, z > 0",
+     "z = 9/16",
+     "x = (14 - sqrt 70)/64",
+     "y = (14 + sqrt 70)/64"
+    ],
+    "gauge": "configurations modulo rotations (O(3) including reflections) and relabelling",
+    "note": "the stratum as a subset of the minimizer set; exact strings"
+   },
+   "dimension": [
+    {
+     "level": 0,
+     "status": "numerical",
+     "value": 0,
+     "note": "modulo rotations and relabelling"
+    }
+   ],
+   "parameterization": null,
+   "value": [
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-3",
+       "8"
+      ],
+      "isolating_interval": [
+       "3/8",
+       "3/8"
+      ],
+      "closed_form": "3/8",
+      "decimal": "0.375"
+     },
+     "note": "D on the whole stratum (constant); hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    },
+    {
+     "id": "v0",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.375,
+     "note": "largest D over the samples (sphcap.discrepancy exact); largest deviation from the closed form 0.0e+00"
+    }
+   ],
+   "closure": [],
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 5,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = dimension of (S^2)^N modulo rotations (relabelling acts discretely): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 0,
+      "level": 0,
+      "status": "numerical",
+      "note": "dimension of the stratum modulo rotations and relabelling"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 0,
+      "note": "rank, modulo rotations, of the derivative of the parameterization along the stratum at N4_arc_end_edge (relative tolerance 1e-7)"
+     }
+    ],
+    "codim": [
+     {
+      "value": 5,
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "a global minimizer has no descending direction"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 0,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_edge yes"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 0,
+      "status": "numerical"
+     }
+    ],
+    "coindex": [
+     {
+      "value": 5,
+      "level": 0,
+      "status": "numerical",
+      "note": "one-sided flat into N4_ARC (z decreasing), first-order growth in every other direction (the smallest cap through the edge of length given by z grows past 3/8 for z > 9/16); derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 5,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_edge yes"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 0,
+      "status": "numerical",
+      "note": "one-sided flat into N4_ARC (z decreasing), first-order growth in every other direction (the smallest cap through the edge of length given by z grows past 3/8 for z > 9/16); derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     },
+     {
+      "level": 0,
+      "status": "numerical",
+      "value": 0,
+      "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_edge yes"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "non-strict minimum",
+      "level": 0,
+      "status": "numerical",
+      "note": "one-sided flat into N4_ARC (z decreasing), first-order growth in every other direction (the smallest cap through the edge of length given by z grows past 3/8 for z > 9/16); derived by hand in the export session from the parameterization and the active caps (not reviewed; checked numerically by the probe of the export)"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = D* = min D on the whole stratum"
+     }
+    ]
+   },
+   "samples": [
+    {
+     "name": "N4_arc_end_edge",
+     "obs_id": "o-44c67095afc7b810",
+     "params": {
+      "x": 0.0880218708540507,
+      "y": 0.34947812914594933,
+      "z": 0.5625
+     },
+     "drawn_by": "N4_ARC_END_EDGE of sphcap/gram.py: x = (14 - sqrt 70)/64, y = (14 + sqrt 70)/64, z = 9/16"
+    }
+   ],
+   "sampling": {
+    "method": "closed-form points chosen by hand: a generic point of the stratum with exact cosines or exact parameters, or the special point itself (sphcap/data/small_n.json, field drawn_by)",
+    "count": 1
+   },
+   "charts": [
+    {
+     "level": 0,
+     "status": "numerical",
+     "sample": "N4_arc_end_edge",
+     "obs_id": "o-44c67095afc7b810",
+     "base_point": [
+      [
+       0.296684800510661,
+       0.5911667524023567,
+       0.75
+      ],
+      [
+       0.296684800510661,
+       -0.5911667524023567,
+       -0.75
+      ],
+      [
+       -0.296684800510661,
+       0.5911667524023567,
+       -0.75
+      ],
+      [
+       -0.296684800510661,
+       -0.5911667524023567,
+       0.75
+      ]
+     ],
+     "tangent_basis": [],
+     "coordinates": "displacements of x_0, ..., x_3 in R^3, flattened, orthogonal to the rotations",
+     "note": "tangent basis of the stratum at the sample from the derivative of the parameterization (central differences, h = 1e-6), orthonormalized; double precision"
+    }
+   ],
+   "probe": {
+    "level": 0,
+    "status": "numerical",
+    "results": [
+     {
+      "sample": "N4_arc_end_edge",
+      "step": 1e-06,
+      "D": 0.375,
+      "param_rank_mod_rotations": 1,
+      "transverse_dim": 4,
+      "max_rate_two_sided_flat": null,
+      "max_rate_one_sided_flat": 3.574918139293004e-08,
+      "min_rate_opposite_of_one_sided": 0.1505571722293375,
+      "min_rate_transverse": 0.15092134869609808,
+      "index": 0,
+      "nullity": 0,
+      "coindex": 5,
+      "consistent": true
+     }
+    ],
+    "note": "numerical probe at the samples (jobs/atlas_small_n.py probe): D by sphcap.discrepancy exact at displacements of 1e-6 along great circles; flat directions from the tangent cone of the parameter region, ascending directions sampled in the complement of the rotations and the parameterization (24 random directions, both signs, and a basis); flat means a rate below 1e-05, ascending above 0.001; consistent: N4_arc_end_edge yes"
+   },
+   "plot": {
+    "level": 0,
+    "status": "numerical",
+    "coordinates": [
+     "z"
+    ],
+    "features": [
+     {
+      "stratum": "N4_ARC",
+      "kind": "segment",
+      "points": [
+       [
+        0.4569836057181187
+       ],
+       [
+        0.5625
+       ]
+      ]
+     },
+     {
+      "stratum": "N4_SYM",
+      "kind": "point",
+      "points": [
+       [
+        0.4569836057181187
+       ]
+      ]
+     },
+     {
+      "stratum": "N4_EDGE",
+      "kind": "point",
+      "points": [
+       [
+        0.5625
+       ]
+      ]
+     }
+    ],
+    "curve": {
+     "coordinates": [
+      "y",
+      "z"
+     ],
+     "points": [
+      [
+       0.5625,
+       0.34947812914594933
+      ],
+      [
+       0.559088323681235,
+       0.3530284936601835
+      ],
+      [
+       0.5556706228304593,
+       0.3565788581744177
+      ],
+      [
+       0.55224705967857,
+       0.3601292226886519
+      ],
+      [
+       0.548817786865438,
+       0.36367958720288607
+      ],
+      [
+       0.5453829479414769,
+       0.36722995171712025
+      ],
+      [
+       0.5419426778304217,
+       0.3707803162313544
+      ],
+      [
+       0.5384971032562871,
+       0.37433068074558856
+      ],
+      [
+       0.5350463431371847,
+       0.37788104525982275
+      ],
+      [
+       0.5315905089484219,
+       0.38143140977405693
+      ],
+      [
+       0.5281297050570732,
+       0.3849817742882911
+      ],
+      [
+       0.5246640290300013,
+       0.3885321388025253
+      ],
+      [
+       0.5211935719171172,
+       0.3920825033167595
+      ],
+      [
+       0.5177184185114909,
+       0.39563286783099366
+      ],
+      [
+       0.5142386475877709,
+       0.39918323234522785
+      ],
+      [
+       0.5107543321202188,
+       0.402733596859462
+      ],
+      [
+       0.5072655394815414,
+       0.40628396137369616
+      ],
+      [
+       0.50377233162357,
+       0.40983432588793034
+      ],
+      [
+       0.5002747652407332,
+       0.4133846904021645
+      ],
+      [
+       0.49677289191715707,
+       0.4169350549163987
+      ],
+      [
+       0.4932667582581344,
+       0.4204854194306329
+      ],
+      [
+       0.4897564060066094,
+       0.4240357839448671
+      ],
+      [
+       0.4862418721452392,
+       0.42758614845910126
+      ],
+      [
+       0.48272318898451183,
+       0.43113651297333544
+      ],
+      [
+       0.4792003842373226,
+       0.4346868774875696
+      ],
+      [
+       0.47567348108033297,
+       0.4382372420018038
+      ],
+      [
+       0.47214249820236787,
+       0.44178760651603793
+      ],
+      [
+       0.46860744984003067,
+       0.4453379710302721
+      ],
+      [
+       0.46506834580064815,
+       0.4488883355445063
+      ],
+      [
+       0.4615251914725902,
+       0.4524387000587405
+      ],
+      [
+       0.4579779878229292,
+       0.45598906457297467
+      ],
+      [
+       0.45442673138234746,
+       0.45953942908720885
+      ],
+      [
+       0.45087141421711263,
+       0.46308979360144303
+      ],
+      [
+       0.4473120238878804,
+       0.4666401581156772
+      ],
+      [
+       0.4437485433949927,
+       0.47019052262991134
+      ],
+      [
+       0.44018095110986943,
+       0.47374088714414553
+      ],
+      [
+       0.4366092206919938,
+       0.4772912516583797
+      ],
+      [
+       0.43303332099090847,
+       0.4808416161726139
+      ],
+      [
+       0.4294532159325336,
+       0.4843919806868481
+      ],
+      [
+       0.42586886438901406,
+       0.48794234520108226
+      ],
+      [
+       0.42228022003118604,
+       0.49149270971531644
+      ],
+      [
+       0.4186872311626254,
+       0.49504307422955063
+      ],
+      [
+       0.41508984053410203,
+       0.4985934387437848
+      ],
+      [
+       0.4114879851371077,
+       0.502143803258019
+      ],
+      [
+       0.40788159597496065,
+       0.5056941677722532
+      ],
+      [
+       0.4042705978097927,
+       0.5092445322864874
+      ],
+      [
+       0.4006549088835225,
+       0.5127948968007215
+      ],
+      [
+       0.39703444061067594,
+       0.5163452613149557
+      ],
+      [
+       0.39340909724065487,
+       0.5198956258291898
+      ],
+      [
+       0.3897787754867523,
+       0.5234459903434241
+      ],
+      [
+       0.3861433641188838,
+       0.5269963548576582
+      ],
+      [
+       0.3825027435166117,
+       0.5305467193718925
+      ],
+      [
+       0.3788567851786221,
+       0.5340970838861265
+      ],
+      [
+       0.3752053511843046,
+       0.5376474484003607
+      ],
+      [
+       0.3715482936025392,
+       0.5411978129145949
+      ],
+      [
+       0.36788545384213844,
+       0.5447481774288291
+      ],
+      [
+       0.36421666193766156,
+       0.5482985419430633
+      ],
+      [
+       0.36054173576346327,
+       0.5518489064572975
+      ],
+      [
+       0.3568604801678595,
+       0.5553992709715316
+      ],
+      [
+       0.353172686018154,
+       0.5589496354857658
+      ],
+      [
+       0.34947812914594933,
+       0.5625
+      ]
+     ],
+     "note": "the arc in the (y, z) plane, cover z in [(14 + sqrt 70)/64, 9/16]; the fold y = z is at the symmetric end"
+    },
+    "note": "the parameter interval of N = 4 modulo relabelling, z in [(19 + sqrt 105)/64, 9/16], double precision"
+   },
+   "note": "active type: the smallest caps through the two edges with coordinate z (count 2/4, value sqrt(z)/2 = 3/8 at z = 9/16) join the worst caps",
+   "obs_id": "o-8b553922e959232b",
+   "seq": 8,
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "/families/9",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76"
+   }
+  }
+ ],
+ "shared_hashes": {
+  "7c76fc2219fe": [
+   "N4_arc_end_symmetric",
+   "N4_arc_end_edge",
+   "N4_arc_z_15_32",
+   "N4_arc_z_1_2",
+   "N4_arc_z_17_32"
+  ]
+ },
+ "search_passes": [],
+ "convergence": null,
+ "label": "Values and tags labelled \"proved (manuscript)\" (level 3) rest on the hand proofs of the unpublished manuscript; everything else is numerical (level 0, double precision) unless its level says otherwise. Nothing here is a proof input."
+}

@@ -190,6 +190,19 @@ The stuck-point classification is the slow step (about 5 min per non-sharp obser
 runs in parallel over the observations (`--workers K`, one BLAS thread each) and resumes from `stuck.jsonl` after an
 interruption.
 
+**N = 1..4 and strata** (`python jobs/atlas_small_n.py`, from the closed forms of `sphcap/gram.py`): the minimizers
+of these N are known by hand (unpublished manuscript; labelled **"proved (manuscript)"**, level 3, until the paper
+appears). The input `sphcap/data/small_n.json` holds the sample configurations (exact Gram matrices in Q or
+Q(sqrt k)) and one **family record per stratum** of the minimizer set: N = 3, the great-circle triples with every
+arc >= g* = 2 arccos(2/3), D = 1/2, stratified modulo rotations and relabelling into 7 strata (the generic
+2-dimensional part, the edge a = g*, the two folds of relabelling, the corner, the edge midpoint, the equilateral
+triple); N = 4, the disphenoid arc on the cubic with max(x, y, z) <= 9/16, D = 3/8, and its two end points. The
+export has the same files as above, plus observation lines of a new kind `family` and a `families` list in
+`observations.json` (key basis, defining system, parameterization, dimension, value, closure, tags, samples by
+`obs_id`, local charts, a numerical probe of the transverse type, a trajectory and the parameter region). Every
+sample is cross-checked with `sphcap.discrepancy` (exact and bruteforce) as a separate level-0 description.
+Tested in `tests/test_atlas_small_n.py`.
+
 ### `msolve/*.ms`: polynomial systems (text, msolve input format)
 Line 1 has the variables, line 2 the characteristic (0), then comma-separated polynomials.
 `N5_C2v.ms` and `N6_D3.ms` are the symmetry-reduced area equations whose elimination gives
