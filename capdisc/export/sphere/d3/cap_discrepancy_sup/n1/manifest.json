@@ -6,13 +6,13 @@
  "generated_by": {
   "classifier_version": "ac44d3513e175f54",
   "code_modified": false,
-  "commit": "1284d1b",
-  "last_code_commit": "1284d1b",
+  "commit": "b8cf7fd",
+  "last_code_commit": "b8cf7fd",
   "script": "jobs/atlas_small_n.py",
   "scripts": {
    "jobs/atlas_export.py": "9471f7ef896e424c0b6d3e1c434a2cc746b6bce6c01c70c36e680eb73ff518c5",
    "jobs/atlas_pipeline.py": "203f0958e8e7fd9aee6ba9535711cb07b276df5630983f56a9b2a7579d874c59",
-   "jobs/atlas_small_n.py": "8829a310632f70d06247e20448d79c86e8303fb809de23a28ef6c2d4025a180e",
+   "jobs/atlas_small_n.py": "f908709b83dcd27e9ece1a53bd0d32928d564b9037f8a7dccb2ab3d92e7416e6",
    "jobs/atlas_stuck.py": "1b06123cfb7924cff1a73d590e7b9d984e48bce0b068082d1fd4fd6c855e6f32",
    "sphcap/__init__.py": "b743a501cdca261f22070408889f50db0f5f6b51eef761a33f95b0ef804c4227",
    "sphcap/balance.py": "03eec9b45eaeeb03ab41c9488bd816cd660410d919389bf5c6e9f9f2100e3ead",
@@ -39,7 +39,7 @@
  "observations": 1,
  "outputs": {
   "observations.json": "b9f387ceaf4634048f881befd09613bdf6c96045022be55634a1d408d6c969d5",
-  "observations.jsonl": "15be4793cfaaa5b282811b7d616d627d332e3ece63609b4c2971f38e795ba159"
+  "observations.jsonl": "a26b5e479a17539ec1802f7666d2e610ee7458d9991ab411ddd97f5de6b7c752"
  },
  "schema_version": "0.2.0",
  "search_passes": 0
