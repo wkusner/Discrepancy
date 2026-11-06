@@ -59,6 +59,7 @@ MANUSCRIPT = ('hand proof in the unpublished manuscript on spherical cap discrep
 PROVED = 'proved (manuscript)'
 G_STAR = 'g* = 2 arccos(2/3)'
 NS = (1, 2, 3, 4)
+FAMILY_SCHEMA_VERSION = '0.2.2'      # observation lines of kind 'family' (atlas schema 0.2.2)
 
 
 # ------------------------------------------------------------------ exact arithmetic in Q(sqrt k)
@@ -886,7 +887,8 @@ def run(out_root=None, log=print):
                 continue
             key = 'family:' + f['name']
             oid = P.obs_id(fsha, key, f)
-            lines.append(dict(record='observation', schema_version=P.SCHEMA_VERSION, obs_id=oid, seq=len(lines) + 1,
+            # kind 'family' is new in atlas schema 0.2.2 (critconfig-atlas DECISIONS.md D28); the line says so
+            lines.append(dict(record='observation', schema_version=FAMILY_SCHEMA_VERSION, obs_id=oid, seq=len(lines) + 1,
                               kind='family', container=P.CONTAINER, N=N, raw=f,
                               source=dict(file_name=os.path.basename(INPUT), file_sha256=fsha, record_index=key,
                                           format='other', commit=fcommit),

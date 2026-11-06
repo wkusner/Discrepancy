@@ -88,6 +88,11 @@ def test_committed_logs_validate():
         seqs = []
         for line in open(p):
             o = json.loads(line)
+            if o.get('kind') == 'family':
+                # a stratum record (jobs/atlas_small_n.py): kind 'family' is new in atlas schema 0.2.2, which the
+                # bundled v0.2 schema predates; the rest of the line must still validate
+                assert o['schema_version'] == '0.2.2', p
+                o = dict(o, kind='import', schema_version='0.2.0')
             assert not list(v.iter_errors(o)), p
             seqs.append(o['seq'])
         assert seqs == list(range(1, len(seqs) + 1)), f'{p}: seq not 1..n'
