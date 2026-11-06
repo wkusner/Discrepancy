@@ -600,6 +600,14 @@ def probe(c, stratum_dim, h=1e-6):
 
 
 # ------------------------------------------------------------------ export
+def code_state():
+    """commit of the last change to the code of this export (CODE), as jobs/atlas_pipeline.py code_state()"""
+    c = P.git('log', '-1', '--format=%h', '--', *CODE) or 'unknown'
+    dirty = bool(P.git('status', '--porcelain', '--', *CODE))
+    return dict(commit='unknown' if dirty else c, last_commit=c, modified=dirty,
+                scripts={p: P.sha_file(os.path.join(ROOT, p)) for p in CODE})
+
+
 def sh(x):
     return P.sha_bytes(x if isinstance(x, bytes) else x.encode())
 
@@ -842,8 +850,7 @@ def run(out_root=None, log=print):
         raise SystemExit('%s differs from what this script writes: run with --write-input and commit it' % INPUT)
     check_classes()
     fsha, fcommit = P.sha_bytes(blob), P.file_commit(path)
-    code = P.code_state()
-    code['scripts'] = {p: P.sha_file(os.path.join(ROOT, p)) for p in CODE}
+    code = code_state()
     plots = trajectories()
     cls_by_name = {c['name']: c for c in doc['classes']}
     fam_by_name = {f['name']: f for f in doc['families']}
