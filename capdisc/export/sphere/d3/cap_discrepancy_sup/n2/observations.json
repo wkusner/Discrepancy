@@ -1,0 +1,315 @@
+{
+ "functional": {
+  "id": "cap_discrepancy_sup",
+  "definition": "D(X) = sup over closed spherical caps C of |#(X n C)/N - sigma(C)|, sigma the normalized area",
+  "sense": "minimize",
+  "container": "sphere",
+  "d": 3,
+  "critical_point": "balanced: a nonnegative combination of the gradients of the worst caps vanishes (Clarke stationary)",
+  "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)"
+ },
+ "N": 2,
+ "observations": [
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 2,
+   "name": "N2_antipodal",
+   "X": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ],
+    [
+     0.0,
+     0.0,
+     -1.0
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 0.5,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v0x",
+     "level": 0,
+     "status": "numerical",
+     "value": 0.5,
+     "note": "cross-check by sphcap.discrepancy (as fixed in audit-refactor 7f7fd86 / 105e525): method exact 0.5, method bruteforce 0.5; |exact - 1/2| = 0.0e+00, |bruteforce - 1/2| = 0.0e+00",
+     "cross_check": {
+      "exact": 0.5,
+      "bruteforce": 0.5,
+      "closed_form": "1/2"
+     }
+    },
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-1",
+       "2"
+      ],
+      "isolating_interval": [
+       "1/2",
+       "1/2"
+      ],
+      "closed_form": "1/2",
+      "decimal": "0.5"
+     },
+     "note": "D of this configuration; hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 1,
+    "hyperedges": [
+     {
+      "boundary": [],
+      "interior": [],
+      "point_cap": true,
+      "branches": [
+       "low:0"
+      ],
+      "weight_range": [
+       1.0,
+       1.0
+      ],
+      "in_support": true,
+      "count": 0
+     }
+    ],
+    "code": ""
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "low:0"
+    ],
+    "ranges": {
+     "low:0": [
+      1.0,
+      1.0
+     ]
+    },
+    "maxmin": {
+     "low:0": 1.0
+    },
+    "maxmin_value": 1.0,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "",
+    "graph_hash": "13dcbafd0ceb"
+   },
+   "first_order": {
+    "rank": 0,
+    "dim_quotient": 1,
+    "kernel_dim": 1,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical",
+    "note": "N = 2: at the antipodal pair the smallest cap through the two points is a hemisphere and its height is not differentiable there (the arc is pi), so the gradient-based first-order data above (rank 0) do not see the first-order growth; see the tags"
+   },
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "N2_antipodal",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76",
+    "pipeline": "jobs/atlas_small_n.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0,
+      -1.0
+     ],
+     [
+      -1.0,
+      1.0
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "second_order": {
+    "level": 0,
+    "status": "numerical",
+    "kernel_dim": 2,
+    "hessian_eigenvalues_on_kernel": [
+     0.0,
+     0.0
+    ],
+    "descending": 0,
+    "ascending": 0,
+    "null": 2,
+    "note": "finite-difference Hessian (h = 1e-4) of sum lambda_b f_b at the max-min multipliers"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/small_n.json",
+     "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+     "pointer": "/classes/1/gram_exact"
+    },
+    "entries": [
+     [
+      "1",
+      "-1"
+     ],
+     [
+      "-1",
+      "1"
+     ]
+    ],
+    "note": "exact Gram matrix of the closed form (Q or Q(sqrt k), entries as strings, labelled as the X of this record); checked by jobs/atlas_small_n.py: entries equal the inner products of X to 1e-14, det G = 0 exactly for N >= 3"
+   },
+   "small_n": {
+    "params": {},
+    "drawn_by": "the antipodal pair",
+    "stratum": null
+   },
+   "obs_id": "o-26ab72d9faf4b76f",
+   "seq": 1,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null,
+    "note": "closed form, not from a search"
+   },
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 1,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "2N - 3 = 1, the angle between the points: a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "isolated"
+     }
+    ],
+    "codim": [
+     {
+      "value": 1,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "moving off the antipodal pair shrinks the smallest cap through the two points at first order (its area (1 - cos(arc/2))/2 falls below 1/2 while it keeps both points), so D grows at first order; unique modulo rotations"
+     }
+    ],
+    "coindex": [
+     {
+      "value": 1,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "moving off the antipodal pair shrinks the smallest cap through the two points at first order (its area (1 - cos(arc/2))/2 falls below 1/2 while it keeps both points), so D grows at first order; unique modulo rotations"
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "moving off the antipodal pair shrinks the smallest cap through the two points at first order (its area (1 - cos(arc/2))/2 falls below 1/2 while it keeps both points), so D grows at first order; unique modulo rotations"
+     }
+    ],
+    "local_type": [
+     {
+      "value": "sharp minimum",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "moving off the antipodal pair shrinks the smallest cap through the two points at first order (its area (1 - cos(arc/2))/2 falls below 1/2 while it keeps both points), so D grows at first order; unique modulo rotations"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "D = 1/2, the minimum for N = 2, attained only by the antipodal pair"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "families": [],
+ "shared_hashes": {},
+ "search_passes": [],
+ "convergence": null,
+ "label": "Values and tags labelled \"proved (manuscript)\" (level 3) rest on the hand proofs of the unpublished manuscript; everything else is numerical (level 0, double precision) unless its level says otherwise. Nothing here is a proof input."
+}

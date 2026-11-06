@@ -1,0 +1,284 @@
+{
+ "functional": {
+  "id": "cap_discrepancy_sup",
+  "definition": "D(X) = sup over closed spherical caps C of |#(X n C)/N - sigma(C)|, sigma the normalized area",
+  "sense": "minimize",
+  "container": "sphere",
+  "d": 3,
+  "critical_point": "balanced: a nonnegative combination of the gradients of the worst caps vanishes (Clarke stationary)",
+  "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)"
+ },
+ "N": 1,
+ "observations": [
+  {
+   "kind": "find",
+   "functional": "cap_discrepancy_sup",
+   "container": "sphere",
+   "d": 3,
+   "N": 1,
+   "name": "N1_point",
+   "X": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "gauge": "x0 = (0,0,1), x1 in the xz-plane with x > 0 (coordinates are stored as found; the gauge applies to q)",
+   "value": [
+    {
+     "id": "v0",
+     "value": 1.0,
+     "level": 0,
+     "status": "numerical",
+     "note": "double precision"
+    },
+    {
+     "id": "v0x",
+     "level": 0,
+     "status": "numerical",
+     "value": 1.0,
+     "note": "cross-check by sphcap.discrepancy (as fixed in audit-refactor 7f7fd86 / 105e525): method exact 1.0, method bruteforce 1.0; |exact - 1| = 0.0e+00, |bruteforce - 1| = 0.0e+00",
+     "cross_check": {
+      "exact": 1.0,
+      "bruteforce": 1.0,
+      "closed_form": "1"
+     }
+    },
+    {
+     "level": 3,
+     "status": "proved (manuscript)",
+     "proof": {
+      "kind": "manuscript",
+      "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+     },
+     "value": {
+      "minpoly": [
+       "-1",
+       "1"
+      ],
+      "isolating_interval": [
+       "1",
+       "1"
+      ],
+      "closed_form": "1",
+      "decimal": "1.0"
+     },
+     "note": "D of this configuration; hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears",
+     "id": "v3"
+    }
+   ],
+   "active": {
+    "level": 0,
+    "status": "numerical",
+    "tolerance": 1e-09,
+    "n_hyperedges": 1,
+    "hyperedges": [
+     {
+      "boundary": [],
+      "interior": [],
+      "point_cap": true,
+      "branches": [
+       "low:0"
+      ],
+      "weight_range": [
+       1.0,
+       1.0
+      ],
+      "in_support": true,
+      "count": 0
+     }
+    ],
+    "code": ""
+   },
+   "weights": {
+    "level": 0,
+    "status": "numerical",
+    "nonempty": true,
+    "dim": 0,
+    "support": [
+     "low:0"
+    ],
+    "ranges": {
+     "low:0": [
+      1.0,
+      1.0
+     ]
+    },
+    "maxmin": {
+     "low:0": 1.0
+    },
+    "maxmin_value": 1.0,
+    "signed_dim": 1
+   },
+   "key_basis": {
+    "method": "support-hypergraph canonical code (individualization-refinement)",
+    "code": "",
+    "graph_hash": "1d3612dade41"
+   },
+   "first_order": {
+    "rank": 0,
+    "dim_quotient": 0,
+    "kernel_dim": 0,
+    "sharp": false,
+    "stationary": true,
+    "multipliers_unique": true,
+    "level": 0,
+    "status": "numerical",
+    "note": "N = 1: S^2 modulo rotations is a point (the stabilizer SO(2) of a point is 1-dimensional), so the quotient has dimension 0, not 2N - 3 = -1"
+   },
+   "source": {
+    "file": "sphcap/data/small_n.json",
+    "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+    "pointer": "N1_point",
+    "script": "jobs/atlas_small_n.py",
+    "commit": "1e2cc76",
+    "pipeline": "jobs/atlas_small_n.py"
+   },
+   "gram_numerical": {
+    "level": 0,
+    "status": "numerical",
+    "value": [
+     [
+      1.0
+     ]
+    ],
+    "note": "Gram matrix <x_i, x_j> of the stored X (rows normalized), double precision; it determines the configuration up to O(3)"
+   },
+   "gram": {
+    "level": 3,
+    "status": "exact (test-verified)",
+    "ref": {
+     "file": "sphcap/data/small_n.json",
+     "file_sha256": "170d1138f91efa3755cd8a0020204421dbdd1adbc042c7fe4909d7f167b21667",
+     "pointer": "/classes/0/gram_exact"
+    },
+    "entries": [
+     [
+      "1"
+     ]
+    ],
+    "note": "exact Gram matrix of the closed form (Q or Q(sqrt k), entries as strings, labelled as the X of this record); checked by jobs/atlas_small_n.py: entries equal the inner products of X to 1e-14, det G = 0 exactly for N >= 3"
+   },
+   "small_n": {
+    "params": {},
+    "drawn_by": "the configuration space modulo rotations is one point; any point represents it",
+    "stratum": null
+   },
+   "obs_id": "o-a3c1d6dcfe3570e7",
+   "seq": 1,
+   "search": {
+    "pass": null,
+    "hits": null,
+    "sources": null,
+    "note": "closed form, not from a search"
+   },
+   "tags": {
+    "ambient_dim": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "exact (test-verified)",
+      "note": "S^2 modulo rotations is a point (the stabilizer of a point is SO(2)): a dimension count"
+     }
+    ],
+    "stratum_dim": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "S^2 modulo rotations is a point: every configuration is this one, D = 1"
+     }
+    ],
+    "codim": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "index": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "coindex": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "nullity": [
+     {
+      "value": 0,
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ],
+    "local_type": [
+     {
+      "value": "sharp minimum",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "vacuous: no direction to move in modulo rotations"
+     }
+    ],
+    "global": [
+     {
+      "value": "global minimizer (proved)",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      },
+      "note": "S^2 modulo rotations is a point: every configuration is this one, D = 1"
+     }
+    ],
+    "order": [
+     {
+      "value": "first",
+      "level": 3,
+      "status": "proved (manuscript)",
+      "proof": {
+       "kind": "manuscript",
+       "reference": "hand proof in the unpublished manuscript on spherical cap discrepancy (Kusner); the citation replaces this label when the paper appears"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "families": [],
+ "shared_hashes": {},
+ "search_passes": [],
+ "convergence": null,
+ "label": "Values and tags labelled \"proved (manuscript)\" (level 3) rest on the hand proofs of the unpublished manuscript; everything else is numerical (level 0, double precision) unless its level says otherwise. Nothing here is a proof input."
+}
