@@ -1,0 +1,608 @@
+{
+ "source": "Hardin and Sloane, tables of spherical designs in 3 dimensions, https://neilsloane.com/sphdesigns/ (see also arXiv:math/0207211)",
+ "read_on": "2026-11-03",
+ "transcription_status": "UNVERIFIED (read through an automated summary of the page)",
+ "meaning": "tau(N) = largest t for which an N-point t-design on S^2 is known to the authors; conjectured to be the maximum, with proof codes: V1 algebraic existence proof, V2 interval proof (N=23 only), V3 numerical solution with discrepancy <= 1e-26 (no proof); citation codes (M90 Mimura 1990, B93 Bajnok 1993, HS92 Hardin-Sloane 1992, R95 Reznick 1995, McL63 McLaren 1963) name the first proof of existence of some design with these parameters.",
+ "rows": [
+  {
+   "N": 1,
+   "tau": 0,
+   "proof_code": "V1",
+   "group_coxeter": "inf"
+  },
+  {
+   "N": 2,
+   "tau": 1,
+   "proof_code": "V1",
+   "group_coxeter": "inf"
+  },
+  {
+   "N": 3,
+   "tau": 1,
+   "proof_code": "V1",
+   "group_coxeter": "[2,3]"
+  },
+  {
+   "N": 4,
+   "tau": 2,
+   "proof_code": "V1",
+   "group_coxeter": "[3,3]"
+  },
+  {
+   "N": 5,
+   "tau": 1,
+   "proof_code": "V1",
+   "group_coxeter": "[2,3]"
+  },
+  {
+   "N": 6,
+   "tau": 3,
+   "proof_code": "V1",
+   "group_coxeter": "[3,4]"
+  },
+  {
+   "N": 7,
+   "tau": 2,
+   "proof_code": "M90",
+   "group_coxeter": "[3]"
+  },
+  {
+   "N": 8,
+   "tau": 3,
+   "proof_code": "V1",
+   "group_coxeter": "[3,4]"
+  },
+  {
+   "N": 9,
+   "tau": 2,
+   "proof_code": "M90",
+   "group_coxeter": "[2,3]"
+  },
+  {
+   "N": 10,
+   "tau": 3,
+   "proof_code": "B93",
+   "group_coxeter": "[2+,10]"
+  },
+  {
+   "N": 11,
+   "tau": 3,
+   "proof_code": "B93",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 12,
+   "tau": 5,
+   "proof_code": "V1",
+   "group_coxeter": "[3,5]"
+  },
+  {
+   "N": 13,
+   "tau": 3,
+   "proof_code": "B93",
+   "group_coxeter": "[4]"
+  },
+  {
+   "N": 14,
+   "tau": 4,
+   "proof_code": "HS92",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 15,
+   "tau": 3,
+   "proof_code": "B93",
+   "group_coxeter": "[2,5]"
+  },
+  {
+   "N": 16,
+   "tau": 5,
+   "proof_code": "HS92",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 17,
+   "tau": 4,
+   "proof_code": "HS92",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 18,
+   "tau": 5,
+   "proof_code": "R95",
+   "group_coxeter": "[2+,6]"
+  },
+  {
+   "N": 19,
+   "tau": 4,
+   "proof_code": "HS92",
+   "group_coxeter": "[3]"
+  },
+  {
+   "N": 20,
+   "tau": 5,
+   "proof_code": "V1",
+   "group_coxeter": "[3,5]"
+  },
+  {
+   "N": 21,
+   "tau": 4,
+   "proof_code": "HS92",
+   "group_coxeter": "[2,3]"
+  },
+  {
+   "N": 22,
+   "tau": 5,
+   "proof_code": "R95",
+   "group_coxeter": "[2+,10]"
+  },
+  {
+   "N": 23,
+   "tau": 5,
+   "proof_code": "V2",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 24,
+   "tau": 7,
+   "proof_code": "McL63",
+   "group_coxeter": "[3,4]+"
+  },
+  {
+   "N": 25,
+   "tau": 5,
+   "proof_code": "V1",
+   "group_coxeter": "[2,5]+"
+  },
+  {
+   "N": 26,
+   "tau": 6,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 27,
+   "tau": 5,
+   "proof_code": "R95",
+   "group_coxeter": "[2,3]"
+  },
+  {
+   "N": 28,
+   "tau": 6,
+   "proof_code": "V3",
+   "group_coxeter": "[2+,4]"
+  },
+  {
+   "N": 29,
+   "tau": 6,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 30,
+   "tau": 7,
+   "proof_code": "V1",
+   "group_coxeter": "[3,4]+"
+  },
+  {
+   "N": 31,
+   "tau": 6,
+   "proof_code": "V3",
+   "group_coxeter": "[5]+"
+  },
+  {
+   "N": 32,
+   "tau": 7,
+   "proof_code": "V1",
+   "group_coxeter": "[3,4]+"
+  },
+  {
+   "N": 33,
+   "tau": 6,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 34,
+   "tau": 7,
+   "proof_code": "V3",
+   "group_coxeter": "[2,4]+"
+  },
+  {
+   "N": 35,
+   "tau": 6,
+   "proof_code": "V3",
+   "group_coxeter": "[2,5]+"
+  },
+  {
+   "N": 36,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 37,
+   "tau": 7,
+   "proof_code": "V3",
+   "group_coxeter": "[3]+"
+  },
+  {
+   "N": 38,
+   "tau": 7,
+   "proof_code": "V3",
+   "group_coxeter": "[3,4]+"
+  },
+  {
+   "N": 39,
+   "tau": 7,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 40,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 41,
+   "tau": 7,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 42,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[2,4]+"
+  },
+  {
+   "N": 43,
+   "tau": 7,
+   "proof_code": "V3",
+   "group_coxeter": "[6]+"
+  },
+  {
+   "N": 44,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 45,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 46,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[2,4]+"
+  },
+  {
+   "N": 47,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 48,
+   "tau": 9,
+   "proof_code": "V1",
+   "group_coxeter": "[3,4]+"
+  },
+  {
+   "N": 49,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[4]+"
+  },
+  {
+   "N": 50,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[2,6]+"
+  },
+  {
+   "N": 51,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 52,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 53,
+   "tau": 8,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 54,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[3,4]+"
+  },
+  {
+   "N": 55,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 56,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[3+,4]"
+  },
+  {
+   "N": 57,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 58,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[2,4]+"
+  },
+  {
+   "N": 59,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 60,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 61,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[6]+"
+  },
+  {
+   "N": 62,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 63,
+   "tau": 9,
+   "proof_code": "V3",
+   "group_coxeter": "[2,7]+"
+  },
+  {
+   "N": 64,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 65,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 66,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[2,4]+"
+  },
+  {
+   "N": 67,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 68,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[2+,4]"
+  },
+  {
+   "N": 69,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[4]+"
+  },
+  {
+   "N": 70,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[2,5]+"
+  },
+  {
+   "N": 71,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3+]"
+  },
+  {
+   "N": 72,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[3,5]+"
+  },
+  {
+   "N": 73,
+   "tau": 10,
+   "proof_code": "V3",
+   "group_coxeter": "[4]+"
+  },
+  {
+   "N": 74,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[2,6]+"
+  },
+  {
+   "N": 75,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 76,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 77,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[4]+"
+  },
+  {
+   "N": 78,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[3,4]+"
+  },
+  {
+   "N": 79,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 80,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[3,5]+"
+  },
+  {
+   "N": 81,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[4]+"
+  },
+  {
+   "N": 82,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[2+,10+]"
+  },
+  {
+   "N": 83,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[2,3]+"
+  },
+  {
+   "N": 84,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 85,
+   "tau": 11,
+   "proof_code": "V3",
+   "group_coxeter": "[2,5]+"
+  },
+  {
+   "N": 86,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[2,2]+"
+  },
+  {
+   "N": 87,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[1]+"
+  },
+  {
+   "N": 88,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 89,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 90,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[2,4]+"
+  },
+  {
+   "N": 91,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 92,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 93,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[4]+"
+  },
+  {
+   "N": 94,
+   "tau": 13,
+   "proof_code": "V3",
+   "group_coxeter": "[2+,2+]"
+  },
+  {
+   "N": 95,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[2]+"
+  },
+  {
+   "N": 96,
+   "tau": 13,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  },
+  {
+   "N": 97,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[4]+"
+  },
+  {
+   "N": 98,
+   "tau": 13,
+   "proof_code": "V3",
+   "group_coxeter": "[2,4]+"
+  },
+  {
+   "N": 99,
+   "tau": 12,
+   "proof_code": "V3",
+   "group_coxeter": "[2]"
+  },
+  {
+   "N": 100,
+   "tau": 13,
+   "proof_code": "V3",
+   "group_coxeter": "[3,3]+"
+  }
+ ]
+}
