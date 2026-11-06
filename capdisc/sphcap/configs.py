@@ -179,20 +179,37 @@ def _lps_generators(p: int) -> np.ndarray:
     b,c,d even, giving the p+1 Lubotzky-Phillips-Sarnak generators used
     to build optimal ("Ramanujan") expander/equidistribution walks on
     SO(3). p must be prime, p = 1 (mod 4).
+
+    Count: by Jacobi's four-square theorem r_4(p) = 8(p + 1) for an odd
+    prime p.  When p = 1 (mod 4) exactly one coordinate of each
+    representation is odd (squares are 0 or 1 mod 4); the 8 choices of
+    its position and sign are equally frequent, so exactly p + 1
+    representations have a odd and positive.  The function raises if
+    it does not find exactly p + 1 (in particular for composite p).
+    Source: Lubotzky, Phillips and Sarnak, Comm. Pure Appl. Math. 39
+    (1986) and 40 (1987) (from memory; check before quoting).
+
+    Fix 2026-11-05 (Quasicrystals project survey): the even ranges used
+    to start at -lim, which is odd whenever int(sqrt p) is even, so for
+    p = 5, 17, 37, 41, 73, 101, ... no generator was found and the
+    function silently returned an empty array.
     """
     if p % 4 != 1:
         raise ValueError("p must be a prime with p = 1 (mod 4)")
     sols = []
     lim = int(np.sqrt(p)) + 1
+    # the even integers in [-lim, lim]; starting the range at -lim would
+    # give odd numbers when lim is odd
+    evens = [x for x in range(-lim, lim + 1) if x % 2 == 0]
     for a in range(1, lim + 1, 2):  # a odd, a>0
         rem = p - a * a
         if rem < 0:
             continue
-        for b in range(-lim, lim + 1, 2):  # b even
+        for b in evens:
             rem2 = rem - b * b
             if rem2 < 0:
                 continue
-            for c in range(-lim, lim + 1, 2):  # c even
+            for c in evens:
                 rem3 = rem2 - c * c
                 if rem3 < 0:
                     continue
@@ -205,11 +222,11 @@ def _lps_generators(p: int) -> np.ndarray:
                         sols.append((a, b, c, dd))
     sols = np.array(sorted(set(sols)), dtype=float)
     if len(sols) != p + 1:
-        # Jacobi's four-square theorem guarantees p+1 such solutions
-        # exist for p = 1 (mod 4); a mismatch means the search range
-        # (`lim`) or parity filtering missed some -- fall back to
-        # whatever was found rather than hard-failing.
-        pass
+        # Jacobi's theorem gives exactly p + 1 for a prime p = 1 (mod 4)
+        # (see the docstring); any other count means p is not prime or
+        # the enumeration is wrong, and a silent fallback hides both.
+        raise ValueError(f"found {len(sols)} LPS generators for p = {p}, expected p + 1 = {p + 1} "
+                         "(is p prime?)")
     return sols / np.sqrt(p)
 
 
